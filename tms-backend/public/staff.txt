@@ -1,0 +1,74 @@
+{
+	"administrator": [ 
+	
+	],
+	"secretariat": [
+		{
+		  "first_name": "ΡΕΝΑ",
+		  "last_name": "ΚΑΛΑΙΤΖΑΚΗ",
+		  "email": "rena@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+		{
+		  "first_name": "ΕΥΑΓΓΕΛΙΑ",
+		  "last_name": "ΚΟΣΜΑ",
+		  "email": "kosma@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+		{
+		  "first_name": "ΜΑΡΙΑ",
+		  "last_name": "ΣΑΒΙΟΛΑΚΗ",
+		  "email": "saviolaki@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+		{
+		  "first_name": "ΣΤΕΛΛΑ",
+		  "last_name": "ΣΥΝΤΙΧΑΚΗ",
+		  "email": "sintis@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+		{
+		  "first_name": "ΣΥΡΑΓΩ",
+		  "last_name": "ΤΣΙΑΜΠΑΛΟΥ",
+		  "email": "syrago@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+		{
+		  "first_name": "ΝΙΚΟΣ",
+		  "last_name": "ΤΣΑΤΣΑΚΗΣ",
+		  "email": "nikost@csd.uoc.gr",
+		  "role": "secretariat",
+		  "group": "Secretariat",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		}
+	],
+	"professor": [
+		{
+		  "first_name": "ΜΑΡΙΟΣ",
+		  "last_name": "ΠΙΤΙΚΑΚΗΣ",
+		  "email": "pitikakis@csd.uoc.gr",
+		  "role": "professor",
+		  "group": "Professor",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		},
+				{
+		  "first_name": "ΠΑΝΑΓΙΩΤΑ",
+		  "last_name": "ΡΙΖΟΠΟΥΛΟΥ",
+		  "email": "nrizop@csd.uoc.gr",
+		  "role": "professor",
+		  "group": "Professor",
+		  "department": "5f89b089099c8d21dc2d9ef8"
+		}
+	]
+}
+

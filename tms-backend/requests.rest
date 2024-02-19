@@ -1,0 +1,25 @@
+GET http://localhost:4000/api/
+Content-Type: application/json
+
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjg5YmI1ZGZlZTA1NDFlNzRkZTU4NmYiLCJpYXQiOjE2MDM0NjgyMTIsImV4cCI6MTYwMzQ3MTgxMn0.xAYAm7_V6ETwQydMQ233wST7gopKFHbNRaafj_Wb52I"
+}
+
+###
+
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+    "email": "csd3659@csd.uoc.gr",
+    "password": "student" 
+}
+
+
+POST http://localhost:4000/api/upload
+Content-Type: application/json
+
+{
+    "name": "Filename",
+    "data": "File" 
+}
