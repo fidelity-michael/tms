@@ -25,3 +25,9 @@ const areaSchema = new Schema(
 export const AreaModel: Model<IArea> = model<IArea>(
   'Area', areaSchema, 'Area'
 );
+
+export type Area_t = {
+  name: string,
+  description: string,
+  image: string,
+}

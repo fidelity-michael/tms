@@ -6,28 +6,21 @@ import * as express from 'express';
 // import { LabelController } from './labels/labels.controller';
 // import { PersonController } from './people/people.controller';
 import { ResourcesController } from './resources/resources-controller';
+import { AreaController } from './area/area-controller';
 // import { TaskController } from './task/task.controller';
 const apiV1Router = express.Router();
 
 
 apiV1Router
-  // Example routes
-  // .use(
-  //   '/event',
-  //   new EventController().applyRoutes()
-  // )
+  // Routes
   .use(
     '/resource',
     new ResourcesController().applyRoutes()
   )
-  // .use(
-  //   '/person',
-  //   new PersonController().applyRoutes()
-  // )
-  // .use(
-  //   '/label',
-  //   new LabelController().applyRoutes()
-  // );
+  .use(
+    '/area',
+    new AreaController().applyRoutes()
+  )
 ;
 
 
