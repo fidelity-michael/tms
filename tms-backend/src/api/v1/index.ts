@@ -7,18 +7,33 @@ import * as express from 'express';
 // import { PersonController } from './people/people.controller';
 import { ResourcesController } from './resources/resources-controller';
 import { AreaController } from './area/area-controller';
+import RateLimit from 'express-rate-limit';
+import { config } from '../../config/environment';
 // import { TaskController } from './task/task.controller';
-const apiV1Router = express.Router();
 
+const apiLimiter = RateLimit(config.apiLimiter)
+const authLimiter = RateLimit(config.authLimiter)
+
+const apiV1Router = express.Router();
+// const chatV1Router = express.Router();
+// const notificationV1Router = express.Router();
 
 apiV1Router
   // Routes
+  //Basic api route
+  // .use(
+  //   '/api',
+  //   authLimiter,
+  //   /**/
+  // )
   .use(
     '/resource',
+    apiLimiter,
     new ResourcesController().applyRoutes()
   )
   .use(
-    '/area',
+    '/areas',
+    apiLimiter,
     new AreaController().applyRoutes()
   )
 ;

@@ -33,7 +33,7 @@ services:
   #     - ${DEV_FRONTEND_PORT}:4200
   #   volumes:
   #     # Sync source code
-  #     - ../frontend/src/:/frontend/src
+  #     - ../tms-frontend/src/:/tms-frontend/src
 
   database:
     ports:

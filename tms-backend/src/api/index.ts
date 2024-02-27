@@ -14,6 +14,10 @@ export class Api {
         const apiRouter = express.Router();
 
         apiRouter.use('/api/', apiV1Router);
+        // NOTE: {Use /chat, /notifications ROUTES for the other 2 servers
+        // combining all 3 servers into 1.}
+        // apiRouter.use('/chat', /**/);
+        // apiRouter.use('/notifications', /**/);
 
         return apiRouter;
     }
