@@ -7,12 +7,13 @@ import * as express from 'express';
 // import { PersonController } from './people/people.controller';
 import { ResourcesController } from './resources/resources-controller';
 import { AreaController } from './area/area-controller';
-import RateLimit from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit'
+
 import { config } from '../../config/environment';
 // import { TaskController } from './task/task.controller';
 
-const apiLimiter = RateLimit(config.apiLimiter)
-const authLimiter = RateLimit(config.authLimiter)
+const apiLimiter = rateLimit(config.apiLimiter)
+const authLimiter = rateLimit(config.authLimiter)
 
 const apiV1Router = express.Router();
 // const chatV1Router = express.Router();
