@@ -87,6 +87,7 @@ app.use(session);
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
 
 // Routes
+// NOTE: All these is the api ROUTE e.g */api/auth, */api/users etc
 app.use("/api", apiLimiter, apiRoute);
 app.use("/auth", authLimiter, authRoute);
 app.use("/universities", apiLimiter, universitiesRoute);

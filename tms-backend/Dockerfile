@@ -1,6 +1,6 @@
 # -------------- STAGE 1: Install Dependencies and copy project --------------
 FROM node:21-alpine3.17
-LABEL maintainer="Michalis K"
+LABEL maintainer="Michalis K."
 
 # set working directory
 WORKDIR /tms-backend

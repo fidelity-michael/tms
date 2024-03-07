@@ -25,7 +25,7 @@ export class ResourceController<T extends Document> {
       // get resources as list
       resources = await this.modelSchema
         .find(queryOptions.query)
-        .select(queryOptions.options.select)
+        .select(queryOptions.options.select as any) // WARN: possible breaking
         .populate(queryOptions.options.populate as any)
         .exec();
       return resources;
@@ -64,7 +64,7 @@ export class ResourceController<T extends Document> {
 
       const resource = await this.modelSchema
         .findOne({ _id: modelId })
-        .select(queryOptions.options.select)
+        .select(queryOptions.options.select as any) // WARN: possible breaking
         .populate(queryOptions.options.populate as any)
         .orFail(new NotFound())
         .exec();

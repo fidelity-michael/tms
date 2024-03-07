@@ -1,6 +1,8 @@
+# Production 
 version: "3.7"
 
-services:
+services: 
+
   backend:
     image: ${APP_NAME}-backend:${APP_VERSION}
     build: ../tms-backend
@@ -18,16 +20,6 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_ROOT_USERNAME=${DB_ROOT_USERNAME}
       - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - HOST=${HOST}
-  frontend:
-    image: ${APP_NAME}-frontend:${APP_VERSION}
-    build:
-      context: ../tms-frontend
-    container_name: ${APP_NAME}-frontend
-    restart: always
-    networks:
-      - integration-network
-    environment:
       - HOST=${HOST}
 
   database:
@@ -50,6 +42,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - HOST=${HOST}
 
+  # frontend:
+  #   build:
+  #     args:
+  #       - API_HOST=${PROD_PROTOCOL}://${PROD_HOST}:${PROD_PORT}
+
 networks:
   integration-network:
     name: ${APP_NAME}-integration-network
@@ -57,3 +54,4 @@ networks:
 volumes:
   database-volume:
     name: ${APP_NAME}-database-volume
+
