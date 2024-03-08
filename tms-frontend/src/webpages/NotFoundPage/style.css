@@ -1,0 +1,34 @@
+.page-error {
+    text-align: center;
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(41, 39, 39);
+}
+
+.page-error h4, h1 {
+    color: aliceblue;
+}
+
+h1 {
+    font-size: 4rem !important;
+    padding-top: 2rem;
+}
+
+h4 {
+    font-size: 2rem !important;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+}
+
+.link-back {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #84e2ff;
+    text-decoration: none;
+    margin-top: 8rem !important;
+}
+
+.link-back:hover, .link-back:active {
+    color: #64b7ff;
+    text-decoration: none;
+}

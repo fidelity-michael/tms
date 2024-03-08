@@ -1,0 +1,52 @@
+/* New Thesis Form */
+.new-thesis-form {
+    max-width: 70rem;
+}
+
+.upload-files {
+    padding: 0.75rem;
+    padding-bottom: 1.1rem;
+    margin-top: 1.55rem;
+    color: #685f5f;
+    border-radius: 0.25rem !important;
+    background-color: #0782bb2c !important;
+    text-decoration: none;
+}
+
+Label {
+    font-weight: 500;
+}
+
+.new-filename {
+    margin-top: 0rem;
+    border-radius: 0.25rem !important;
+}
+
+.new-file i {
+    cursor: pointer;
+    color: #ec2020;
+    margin-right: 1rem;
+}
+
+.add-file-btn {
+    margin-top: 0.25rem !important;
+    border-radius: 0.25rem !important;
+    background-color: #3871da !important;
+}
+
+.del-file-btn {
+    margin-left: 0 !important;
+    margin-right: 1rem;
+    font-size: 1rem;
+    border-radius: 0.15rem !important;
+    background-color: #2a6be4 !important;
+}
+
+.submit-thesis-form {
+    width: 100%;
+    margin-bottom: 5rem;
+    margin-left: 0rem;
+    padding: 0.25rem;
+    background-color: #3871da !important;
+    border-radius: 0.25rem !important;
+}
