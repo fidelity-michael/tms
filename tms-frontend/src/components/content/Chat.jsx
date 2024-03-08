@@ -26,6 +26,7 @@ export default function Chat({userId, role}) {
     const componentIsMounted = useRef(true)
 
     //for sockets
+  //TODO: [Frontend] Check Port here, probably needs a change
     const socketRef = useRef(null);  
     const ENDPOINT = 'localhost:4002';
 

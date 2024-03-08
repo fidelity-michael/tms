@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Changed from deprecated useHistory
 import axios from 'axios';
 import './content.css';
 
 export default function MyRoles({userId, currentRole}) {;
     
     const [roles, setRoles] = useState([]);
-    const history = useHistory();
+    const history = useNavigate();
 
     //fetch user's data
     useEffect(() => {
