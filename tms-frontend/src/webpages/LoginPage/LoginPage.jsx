@@ -1,4 +1,3 @@
-import React from 'react';
 import LoginForm from '../../components/forms/LoginForm/LoginForm';
 import "mdbreact/dist/css/mdb.css";
 import './style.css';

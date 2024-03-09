@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card } from 'react-bootstrap';
-import Carousel from 'react-elastic-carousel';
+import Carousel from '@itseasy21/react-elastic-carousel'; // NOTE: Changed import because of dependency conflicts
 // import axios from 'axios';
 import './content.css';
 
