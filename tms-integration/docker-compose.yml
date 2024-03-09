@@ -42,10 +42,16 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - HOST=${HOST}
 
-  # frontend:
-  #   build:
-  #     args:
-  #       - API_HOST=${PROD_PROTOCOL}://${PROD_HOST}:${PROD_PORT}
+  frontend:
+    image: ${APP_NAME}-frontend:${APP_VERSION}
+    build:
+      context: ../tms-frontend
+    container_name: ${APP_NAME}-frontend
+    restart: always
+    networks:
+      - integration-network
+    environment:
+      - HOST=${HOST}
 
 networks:
   integration-network:
