@@ -1,0 +1,554 @@
+/* @media screen and (max-width: 600px) {
+  .fa-heart {
+    font-size: 1rem !important;
+  }
+} */
+
+/* Scroll Bar */
+body::-webkit-scrollbar {
+  width: 0.47rem;
+}
+
+/* Track */
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  background: #b2b5be;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: #8d9099;
+}
+
+/* Table for available thesis*/
+.table-thesis{
+  border-top: 1px solid #dfe2e2 !important;
+  table-layout:fixed;
+  width: 85vw !important;
+}
+
+.table-header-thesis {
+  width: 10vw;
+  white-space: nowrap;
+}
+
+.table-data-thesis {
+  word-wrap: break-word; 
+  font-size: 0.9rem;
+  width: 10vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*Table*/
+Table .table-header {
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+Table .table-data {
+  min-width: 100%;
+  white-space: nowrap;
+}
+
+.table-header {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+
+
+.table-header > span {
+  margin-right: 0.25rem;
+}
+
+.table-header > span:hover {
+  cursor: pointer;
+}
+
+/* Scroll Bar */
+::-webkit-scrollbar {
+  height: 0.47rem !important;
+  width: 0.47rem !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5c5ef0;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #4b4ee0;
+}
+
+.accept-request,
+.decline-request {
+  font-size: 0.85rem !important;
+  margin-top: -0.75rem;
+  margin-bottom: -0.4rem;
+}
+
+.empty-data {
+  font-size: medium;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Page selection */
+.page-select {
+  height: 1.9rem;
+  background-color: #e7eff1;
+  border: 1px solid #e0d8d8;
+  padding: 0.1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-select > span {
+  cursor: default;
+  margin-left: 0.25rem;
+  margin-right: 2rem;
+  color: #6c8eeb;
+}
+
+.page-select > span:hover {
+  cursor: pointer;
+  color: #5473c7;
+}
+
+/* Dropdown Page Limit */
+.page-limit-lbl {
+  float: left;
+  margin-top: 0.2rem;
+  margin-right: 1rem;
+}
+
+.page-limit {
+  font-size: 0.85rem !important;
+  height: 1.9rem !important;
+  width: 4rem !important;
+}
+
+.page-number {
+  cursor: default !important;
+  color: #5a5757 !important;
+  text-decoration: none;
+  float: right;
+}
+
+/* Carousel */
+.fav-carousel {
+  margin-top: 1rem !important;
+}
+
+/* square buttons */
+.rec.rec-arrow {
+  border-radius: 0;
+}
+
+.rec.rec.rec-arrow {
+  color: aliceblue;
+  background-color: #0f8cdf;
+}
+
+/* round buttons on hover */
+.rec.rec-arrow:hover {
+  border-radius: 50%;
+}
+
+/* remove outline border on focus */
+.rec.rec-arrow:focus {
+  outline: none !important;
+}
+
+/* hide disabled buttons */
+.rec.rec-arrow:disabled {
+  visibility: hidden;
+}
+
+/* Card */
+.card {
+  margin: 0.3rem !important;
+}
+
+.card-title {
+  height: 4rem !important;
+  color: #5765b3;
+}
+
+/* Badger */
+.card .heart {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #d6e5ff;
+}
+
+.card .fa-heart {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.card .fa-heart:hover {
+  cursor: pointer;
+  color: #ff4a02;
+}
+
+/* Spinner */
+.fav-loading {
+  margin-top: 9rem;
+}
+
+/* Select supervisor */
+.select-supervisor {
+  min-width: 13rem;
+  margin-top: -0.55rem;
+  margin-bottom: -1.5rem;
+}
+
+/* Status Professor */
+.request-status {
+  min-width: 7.4rem;
+  margin-top: -0.55rem;
+  margin-bottom: -1.5rem;
+}
+
+/* Modal */
+.close-modal {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.save-modal {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Available Theses */
+.apply-thesis {
+  font-size: 0.9rem !important;
+  margin-top: -0.55rem;
+  margin-bottom: -0.35rem;
+}
+
+span .fa-paperclip {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #1990df;
+}
+
+/* Assigned Theses */
+.supervisors-dropdown {
+  font-size: 0.9rem !important;
+  min-width: 12rem;
+  margin-top: -0.5rem;
+  margin-bottom: -1.4rem;
+  border-radius: 0rem !important;
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.supervisors-dropdown:focus {
+  box-shadow: 0 4px 8px 0 #00000066 !important;
+}
+
+.propose-btn {
+  font-size: 0.85rem !important;
+  padding: 0.41rem !important;
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.4rem !important;
+  margin-left: 0rem !important;
+  box-shadow: none;
+}
+
+.propose-btn:hover {
+  box-shadow: 0 4px 8px 0 #00000066;
+}
+
+.user-btn {
+  margin-left: 0rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem !important;
+  padding: 0.4rem !important;
+}
+
+.area-btn {
+  margin-left: 0rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem !important;
+  padding: 0.4rem !important;
+}
+
+.new {
+  /* color: #f4fbff !important; */
+  background-color: #1990df !important;
+  border: 1px solid #eef7ff !important;
+}
+
+.new:hover {
+  border: 1px solid #1990df !important;
+}
+
+.request-action-status {
+  text-transform: capitalize;
+}
+
+.editable-data {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.editable-data::placeholder {
+  color: #645c5c;
+  opacity: 1;
+}
+
+.edit-input-icon {
+  opacity: 0.2;
+}
+
+.report-post h6 {
+  font-size: 1.05rem;
+  color: #4e4a4a9d;
+}
+
+.report-post .post-description {
+  margin-top: 0;
+  margin-left: 1.2rem;
+}
+
+.report-post .date-posted {
+  text-align: left;
+  color: #4e4a4ac4;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  margin-right: 0.25rem;
+}
+
+.reports {
+  bottom: 2rem !important;
+}
+
+.reports-wrapper .empty-data {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-item {
+  color: #3f61f7;
+  cursor: pointer;
+}
+
+.modal-item:hover {
+  color: #1a52c9;
+}
+
+.notifications-content {
+ max-height: 20rem;
+ overflow-y: auto;
+}
+
+/* Available Theses Alert */
+.alert {
+  padding: 20px;
+  background-color: #ffb920;
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+.cancel-modal {
+  border-radius: 0.2rem !important;
+  background-color: #d6d6d6 !important;
+}
+
+.confirm-modal {
+  color: white !important;
+  border-radius: 0.2rem !important;
+  background-color: #0b7ce6 !important;
+}
+
+.confirm-modal:hover {
+  border-color: #0b7ce6 !important;
+}
+
+.fa-clipboard{
+  float: left;
+  margin-right: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.fa-caret-down{
+  margin-bottom: 0.8rem;
+  margin-left: 0.3rem;
+}
+
+.fa-caret-up{
+  float: right;
+  margin-bottom: 0.8rem;
+  margin-left: 0.8rem;
+}
+
+.detailsToggle{
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  width: fit-content; 
+  height: fit-content;
+  margin-left: 1.2rem;
+}
+
+.collapseWrap{
+  margin-left: 1.2rem;
+}
+
+.editDiv{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.inputProfile{
+  margin-top: 0.4rem;
+  width: 20vw !important;
+}
+
+.editButton{
+  font-size: 10px;
+  float: right;
+  margin-left: 2rem;
+}
+
+.editButton:focus{
+  outline: none;
+}
+
+.validity{
+  margin-left: 0.8vw;
+}
+
+
+
+.dropdown-check-list {
+  display: inline-block;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.roles {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.dropdown-check-list ul.roles li {
+  list-style: none;
+}
+
+.dropdown-check-list.visible .anchor {
+  color: #0094ff;
+}
+
+.dropdown-check-list.visible .roles {
+  display: block;
+}
+
+input[type=checkbox] {
+  vertical-align:-2px;
+  padding:0;
+}
+
+.rolesWrapper{
+  display: table;
+}
+
+.rolesArrow{
+  display: inline-block;
+  margin: 0;
+}
+
+.roleP{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.infoUpdateUser{
+  margin-left: 0.5vw;
+  margin-top: 2vh;
+}
+
+.liRole{
+  margin-bottom: 7vh;
+}
+
+.fa-file-alt{
+  width: 100%;
+  text-align:center;
+}
+
+.thesisFile:hover {
+  color: #4b4ee0;
+}
+
+.showDetails:hover{
+  color: #4b4ee0;
+}

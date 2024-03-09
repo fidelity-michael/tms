@@ -1,0 +1,16 @@
+.grading-header {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.grading-btn {
+    border-radius: 0.2rem !important;
+}
+
+.form-control[readOnly] {
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: inset 0 -1px 0 #ddd !important;
+}

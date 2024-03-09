@@ -24,16 +24,16 @@ services:
       # Sync source code
       - ../tms-backend/src/:/tms-backend/src
 
-  # frontend:
-  #   image: ${APP_NAME}-frontend:${APP_VERSION}-dev
-  #   build:
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     # Expose frontend port at host machine
-  #     - ${DEV_FRONTEND_PORT}:4200
-  #   volumes:
-  #     # Sync source code
-  #     - ../tms-frontend/src/:/tms-frontend/src
+  frontend:
+    image: ${APP_NAME}-frontend:${APP_VERSION}-dev
+    build:
+      dockerfile: Dockerfile
+    ports:
+      # Expose frontend port at host machine
+      - ${DEV_FRONTEND_PORT}:4200
+    volumes:
+      # Sync source code
+      - ../tms-frontend/src/:/tms-frontend/src
 
   database:
     ports:
