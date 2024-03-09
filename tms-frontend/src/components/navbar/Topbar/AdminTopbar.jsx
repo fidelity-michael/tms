@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyNotifications from '../../content/MyNotifications';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ export default function AdminTopbar(props) {
 
     const [notifications, setNotifications] = useState([]);
     const [badge, setBadge] = useState(0);
-    const history = useHistory();
+    const history = useNavigate();
 
     // const [windowHeight, setHeight] = useState(window.innerHeight);
     const [windowWidth, setWidth] = useState(window.innerWidth);

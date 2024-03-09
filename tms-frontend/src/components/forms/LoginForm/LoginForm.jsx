@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export default function LoginForm() {
@@ -11,7 +11,7 @@ export default function LoginForm() {
         user: []
     };
 
-    const history = useHistory();
+    const history = useNavigate();
 
     const [user, setUser] = useState(initialUser);
     const [loading, setLoading] = useState(false);
