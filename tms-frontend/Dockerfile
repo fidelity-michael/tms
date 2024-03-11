@@ -13,11 +13,11 @@ ENV PATH /tms-frontend/node_modules/.bin:$PATH
 # RUN npm install -D tailwindcss postcss autoprefixer
 # RUN npx tailwindcss init -p
 
-# COPY package.json /tms-frontend/package.json
-
-# add app
-COPY . /tms-frontend
+# Install all dependencies
+COPY package.json .
 RUN npm install
+
+COPY . /tms-frontend
 
 # -------------- STAGE 2: Run --------------
 
