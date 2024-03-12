@@ -42,6 +42,11 @@ export const config = {
     max: 10,               // limit each IP to 10 requests per windowMs (for auth route)
     message: "Too many requests!"
   },
+  notifLimiter: {
+    windowMs: 3*60*1000,    // 5 minutes
+    max: 500,               // limit each IP to 500 requests per windowMs
+    message: "Too many requests!"
+  }
 };
 
 
