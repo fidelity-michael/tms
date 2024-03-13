@@ -7,6 +7,7 @@ import * as express from 'express';
 // import { PersonController } from './people/people.controller';
 import { ResourcesController } from './resources/resources-controller';
 import { AreaController } from './area/area-controller';
+import { NotificationController } from './notifications/notif-controller';
 import { rateLimit } from 'express-rate-limit'
 
 import { config } from '../../config/environment';
@@ -14,10 +15,11 @@ import { config } from '../../config/environment';
 
 const apiLimiter = rateLimit(config.apiLimiter)
 const authLimiter = rateLimit(config.authLimiter)
+const notificationsLimiter = rateLimit(config.notifLimiter)
 
 const apiV1Router = express.Router();
 // const chatV1Router = express.Router();
-// const notificationV1Router = express.Router();
+const notificationV1Router = express.Router();
 
 apiV1Router
   // Routes
@@ -39,5 +41,12 @@ apiV1Router
   )
 ;
 
+notificationV1Router
+  .use(
+    '/',
+    notificationsLimiter,
+    new NotificationController().applyRoutes()
+  )
 
-export { apiV1Router };
+
+export { apiV1Router , notificationV1Router};

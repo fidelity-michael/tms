@@ -1,5 +1,4 @@
-
-import { Request, Response, NextFunction, Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { IArea, AreaModel, Area_t } from './area-model';
 import { ResourceController } from '../../shared';
 import { StatusCodes } from 'http-status-codes';

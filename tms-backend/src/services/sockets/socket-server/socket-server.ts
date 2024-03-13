@@ -9,8 +9,7 @@ export class SocketServer {
   private logger: Logger = new Logger();
   public io!: io.Server;
 
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Start the Socket Server.
@@ -124,6 +123,22 @@ export class SocketServer {
     });
   }
 
+  /** TODO: Fix currentUserId problem
+   * On Map event to a channel.
+   *
+   * @param {io.Socket} socket
+   */
+  private onNotificationEvents(socket: io.Socket): void {
+    let users = {};
+    var currentUserId: any;
+    socket.on('map', (userId: any) => {
+      this.logger.debug('On map event');
+      currentUserId = userId;
+      users[socket.id] = userId;
+      console.log(userId,' connected');
+      // this.io.emit('updateTable', data);
+    });
+  }
   //#endregion Private methods
   // --------------------------------
 
