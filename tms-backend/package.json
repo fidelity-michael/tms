@@ -54,6 +54,7 @@
     "@types/lodash": "^4.14.202",
     "@types/nodemailer": "^6.4.14",
     "concurrently": "^8.2.2",
+    "eslint": "^9.6.0",
     "nodemon": "^3.0.3",
     "typescript": "^5.3.3"
   }
