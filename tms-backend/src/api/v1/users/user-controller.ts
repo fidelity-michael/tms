@@ -14,7 +14,7 @@ export class UserController extends ResourceController<IUser> {
   }
 
   /**
-   * Apply all routes for tasks
+   * Apply all routes for users
    *
    * @returns {Router}
    */

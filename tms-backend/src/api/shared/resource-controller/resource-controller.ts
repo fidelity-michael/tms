@@ -1,12 +1,15 @@
-import { NotFound } from 'http-errors';
-import { Request, Response, Router, NextFunction } from 'express';
-import { MongooseQueryParser, QueryOptions } from 'mongoose-query-parser';
-import { Model, Document } from 'mongoose';
-import { StatusCodes } from 'http-status-codes';
-import { ICrudRouteOptions, CrudOperations, IPaginateOptions } from '../interfaces/crud.interface';
+import { NotFound } from "http-errors";
+import { Request, Response, Router, NextFunction } from "express";
+import { MongooseQueryParser, QueryOptions } from "mongoose-query-parser";
+import { Model, Document } from "mongoose";
+import { StatusCodes } from "http-status-codes";
+import {
+  ICrudRouteOptions,
+  CrudOperations,
+  IPaginateOptions,
+} from "../interfaces/crud.interface";
 
 export class ResourceController<T extends Document> {
-
   protected modelSchema: Model<T>;
 
   constructor(modelSchema: Model<T>) {
@@ -18,21 +21,52 @@ export class ResourceController<T extends Document> {
   /**
    * Get all resources paginated
    */
-  public async getAll(req: Request, res: Response, next?: NextFunction): Promise<any> {
+  public async getAll(
+    req: Request,
+    res: Response,
+    // sort: boolean,
+    next?: NextFunction,
+  ): Promise<any> {
     try {
       const queryOptions = this.parseQueryParameters(req);
       let resources: T[];
       // get resources as list
       resources = await this.modelSchema
         .find(queryOptions.query)
-        .select(queryOptions.options.select as any) // WARN: possible breaking
-        .populate(queryOptions.options.populate as any)
+        // .sort(sort ? { date: 1 } : { date: -1 }) // -1 descending, 1 ascending
+        .select(queryOptions.options.select as string | any) // WARN: possible breaking
+        .populate(queryOptions.options.populate as string | any)
         .exec();
       return resources;
       // return res
       //   .status(StatusCodes.OK)
       //   .json(resources);
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
+  }
 
+  /**
+   * Get a limited amount of resources paginated based on limit variable
+   */
+  public async getLimited(
+    req: Request,
+    res: Response,
+    limit: number,
+    next?: NextFunction,
+  ): Promise<any> {
+    try {
+      const queryOptions = this.parseQueryParameters(req);
+      let resources: T[];
+      // get resources as list
+      resources = await this.modelSchema
+        .find(queryOptions.query)
+        .sort({ date: -1 })
+        .limit(limit)
+        .select(queryOptions.options.select as string | any) // WARN: possible breaking
+        .populate(queryOptions.options.populate as string | any)
+        .exec();
+      return resources;
     } catch (e) {
       next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
     }
@@ -41,10 +75,13 @@ export class ResourceController<T extends Document> {
   /**
    * Create a new resource model
    */
-  public async create(req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+  public async create(
+    req: Request,
+    res: Response,
+    next?: NextFunction,
+  ): Promise<any | undefined> {
     try {
-      const resource = await new this.modelSchema(req.body)
-        .save();
+      const resource = await new this.modelSchema(req.body).save();
       return resource;
     } catch (e) {
       next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
@@ -57,7 +94,12 @@ export class ResourceController<T extends Document> {
    * @param {string} [id] Model id to be retrieved
    * @returns
    */
-  public async getOne(id: string, req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+  public async getOne(
+    id: string,
+    req: Request,
+    res: Response,
+    next?: NextFunction,
+  ): Promise<any | undefined> {
     try {
       const modelId: any = id || req.params.id;
       const queryOptions = this.parseQueryParameters(req);
@@ -81,27 +123,32 @@ export class ResourceController<T extends Document> {
    * @param {string[]} [blacklist=[]] List of properties to ignore
    * @returns
    */
-  public async update(id: string, blacklist: string[] = [], req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+  public async update(
+    id: string,
+    blacklist: string[] = [],
+    req: Request,
+    res: Response,
+    next?: NextFunction,
+  ): Promise<any | undefined> {
     try {
       const modelId: any = id || req.params.id;
 
       // delete blacklisted properties from body
-      const defaultBlacklist = ['_id', 'createdAt', 'updatedAt', ...blacklist];
+      const defaultBlacklist = ["_id", "createdAt", "updatedAt", ...blacklist];
       for (const key of defaultBlacklist) {
         delete req.body[key];
       }
 
       const resource = await this.modelSchema
-        .findOneAndUpdate(
-          { _id: modelId },
-          req.body,
-          { new: true, runValidators: true, context: 'query' }
-        )
+        .findOneAndUpdate({ _id: modelId }, req.body, {
+          new: true,
+          runValidators: true,
+          context: "query",
+        })
         .orFail(new NotFound())
         .exec();
 
       return resource;
-
     } catch (e) {
       next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
     }
@@ -112,7 +159,12 @@ export class ResourceController<T extends Document> {
    *
    * @param {string} [id] Model id to be deleted
    */
-  public async delete(id: string, req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+  public async delete(
+    id: string,
+    req: Request,
+    res: Response,
+    next?: NextFunction,
+  ): Promise<any | undefined> {
     try {
       const modelId: any = id || req.params.id;
 
@@ -122,7 +174,6 @@ export class ResourceController<T extends Document> {
         .exec();
 
       return resource;
-
     } catch (e) {
       next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
     }
@@ -146,12 +197,14 @@ export class ResourceController<T extends Document> {
   protected parseQueryParameters(
     req: Request,
     blacklist: string[] = [],
-    skipKey: string = 'page',
-    limitKey: string = 'perPage'
-  ): { query: QueryOptions['filter'], options: IPaginateOptions } {
-
-    const queryOptions = new MongooseQueryParser({ limitKey, skipKey, blacklist })
-      .parse(req.query);
+    skipKey: string = "page",
+    limitKey: string = "perPage",
+  ): { query: QueryOptions["filter"]; options: IPaginateOptions } {
+    const queryOptions = new MongooseQueryParser({
+      limitKey,
+      skipKey,
+      blacklist,
+    }).parse(req.query);
 
     return {
       query: queryOptions.filter,
@@ -163,11 +216,10 @@ export class ResourceController<T extends Document> {
         lean: false,
         leanWithId: false,
         limit: queryOptions.limit || 10,
-      }
+      },
     };
   }
 
   // #endregion Helper methods
   // --------------------------------------
-
 }

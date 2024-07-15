@@ -1,24 +1,24 @@
-import http from 'http';
-import cors from 'cors';
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import { MethodNotAllowed } from 'http-errors';
-import { StatusCodes } from 'http-status-codes';
-import { Api } from './api';
-import { MongoAdapter } from './database';
-import { config, getHostDomain } from './config/environment';
-import { DIContainer, SocketsService } from './services';
-import { Logger } from './api/shared/utils/logger';
-import session from 'express-session';
-import helmet from 'helmet';
-import fileUpload from 'express-fileupload'
+import http from "http";
+import cors from "cors";
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import { MethodNotAllowed } from "http-errors";
+import { StatusCodes } from "http-status-codes";
+import { Api } from "./api";
+import { MongoAdapter } from "./database";
+import { config, getHostDomain } from "./config/environment";
+import { DIContainer, SocketsService } from "./services";
+import { Logger } from "./api/shared/utils/logger";
+import session from "express-session";
+import helmet from "helmet";
+import fileUpload from "express-fileupload";
 
 export class App {
   private logger: Logger = new Logger();
   private app!: express.Application;
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Initializes application and starts the server
@@ -38,9 +38,10 @@ export class App {
 
       // Finally start server
       server.listen(config.port, () => {
-        this.logger.success(`Server started in "${config.environment}" mode. Available on: ${getHostDomain()}`);
+        this.logger.success(
+          `Server started in "${config.environment}" mode. Available on: ${getHostDomain()}`,
+        );
       });
-
     } catch (e) {
       this.logger.error(`Failed to start server due to error: `, e);
       process.exit(-1);
@@ -58,23 +59,22 @@ export class App {
   private async setupExpressApp(): Promise<express.Application> {
     const application = express();
     application
-      .set('port', config.port)
-      .set('env', config.environment)
+      .set("port", config.port)
+      .set("env", config.environment)
       .use(cors())
       .use(helmet()) // security
-      .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024}})) // 50MB file limit
+      .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
       // .use(session(config.session))
-      .use(bodyParser.json({ limit: '5MB' }))
-      .use(bodyParser.urlencoded({ extended: true }))
+      .use(bodyParser.json({ limit: "5MB" }))
+      .use(bodyParser.urlencoded({ extended: true }));
 
     // setup primary app routes.
-    application
-      .use(await Api.applyRoutes(application));
+    application.use(await Api.applyRoutes(application));
 
     // all other routes should return 405 error (Method Not Allowed)
-    application
-      .route('/*')
-      .get((req, res) => { throw new MethodNotAllowed(); });
+    application.route("/*").get((req, res) => {
+      throw new MethodNotAllowed();
+    });
 
     // global error handler
     // !it has to be the last
@@ -95,7 +95,6 @@ export class App {
       this.logger.success(`MongoDB is connected on ${config.mongo.uri}`);
       const Str = mongoose.Schema.Types.String as any;
       Str.checkRequired((v: string) => v != null);
-
     } catch (e) {
       this.logger.error(`MongoDB connection error: `, e);
       throw e;
@@ -111,15 +110,22 @@ export class App {
    * @param {express.Response} res
    * @param {express.NextFunction} next
    */
-  private handlerError(error: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+  private handlerError(
+    error: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) {
     let status = error.status || StatusCodes.INTERNAL_SERVER_ERROR;
-    const code = error.code || error.name || 'InternalServerError';
-    const message = error.message || 'Internal Server Error';
+    const code = error.code || error.name || "InternalServerError";
+    const message = error.message || "Internal Server Error";
     const errors = error.errors || undefined;
 
     // cast mongoose errors to bad request
-    if (error instanceof mongoose.Error.CastError
-      || error instanceof mongoose.Error.ValidationError) {
+    if (
+      error instanceof mongoose.Error.CastError ||
+      error instanceof mongoose.Error.ValidationError
+    ) {
       status = StatusCodes.UNPROCESSABLE_ENTITY;
     }
 
@@ -128,6 +134,4 @@ export class App {
 
   // #endregion Private methods
   // ---------------------------------------
-
-
 }

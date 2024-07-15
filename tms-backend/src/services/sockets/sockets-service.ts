@@ -28,7 +28,7 @@ export class SocketsService {
   public publish(event: string, data: any) {
     /** 
      * "server:event" is predefined channel for every server event.
-     * Every socket-client in the frontend has subscribed in this event and
+     * Every socket-client in the frontend has subscribed in this event
     */
     this.socketServer.io.emit(event, data);
   }

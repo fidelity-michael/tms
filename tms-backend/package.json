@@ -46,6 +46,7 @@
     "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/config": "^3.3.3",
     "@types/express": "^4.17.21",
     "@types/express-fileupload": "^1.4.4",
