@@ -1,13 +1,13 @@
 // TODO: Need changes for socket events
-import http, { Server } from 'http';
-import io from 'socket.io';
-import { Logger } from '../../../api/shared/utils/logger';
-import { config, getHostDomain } from '../../../config/environment';
-
+import http, { Server } from "http";
+import io from "socket.io";
+import { Logger } from "../../../api/shared/utils/logger";
+import { config, getHostDomain } from "../../../config/environment";
 
 export class SocketServer {
   private logger: Logger = new Logger();
   public io!: io.Server;
+  public users = {};
 
   constructor() {}
 
@@ -24,10 +24,11 @@ export class SocketServer {
       // register events on connect
       this.onConnect();
 
-      this.logger.success(`Sockets are established on path: ${getHostDomain()}`);
-
+      this.logger.success(
+        `Sockets are established on path: ${getHostDomain()}`,
+      );
     } catch (e) {
-      this.logger.error('Socket server failed to start', e);
+      this.logger.error("Socket server failed to start", e);
     }
   }
 
@@ -37,8 +38,8 @@ export class SocketServer {
    * On server connection.
    */
   private onConnect() {
-    this.io.on('connection', socket => {
-      this.logger.debug('Connection event triggered');
+    this.io.on("connection", (socket) => {
+      this.logger.debug("Connection event triggered");
       this.logger.debug("New client has connected");
       //emit welcome message from server to user
       // handshake verify function
@@ -47,10 +48,10 @@ export class SocketServer {
       });
       this.onSubscribe(socket);
       this.onUnsubscribe(socket);
-      this.onDisconnecting(socket);
+      this.onDisconnect(socket);
       this.onClientEvent(socket);
-      this.onUpdateWall(socket);
-      this.onUpdateTable(socket);
+      // this.onUpdateWall(socket);
+      // this.onUpdateTable(socket);
     });
   }
 
@@ -60,8 +61,8 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onSubscribe(socket: io.Socket): void {
-    socket.on('subscribe', (data: any) => {
-      this.logger.debug('subscribe');
+    socket.on("subscribe", (data: any) => {
+      this.logger.debug("subscribe");
     });
   }
 
@@ -71,8 +72,8 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onUnsubscribe(socket: io.Socket): void {
-    socket.on('unsubscribe', (data: any) => {
-      this.logger.debug('unsubscribe');
+    socket.on("unsubscribe", (data: any) => {
+      this.logger.debug("unsubscribe");
     });
   }
 
@@ -81,9 +82,9 @@ export class SocketServer {
    *
    * @param {io.Socket} socket
    */
-  private onDisconnecting(socket: io.Socket): void {
-    socket.on('disconnecting', (reason: any) => {
-      this.logger.debug('disconnecting');
+  private onDisconnect(socket: io.Socket): void {
+    socket.on("disconnect", (reason: any) => {
+      this.removeUser(socket);
     });
   }
 
@@ -93,8 +94,8 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onClientEvent(socket: io.Socket): void {
-    socket.on('client:event', (data: any) => {
-      this.logger.debug('client event');
+    socket.on("client:event", (data: any) => {
+      this.logger.debug("client event");
       this.io.emit(data.event, data.data);
     });
   }
@@ -105,9 +106,9 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onUpdateWall(socket: io.Socket): void {
-    socket.on('updateWall', (data: any) => {
-      this.logger.debug('On updateWall event');
-      this.io.emit('updateWall', data);
+    socket.on("updateWall", (data: any) => {
+      this.logger.debug("On updateWall event");
+      this.io.emit("updateWall", data);
     });
   }
 
@@ -117,30 +118,38 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onUpdateTable(socket: io.Socket): void {
-    socket.on('updateTable', (data: any) => {
-      this.logger.debug('On updateTable event');
-      this.io.emit('updateTable', data);
+    socket.on("updateTable", (data: any) => {
+      this.logger.debug("On updateTable event");
+      this.io.emit("updateTable", data);
     });
   }
 
   /** TODO: Fix currentUserId problem
-   * On Map event to a channel.
+   * On Map event to a channel for notification use
    *
    * @param {io.Socket} socket
    */
-  private onNotificationEvents(socket: io.Socket): void {
-    let users = {};
-    var currentUserId: any;
-    socket.on('map', (userId: any) => {
-      this.logger.debug('On map event');
+  private onMap(socket: io.Socket): void {
+    var currentUserId: string; // NOTE: I suspect it's a string
+    socket.on("map", (userId: any) => {
+      this.logger.debug("On map event");
       currentUserId = userId;
-      users[socket.id] = userId;
-      console.log(userId,' connected');
+      this.users[socket.id] = userId;
+      this.logger.debug(userId, " connected");
+
       // this.io.emit('updateTable', data);
     });
   }
-  //#endregion Private methods
+
+  // #region Helper methods
+
+  private removeUser(socket: io.Socket) {
+    this.logger.debug(socket.id + " disconnect");
+    delete this.users[socket.id]; // remove from mapping
+  }
+  // #endregion Helper methods
   // --------------------------------
 
+  //#endregion Private methods
+  // --------------------------------
 }
-

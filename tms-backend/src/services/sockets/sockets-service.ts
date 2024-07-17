@@ -8,7 +8,7 @@ import { SocketServer } from './socket-server';
 // @injectable()
 export class SocketsService {
 
-  private socketServer!: SocketServer;
+  public socketServer!: SocketServer;
 
   constructor() { }
 

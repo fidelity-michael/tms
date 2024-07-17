@@ -18,6 +18,7 @@ const notificationsLimiter = rateLimit({
 
 // Import Routes
 const notificationsRoute = require("./routes/notifications");
+const { functions } = require("lodash");
 
 const app = express();
 const PORT = 4000;

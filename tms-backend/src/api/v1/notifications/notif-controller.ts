@@ -1,31 +1,43 @@
-import { Request, Response, Router } from 'express';
-import { INotification, NotificationModel, Notification_t } from './notif-model';
-import { ResourceController } from '../../shared';
-import { StatusCodes } from 'http-status-codes';
-import { Logger } from '../../shared/utils/logger';
-import { ObjectId } from 'mongoose';
-import config from 'config';
-import nodemailer from 'nodemailer';
+import { Request, Response, Router } from "express";
+import {
+  INotification,
+  NotificationModel,
+  Notification_t,
+} from "./notif-model";
+import { ResourceController } from "../../shared";
+import { StatusCodes } from "http-status-codes";
+import { Logger } from "../../shared/utils/logger";
+import { ObjectId } from "mongoose";
+import config from "config";
+import nodemailer from "nodemailer";
+import { UserModel } from "../users/user-model";
+import { DIContainer, SocketsService } from "../../../services";
 
-export class NotificationController extends ResourceController<INotification>{
+// TODO: Add socket event (from routes/notifications.js) in services folder
+// TODO: Fix socket implementation and integrate it with current structure
+
+export class NotificationController extends ResourceController<INotification> {
   private logger: Logger = new Logger();
+  private users = DIContainer.get(SocketsService).socketServer.users; // TODO: Check if correct
   constructor() {
     super(NotificationModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for notifications
    *
    * @returns {Router}
    */
   public applyRoutes(): Router {
     const router = Router();
     router
-      .get('/', this.getNotification)
-      .get('/initialize', this.initNotification)
-      .get('/:id', this.getNotificationById)
-      .post('/', this.postNotification)
-      .put('/:id', this.updateNotification)
-      .delete('/:id', this.deleteNotification);
+      .get("/", this.getNotifications)
+      .get("/initialize", this.initNotification)
+      .get("/:userId", this.getNotificationById)
+      .get("/all/:userId", this.getNotifications)
+      .get("/some/:userId", this.getLimitedNotifications) // TODO: add patch function with notification id here
+      .post("/", this.postNotification)
+      .patch("/:notificationId", this.updateNotification)
+      .delete("/:id", this.deleteNotification);
 
     return router;
   }
@@ -40,60 +52,105 @@ export class NotificationController extends ResourceController<INotification>{
    * @param req
    * @param res
    */
-  getNotification = async (req: Request, res: Response) => {
-    this.logger.debug('getNotification request');
+  getNotifications = async (req: Request, res: Response) => {
+    this.logger.debug("getNotification request");
     // you can pre-process the request here before passing it to the super class method
+
     const allNotifications = await this.getAll(req, res);
     // you can process the data retrieved here before returning it to the client
-    return res
-      .status(StatusCodes.OK)
-      .json(allNotifications);
-  }
+    return res.status(StatusCodes.OK).json(allNotifications);
+  };
+
+  getLimitedNotifications = async (req: Request, res: Response) => {
+    this.logger.debug("getSomeNotifications request");
+
+    const limitedNotifications = await this.getLimited(req, res, 20);
+
+    return res.status(StatusCodes.OK).json(limitedNotifications);
+  };
 
   /**
-   * Creates a new task
    * @param req
    * @param res
    */
   postNotification = async (req: Request, res: Response) => {
-    this.logger.debug('postNotification request');
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.create(req, res);
-    // you can process the data retrieved here before returning it to the client
-    return res
-      .status(StatusCodes.OK)
-      .json(task);
-  }
+    this.logger.debug("postNotification request");
+    try {
+      const notification = new NotificationModel({
+        title: req.body.title,
+        message: req.body.message,
+        receiver: req.body.receiver,
+        type: req.body.type,
+        date: Date.now(),
+      });
+
+      const saved_notification = await notification.save();
+      res.send({ notification: notification._id });
+
+      var receiverSocketIds: string[] = [];
+
+      //we get all the current socketIds of the receiver and the sender
+      Object.keys(this.users).forEach((key: string) => {
+        //key is the socket.id of the receiver
+
+        //for receiver
+        if (this.users[key] === notification.receiver) {
+          receiverSocketIds.push(key);
+        }
+      });
+
+      console.log("receivers: ", receiverSocketIds, "users: ", this.users);
+
+      //emit to all of the receiver sockets
+      if (receiverSocketIds.length > 0) {
+        receiverSocketIds.forEach((socketId) => {
+          socket.to(socketId).emit("newNotification");
+        });
+      }
+
+      sendEmail(req.body.receiver, req.body.title, req.body.message);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+
+    // return res.status(StatusCodes.OK).json(task);
+  };
+
+  postNotification = async (req: Request, res: Response) => {};
 
   /**
-   * Delete task by id
+   * Delete notification by id
    * @param req
    * @param res
    */
   deleteNotification = async (req: Request, res: Response) => {
-    this.logger.debug('deleteNotification request');
+    this.logger.debug("deleteNotification request");
     // you can pre-process the request here before passing it to the super class method
     const task = await this.delete(req.params.id, req, res);
     // you can process the data retrieved here before returning it to the client
-    return res
-      .status(StatusCodes.OK)
-      .json(task);
-  }
+    return res.status(StatusCodes.OK).json(task);
+  };
 
   /**
-   * Update task by id
+   * Update notification by id
    * @param req
    * @param res
    */
   updateNotification = async (req: Request, res: Response) => {
-    this.logger.debug('updateNotification request');
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.update(req.params.id, req.body.blacklist, req, res); // WARN: check for correct params
-    // you can process the data retrieved here before returning it to the client
-    return res
-      .status(StatusCodes.OK)
-      .json(task);
-  }
+    this.logger.debug("updateNotification request");
+    const updated_notification = await NotificationModel.updateOne(
+      { _id: req.params.notificationId },
+      { $set: { [req.body.attr]: req.body.value } },
+    )
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        console.log("Server internal error occurred on updateNotification!");
+      });
+    return res.status(StatusCodes.OK).json(updated_notification);
+  };
 
   /**
    * Get single task by id
@@ -101,15 +158,13 @@ export class NotificationController extends ResourceController<INotification>{
    * @param res
    */
   getNotificationById = async (req: Request, res: Response) => {
-    this.logger.debug('getNotificationById request');
+    this.logger.debug("getNotificationById request");
     // you can pre-process the request here before passing it to the super class method
-    const task = await this.getOne(req.params.id, req, res);
+    const task = await this.getOne(req.params.userId, req, res);
 
     // you can process the data retrieved here before returning it to the client
-    return res
-      .status(StatusCodes.OK)
-      .json(task);
-  }
+    return res.status(StatusCodes.OK).json(task);
+  };
 
   /**
    * Initialize items
@@ -117,7 +172,7 @@ export class NotificationController extends ResourceController<INotification>{
    * @param res
    */
   initNotification = async (req: Request, res: Response) => {
-    this.logger.debug('Initialize notification request');
+    this.logger.debug("Initialize notification request");
 
     const NotificationToInsert: Notification_t[] = [];
 
@@ -126,25 +181,27 @@ export class NotificationController extends ResourceController<INotification>{
         res.json(docs);
       })
       .catch((err) => {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-      })
-
-  }
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      });
+  };
 
   sendEmail = async (receiverId: ObjectId, title: string, message: string) => {
-
     // TODO: Add User model so it can be searched.
-    const receiver = await User.findOne({ _id: receiverId });
-    const receiverEmail = receiver.email
+    const receiver = await UserModel.findOne({ _id: receiverId });
+    const receiverEmail: string = receiver!.email; // ! because email is never null
 
     //apo config file
-    const senderEmail = config.get('AdminMailCredentials.email');
-    const senderPswd = config.get('AdminMailCredentials.password');
-    const senderService = config.get('AdminMailCredentials.service')
+    const senderEmail: string = config.get("AdminMailCredentials.email");
+    const senderPswd: string = config.get("AdminMailCredentials.password");
+    const senderService: string = config.get("AdminMailCredentials.service");
 
     //prevent error
-    if (senderEmail.length === 0 || senderPswd.length === 0 || senderService.length === 0) {
-      return
+    if (
+      senderEmail.length === 0 ||
+      senderPswd.length === 0 ||
+      senderService.length === 0
+    ) {
+      return;
     } else {
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
@@ -153,20 +210,19 @@ export class NotificationController extends ResourceController<INotification>{
           user: senderEmail,
           pass: senderPswd,
         },
-        tls: { rejectUnauthorized: false }
+        tls: { rejectUnauthorized: false },
       });
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
         from: senderEmail,
-        to: receiverEmail,  //receiver email
+        to: receiverEmail, //receiver email
         subject: title,
         text: message,
-        html: "<b>" + message + "</b>"
+        html: "<b>" + message + "</b>",
       });
 
-      console.log("Mail sent successfully!");
+      this.logger.debug("Mail sent successfully!");
     }
-
-  }
+  };
 }
