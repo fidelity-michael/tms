@@ -3,13 +3,16 @@ import http, { Server } from "http";
 import io from "socket.io";
 import { Logger } from "../../../api/shared/utils/logger";
 import { config, getHostDomain } from "../../../config/environment";
+import { UserSockets } from "../../../api/v1/users/user-controller";
 
 export class SocketServer {
   private logger: Logger = new Logger();
   public io!: io.Server;
-  public users = {};
+  public users: UserSockets; // For notifications
 
-  constructor() {}
+  constructor() {
+    this.users = {};
+  }
 
   /**
    * Start the Socket Server.
@@ -38,11 +41,10 @@ export class SocketServer {
    * On server connection.
    */
   private onConnect() {
-    this.io.on("connection", (socket) => {
+    this.io.on("connection", (socket) => { // same as: `.of("/")`
       this.logger.debug("Connection event triggered");
       this.logger.debug("New client has connected");
-      //emit welcome message from server to user
-      // handshake verify function
+      //emit welcome message from server to user handshake verify function
       socket.emit("welcome", {
         message: "connection was successful",
       });
@@ -50,9 +52,28 @@ export class SocketServer {
       this.onUnsubscribe(socket);
       this.onDisconnect(socket);
       this.onClientEvent(socket);
-      // this.onUpdateWall(socket);
-      // this.onUpdateTable(socket);
     });
+
+    this.io.of("/notification").on("connection", (socket) => {
+      this.logger.debug("Connection event (notification) triggered");
+      socket.emit("welcome", {
+        message: "connection to notification socket was successful",
+      });
+
+      this.onMap(socket);
+      this.onNotificationEvent(socket);
+      this.onDisconnect(socket);
+    })
+
+    this.io.of("/chat").on("connection", (socket) => {
+      this.logger.debug("Connection event (chat) triggered");
+      socket.emit("welcome", {
+        message: "connection to chat was successful",
+      });
+
+      this.onChatEvent(socket);
+      this.onDisconnect(socket);
+    })
   }
 
   /**
@@ -100,6 +121,20 @@ export class SocketServer {
     });
   }
 
+  private onNotificationEvent(socket: io.Socket): void {
+    socket.on("notification:event", (data: any) => {
+      this.logger.debug("notification event");
+      this.io.emit(data.event, data.data);
+    })
+  }
+
+  private onChatEvent(socket: io.Socket): void {
+    socket.on("chat:event", (data: any) => {
+      this.logger.debug("chat event");
+      this.io.emit(data.event, data.data);
+    })
+  }
+
   /**
    * On UpdateWall event to a channel.
    *
@@ -131,20 +166,42 @@ export class SocketServer {
    */
   private onMap(socket: io.Socket): void {
     var currentUserId: string; // NOTE: I suspect it's a string
-    socket.on("map", (userId: any) => {
+    socket.on("map", (userId: string) => {
       this.logger.debug("On map event");
       currentUserId = userId;
       this.users[socket.id] = userId;
       this.logger.debug(userId, " connected");
 
-      // this.io.emit('updateTable', data);
     });
   }
+
+  /* private newNotification(socket: io.Socket): void {
+    var receiverSocketIds: string[] = [];
+
+    //we get all the current socketIds of the receiver and the sender
+    Object.keys(this.users).forEach((key: string) => {
+      //key is the socket.id of the receiver
+
+      //for receiver
+      if (this.users[key] === notification.receiver) {
+        receiverSocketIds.push(key);
+      }
+    });
+
+    console.log("receivers: ", receiverSocketIds, "users: ", this.users);
+
+    //emit to all of the receiver sockets
+    if (receiverSocketIds.length > 0) {
+      receiverSocketIds.forEach((socketId) => {
+        socket.to(socketId).emit("newNotification");
+      });
+    }
+  } */
 
   // #region Helper methods
 
   private removeUser(socket: io.Socket) {
-    this.logger.debug(socket.id + " disconnect");
+    this.logger.debug(socket.id + " disconnected");
     delete this.users[socket.id]; // remove from mapping
   }
   // #endregion Helper methods

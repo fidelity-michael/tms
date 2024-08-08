@@ -7,7 +7,7 @@ export const config = {
   // host domain options
   protocol: process.env.PROTOCOL || 'http',
   host: process.env.HOST || "localhost",
-  exposedPort: process.env.EXPOSED_PORT,
+  exposedPort: process.env.EXPOSED_PORT, // TODO: Change EXPOSED_PORT
   port: process.env.PORT, // !Do NOT change this option, because it is used by reverse-proxy
 
   // MongoDB connection options

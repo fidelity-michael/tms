@@ -4,7 +4,15 @@ import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
 
-import bcrypt from "bcryptJS";
+import bcrypt from "bcryptjs";
+
+/**
+ * Interface for user sockets type.
+ * Key: socketId, Value: userId
+ */
+export interface UserSockets {
+  [socketId: string]: string;
+}
 
 export class UserController extends ResourceController<IUser> {
   private logger: Logger = new Logger();
@@ -25,8 +33,8 @@ export class UserController extends ResourceController<IUser> {
       .get("/initialize", this.initializeUsers)
       .get("/:userId", this.getUserById)
       .post("/", this.postUser)
-      .put("/:userId", this.updateArea)
-      .patch("/:userId", this.patchArea)
+      .put("/:userId", this.updateUser)
+      .patch("/:userId", this.patchUser)
       .delete("/:userId", this.deleteUser);
 
     return router;
@@ -115,8 +123,8 @@ export class UserController extends ResourceController<IUser> {
    * @param req
    * @param res
    */
-  updateArea = async (req: Request, res: Response) => {
-    this.logger.debug("updateArea request");
+  updateUser = async (req: Request, res: Response) => {
+    this.logger.debug("updateUser request");
     // you can pre-process the request here before passing it to the super class method
     const task = await this.update(
       req.params.userId,
@@ -133,8 +141,8 @@ export class UserController extends ResourceController<IUser> {
    * @param req
    * @param res
    */
-  patchArea = async (req: Request, res: Response) => {
-    this.logger.debug("updateArea request");
+  patchUser = async (req: Request, res: Response) => {
+    this.logger.debug("patch user request");
     // you can pre-process the request here before passing it to the super class method
     const updated_user = await UserModel.updateOne(
       { _id: req.params.userId },
@@ -148,18 +156,18 @@ export class UserController extends ResourceController<IUser> {
       });
   };
 
-  encryptPass = async (plainPass, rounds) => {
+  encryptPass = async (plainPass: any, rounds: any) => {
     const saltRounds = await bcrypt.genSalt(rounds);
     const hashedPass = await bcrypt.hash(plainPass, saltRounds);
     return hashedPass;
   };
 
   /**
-   * Initialize items
+   * Initialize users
    * @param req
    * @param res
    */
-  initializeUsers = async () => {
+  private initializeUsers = async (): Promise<void> => {
     this.logger.debug("Initialize users request");
 
     const usersToInsert: User_t[] = [
@@ -203,14 +211,21 @@ export class UserController extends ResourceController<IUser> {
   };
 
   // Check if Model is empty, if empty initialize document
-
-  private checkAndInitialize(): void {
-    UserModel.findOne({}, (err: any, docs: any) => {
-      if (err) {
-        console.log(err);
-      } else if (!docs) {
+  private async checkAndInitialize(): Promise<void> {
+    try {
+      const data = await UserModel.findOne({})
+      if(!data){
         this.initializeUsers();
       }
-    });
+    }catch(error){
+      this.logger.error("Error ocurred in user initialization: ", error);
+    }
+    // UserModel.findOne({}, function (this: UserController, err: any, docs: any) {
+    //   if (err) {
+    //     console.log(err);
+    //   } else if (!docs) {
+    //     this.initializeUsers();
+    //   }
+    // });
   }
 }
