@@ -11,16 +11,26 @@ import { ObjectId } from "mongoose";
 import config from "config";
 import nodemailer from "nodemailer";
 import { UserModel } from "../users/user-model";
-import { DIContainer, SocketsService } from "../../../services";
+import { DIContainer, SocketServer, SocketsService } from "../../../services";
+import io from "socket.io";
+import { ObjectType } from "typescript";
+import { UserSockets } from "../users/user-controller";
 
 // TODO: Add socket event (from routes/notifications.js) in services folder
 // TODO: Fix socket implementation and integrate it with current structure
 
 export class NotificationController extends ResourceController<INotification> {
   private logger: Logger = new Logger();
-  private users = DIContainer.get(SocketsService).socketServer.users; // TODO: Check if correct
+  private socketServer: SocketServer;
+  private users: UserSockets; // TODO: Check if correct
   constructor() {
     super(NotificationModel);
+    this.socketServer = DIContainer.get(SocketsService).socketServer;
+
+    if(this.socketServer) // NOTE: Check this piece of code. users logic maybe incorrect
+      this.users = this.socketServer.users;
+    else
+      this.users = {};
   }
   /**
    * Apply all routes for notifications
@@ -70,11 +80,13 @@ export class NotificationController extends ResourceController<INotification> {
   };
 
   /**
+   * Create a new notification
    * @param req
    * @param res
    */
   postNotification = async (req: Request, res: Response) => {
     this.logger.debug("postNotification request");
+    // TODO: FIX THIS EMIT SOCKET SITUATION HERE
     try {
       const notification = new NotificationModel({
         title: req.body.title,
@@ -87,7 +99,8 @@ export class NotificationController extends ResourceController<INotification> {
       const saved_notification = await notification.save();
       res.send({ notification: notification._id });
 
-      var receiverSocketIds: string[] = [];
+      let receiverSocketIds: {[index: string]: any} = [];
+      // let receiverSocketIds: string[] = [];
 
       //we get all the current socketIds of the receiver and the sender
       Object.keys(this.users).forEach((key: string) => {
@@ -103,12 +116,13 @@ export class NotificationController extends ResourceController<INotification> {
 
       //emit to all of the receiver sockets
       if (receiverSocketIds.length > 0) {
-        receiverSocketIds.forEach((socketId) => {
+        receiverSocketIds.forEach((socketId: string) => {
+          const socket = this.socketServer.io;
           socket.to(socketId).emit("newNotification");
         });
       }
 
-      sendEmail(req.body.receiver, req.body.title, req.body.message);
+      this.sendEmail(req.body.receiver, req.body.title, req.body.message);
     } catch (err) {
       console.log(err);
       res.status(400).send(err);
@@ -116,8 +130,6 @@ export class NotificationController extends ResourceController<INotification> {
 
     // return res.status(StatusCodes.OK).json(task);
   };
-
-  postNotification = async (req: Request, res: Response) => {};
 
   /**
    * Delete notification by id
@@ -186,7 +198,6 @@ export class NotificationController extends ResourceController<INotification> {
   };
 
   sendEmail = async (receiverId: ObjectId, title: string, message: string) => {
-    // TODO: Add User model so it can be searched.
     const receiver = await UserModel.findOne({ _id: receiverId });
     const receiverEmail: string = receiver!.email; // ! because email is never null
 
