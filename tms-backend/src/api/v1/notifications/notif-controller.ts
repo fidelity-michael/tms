@@ -112,9 +112,10 @@ export class NotificationController extends ResourceController<INotification> {
         }
       });
 
-      console.log("receivers: ", receiverSocketIds, "users: ", this.users);
+      this.logger.debug("receivers: ", receiverSocketIds, "users: ", this.users)
 
       //emit to all of the receiver sockets
+      // TODO: Check socket usability
       if (receiverSocketIds.length > 0) {
         receiverSocketIds.forEach((socketId: string) => {
           const socket = this.socketServer.io;
@@ -197,7 +198,7 @@ export class NotificationController extends ResourceController<INotification> {
       });
   };
 
-  sendEmail = async (receiverId: ObjectId, title: string, message: string) => {
+  sendEmail = async (receiverId: any, title: string, message: string) => {
     const receiver = await UserModel.findOne({ _id: receiverId });
     const receiverEmail: string = receiver!.email; // ! because email is never null
 
