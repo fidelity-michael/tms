@@ -4,6 +4,7 @@ import io from "socket.io";
 import { Logger } from "../../../api/shared/utils/logger";
 import { config, getHostDomain } from "../../../config/environment";
 import { UserSockets } from "../../../api/v1/users/user-controller";
+import { RateLimiterMemory } from "rate-limiter-flexible";
 
 export class SocketServer {
   private logger: Logger = new Logger();
@@ -41,7 +42,8 @@ export class SocketServer {
    * On server connection.
    */
   private onConnect() {
-    this.io.on("connection", (socket) => { // same as: `.of("/")`
+    this.io.on("connection", (socket) => {
+      // same as: `.of("/")`
       this.logger.debug("Connection event triggered");
       this.logger.debug("New client has connected");
       //emit welcome message from server to user handshake verify function
@@ -63,7 +65,7 @@ export class SocketServer {
       this.onMap(socket);
       this.onNotificationEvent(socket);
       this.onDisconnect(socket);
-    })
+    });
 
     this.io.of("/chat").on("connection", (socket) => {
       this.logger.debug("Connection event (chat) triggered");
@@ -71,11 +73,18 @@ export class SocketServer {
         message: "connection to chat was successful",
       });
 
+      //for ddos attack prevention
+      const msgRateLimiter = new RateLimiterMemory({
+        points: 3, // 3 messages
+        duration: 1, // per second
+      });
+
+      this.onMap(socket);
+      this.onPrivateMessage(socket, msgRateLimiter);
       this.onChatEvent(socket);
       this.onDisconnect(socket);
-    })
+    });
   }
-
   /**
    * On subscribe to a channel.
    *
@@ -125,14 +134,14 @@ export class SocketServer {
     socket.on("notification:event", (data: any) => {
       this.logger.debug("notification event");
       this.io.emit(data.event, data.data);
-    })
+    });
   }
 
   private onChatEvent(socket: io.Socket): void {
     socket.on("chat:event", (data: any) => {
       this.logger.debug("chat event");
       this.io.emit(data.event, data.data);
-    })
+    });
   }
 
   /**
@@ -159,8 +168,8 @@ export class SocketServer {
     });
   }
 
-  /** TODO: Fix currentUserId problem
-   * On Map event to a channel for notification use
+  /**
+   * On Map event to a channel for notification/chat use
    *
    * @param {io.Socket} socket
    */
@@ -171,37 +180,64 @@ export class SocketServer {
       currentUserId = userId;
       this.users[socket.id] = userId;
       this.logger.debug(userId, " connected");
-
     });
   }
 
-  /* private newNotification(socket: io.Socket): void {
-    var receiverSocketIds: string[] = [];
+  /**
+   * On onPrivateMessage event for chat usage
+   *
+   * @param {io.Socket} socket
+   * @param msgRateLimiter object of RateLimiterMemory class
+   */
+  private onPrivateMessage(
+    socket: io.Socket,
+    msgRateLimiter: RateLimiterMemory,
+  ): void {
+    socket.on("privateMessage", (data) => {
+      msgRateLimiter
+        .consume(socket.id) // consume 1 point per event
+        .then(() => {
+          var receiverSocketIds: string[] = [];
+          var senderOtherSocketIds: string[] = [];
 
-    //we get all the current socketIds of the receiver and the sender
-    Object.keys(this.users).forEach((key: string) => {
-      //key is the socket.id of the receiver
+          //we get all the current socketIds of the receiver and the sender
+          Object.keys(this.users).forEach((key) => {
+            //key is the socket.id of the receiver
 
-      //for receiver
-      if (this.users[key] === notification.receiver) {
-        receiverSocketIds.push(key);
-      }
+            //for receiver
+            if (this.users[key] === data.receiverId) {
+              receiverSocketIds.push(key);
+            }
+
+            //for sender
+            if (this.users[key] === data.senderId && key !== socket.id) {
+              senderOtherSocketIds.push(key);
+            }
+          });
+
+          //emit to all of the receiver sockets
+          if (receiverSocketIds.length > 0) {
+            receiverSocketIds.forEach((socketId) => {
+              socket.to(socketId).emit("privateMessage", data);
+            });
+          }
+
+          //emit to the other sockets of the sender (px. open multiple tabs)
+          if (senderOtherSocketIds.length > 0) {
+            senderOtherSocketIds.forEach((socketId) => {
+              socket.to(socketId).emit("myMessage", data);
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("Tooo many messages sent (DDoS prevention)");
+        });
     });
-
-    console.log("receivers: ", receiverSocketIds, "users: ", this.users);
-
-    //emit to all of the receiver sockets
-    if (receiverSocketIds.length > 0) {
-      receiverSocketIds.forEach((socketId) => {
-        socket.to(socketId).emit("newNotification");
-      });
-    }
-  } */
-
+  }
   // #region Helper methods
-
   private removeUser(socket: io.Socket) {
-    this.logger.debug(socket.id + " disconnected");
+    const user = this.users[socket.id];
+    this.logger.debug(user + " disconnected");
     delete this.users[socket.id]; // remove from mapping
   }
   // #endregion Helper methods
