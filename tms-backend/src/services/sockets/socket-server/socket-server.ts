@@ -174,10 +174,8 @@ export class SocketServer {
    * @param {io.Socket} socket
    */
   private onMap(socket: io.Socket): void {
-    var currentUserId: string; // NOTE: I suspect it's a string
     socket.on("map", (userId: string) => {
       this.logger.debug("On map event");
-      currentUserId = userId;
       this.users[socket.id] = userId;
       this.logger.debug(userId, " connected");
     });

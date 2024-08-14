@@ -15,12 +15,13 @@ import { UserController } from "./users/user-controller";
 // import { TaskController } from './task/task.controller';
 
 const apiLimiter = rateLimit(config.apiLimiter);
-const authLimiter = rateLimit(config.authLimiter);
+// const authLimiter = rateLimit(config.authLimiter);
 const notificationsLimiter = rateLimit(config.notifLimiter);
+const chatLimiter = rateLimit(config.chatLimiter)
 
 const apiV1Router = express.Router();
-// const chatV1Router = express.Router();
 const notificationV1Router = express.Router();
+const chatV1Router = express.Router();
 
 apiV1Router
   .use("/resource", apiLimiter, new ResourcesController().applyRoutes())
@@ -32,5 +33,12 @@ notificationV1Router.use(
   notificationsLimiter,
   new NotificationController().applyRoutes(),
 );
+
+// TODO: Add chat route
+// chatV1Router.use(
+//   "/",
+//   chatLimiter,
+//
+ // )
 
 export { apiV1Router, notificationV1Router };

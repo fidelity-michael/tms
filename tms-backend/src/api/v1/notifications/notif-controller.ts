@@ -17,7 +17,6 @@ import { ObjectType } from "typescript";
 import { UserSockets } from "../users/user-controller";
 
 // TODO: Add socket event (from routes/notifications.js) in services folder
-// TODO: Fix socket implementation and integrate it with current structure
 
 export class NotificationController extends ResourceController<INotification> {
   private logger: Logger = new Logger();
@@ -198,7 +197,7 @@ export class NotificationController extends ResourceController<INotification> {
       });
   };
 
-  sendEmail = async (receiverId: any, title: string, message: string) => {
+  sendEmail = async (receiverId: ObjectId, title: string, message: string) => {
     const receiver = await UserModel.findOne({ _id: receiverId });
     const receiverEmail: string = receiver!.email; // ! because email is never null
 
