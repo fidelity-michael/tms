@@ -8,6 +8,8 @@ import * as express from "express";
 import { ResourcesController } from "./resources/resources-controller";
 import { AreaController } from "./area/area-controller";
 import { NotificationController } from "./notifications/notif-controller";
+import { MessageController } from "./chat/message/message-controller";
+import { PrivateMessageController } from "./chat/privateMessage/privateMessage-controller";
 import { rateLimit } from "express-rate-limit";
 
 import { config } from "../../config/environment";
@@ -17,7 +19,7 @@ import { UserController } from "./users/user-controller";
 const apiLimiter = rateLimit(config.apiLimiter);
 // const authLimiter = rateLimit(config.authLimiter);
 const notificationsLimiter = rateLimit(config.notifLimiter);
-const chatLimiter = rateLimit(config.chatLimiter)
+const chatLimiter = rateLimit(config.chatLimiter);
 
 const apiV1Router = express.Router();
 const notificationV1Router = express.Router();
@@ -34,11 +36,12 @@ notificationV1Router.use(
   new NotificationController().applyRoutes(),
 );
 
-// TODO: Add chat route
-// chatV1Router.use(
-//   "/",
-//   chatLimiter,
-//
- // )
+chatV1Router
+  .use("/message", chatLimiter, new MessageController().applyRoutes())
+  .use(
+    "/privateConversation",
+    chatLimiter,
+    new PrivateMessageController().applyRoutes(),
+  );
 
-export { apiV1Router, notificationV1Router };
+export { apiV1Router, notificationV1Router, chatV1Router };

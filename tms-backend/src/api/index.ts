@@ -1,5 +1,5 @@
 import * as express from "express";
-import { apiV1Router, notificationV1Router } from "./v1";
+import { apiV1Router, notificationV1Router, chatV1Router } from "./v1";
 
 export class Api {
   /**
@@ -17,7 +17,7 @@ export class Api {
     apiRouter.use("/notifications/", notificationV1Router);
     // NOTE: {Use /chat, /notifications ROUTES for the other 2 servers
     // combining all 3 servers into 1.}
-    // apiRouter.use('/chat', /**/);
+    apiRouter.use('/chat', chatV1Router);
 
     return apiRouter;
   }
