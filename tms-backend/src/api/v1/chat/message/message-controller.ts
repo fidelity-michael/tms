@@ -74,6 +74,7 @@ export class MessageController extends ResourceController<IMessage> {
    * @param res
    */
   postMessage = async (req: Request, res: Response) => {
+    this.logger.debug("postMessage request");
     try {
       var newMessage = new MessageModel({
         sender: req.body.sender,

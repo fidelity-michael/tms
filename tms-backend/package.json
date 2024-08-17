@@ -53,6 +53,8 @@
     "@types/express-fileupload": "^1.4.4",
     "@types/express-session": "^1.18.0",
     "@types/http-errors": "^2.0.4",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/ldapjs-client": "^0.1.5",
     "@types/lodash": "^4.14.202",
     "@types/nodemailer": "^6.4.14",
     "concurrently": "^8.2.2",
