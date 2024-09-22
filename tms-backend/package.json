@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "start": "ts-node-dev src/index.ts",
     "dev": "nodemon --legacy-watch",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "keywords": [],
   "author": "",

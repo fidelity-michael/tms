@@ -1,5 +1,4 @@
 # Production 
-version: "3.7"
 
 services: 
 
@@ -56,6 +55,7 @@ services:
 networks:
   integration-network:
     name: ${APP_NAME}-integration-network
+    external: true
 
 volumes:
   database-volume:

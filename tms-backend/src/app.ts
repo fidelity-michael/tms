@@ -64,7 +64,7 @@ export class App {
       .use(cors())
       .use(helmet()) // security
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
-      // .use(session(config.session))
+      // .use(session(config.session)) // TODO: Check for session here
       .use(bodyParser.json({ limit: "5MB" }))
       .use(bodyParser.urlencoded({ extended: true }));
 
