@@ -14,6 +14,7 @@ import { rateLimit } from "express-rate-limit";
 
 import { config } from "../../config/environment";
 import { UserController } from "./users/user-controller";
+import { AuthenticationController } from "./authentication/auth-controller";
 // import { TaskController } from './task/task.controller';
 
 const apiLimiter = rateLimit(config.apiLimiter);
@@ -26,6 +27,7 @@ const notificationV1Router = express.Router();
 const chatV1Router = express.Router();
 
 apiV1Router
+  .use("/auth", apiV1Router, new AuthenticationController().applyRoutes()) // ldap
   .use("/resource", apiLimiter, new ResourcesController().applyRoutes())
   .use("/areas", apiLimiter, new AreaController().applyRoutes())
   .use("/users", apiLimiter, new UserController().applyRoutes());
