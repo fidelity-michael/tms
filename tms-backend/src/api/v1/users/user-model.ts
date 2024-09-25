@@ -1,4 +1,4 @@
-import { Document, Schema, Model, model } from "mongoose";
+import { Document, Schema, Model, model, ObjectId } from "mongoose";
 import { DefaultSchemaOptions } from "../../../models/shared";
 
 // Interface declaration
@@ -12,6 +12,7 @@ export interface IUser extends Document {
   status: string;
   department: string;
   date: Date;
+  _id: ObjectId;
 }
 
 // ------------------------------------------

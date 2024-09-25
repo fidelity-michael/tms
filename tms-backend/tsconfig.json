@@ -9,7 +9,7 @@
     "skipLibCheck": true,                        // Skip type checking of declaration files
     "outDir": "./dist",                          // Output directory for compiled files
     // "sourceMap": true,                           // Include source maps
-    "rootDir": "./src",                          // Specify the root directory of input files
+    "rootDir": ".",                          // Specify the root directory of input files
     "resolveJsonModule": true,                   // Allow importing JSON files
     // "emitDecoratorMetadata": true,               // Required for Inversify.js decorators
     // "experimentalDecorators": true               // Enable decorators (e.g., for Inversify.js)

@@ -1,20 +1,20 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { IAuth, AuthModel } from "./auth-model";
 import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
-import mongoose from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 
 import bcrypt from "bcryptjs";
 import LdapClient from "ldapjs-client";
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import { UserModel } from "../users/user-model";
+import { IUser, UserModel } from "../users/user-model";
 
 declare module "express-session" {
   interface SessionData {
     user: {
-      id: number;
+      id: ObjectId;
       role: string[];
       group: string;
       email: string;
@@ -23,18 +23,7 @@ declare module "express-session" {
 }
 
 // Define a custom interface to ensure req has a results property
-// interface CustomRequest extends Request {
-//   results?: {
-//     auth: string;
-//     email: string;
-//     role: string;
-//     group: string;
-//   };
-//   data?: Array<{ cn: string; mail: string }>;
-// }
-
-// Define a custom interface to ensure req has a results property
-interface CustomResponse extends Response {
+interface CustomRequest extends Request {
   results?: {
     auth: string;
     email: string;
@@ -44,10 +33,22 @@ interface CustomResponse extends Response {
   data?: Array<{ cn: string; mail: string }>;
 }
 
+// Define a custom interface to ensure req has a results property
+interface CustomResponse extends Response {
+  results?: {
+    auth?: string;
+    email?: string;
+    role?: string;
+    group?: string;
+    message?: string;
+  };
+  data?: Array<{ cnDn: { cn: string; dn:string; }; mail: string; eduPersonAffiliation: string; businessCategory: string }>;
+}
+
 export class AuthenticationController extends ResourceController<IAuth> {
   private logger: Logger = new Logger();
 
-  private encryptPass = async (plainPass, rounds) => {
+  private encryptPass = async (plainPass: any, rounds: any) => {
     const saltRounds = await bcrypt.genSalt(rounds);
     const hashedPass = await bcrypt.hash(plainPass, saltRounds);
     return hashedPass;
@@ -76,7 +77,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
         this.modifyData(),
         this.loginWithLDAP,
       )
-      // .post("/login", this.loginWithoutLDAP)
+      .post("/login", this.loginWithoutLDAP)
       .post("/logout", this.logout);
     return router;
   }
@@ -156,8 +157,8 @@ export class AuthenticationController extends ResourceController<IAuth> {
           try {
             const insertUser = async () => {
               UserModel.create({
-                first_name: res.data![0].cn.split(" ")[0],
-                last_name: res.data![0].cn.split(" ")[1],
+                first_name: res.data![0].cnDn.cn.split(" ")[0],
+                last_name: res.data![0].cnDn.cn.split(" ")[1],
                 email: res.data![0].mail,
                 password: await this.encryptPass(req.body.password, 10),
                 role: res.results!.role,
@@ -226,10 +227,10 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param req
    * @param res
    */
-  /* loginWithoutLDAP = async (req: Request, res: CustomResponse) => {
+  loginWithoutLDAP = async (req: CustomRequest, res: CustomResponse) => {
     mongoose.connection.on("error", (err) => {
       this.logger.error("MongoDB failed to connect!")
-      res.status(503).send(err);
+      res.status(StatusCodes.SERVICE_UNAVAILABLE).send(err);
     });
 
     // Validate data before add a new user
@@ -242,21 +243,25 @@ export class AuthenticationController extends ResourceController<IAuth> {
     //   return res.status(400).send(server_res);
     // }
 
-    // Check if user email exists in the database
-    const user = await UserModel.findOne({ email: req.body.email }).catch((err) => {
-      return res.status(500).send("Server failed to connect with database.");
-    });
+    let user: IUser | null;
+    try {
+      // Check if user email exists in the database
+      user = await UserModel.findOne({ email: req.body.email });
+      if (!user) {
+        const server_res = {
+          message: "User not registered in database!",
+        };
 
-    if (!user) {
-      const server_res = {
-        message: "User not registered in database!",
-      };
+        return res.status(StatusCodes.NOT_FOUND).send(server_res);
+      }
 
-      return res.status(400).send(server_res);
+    } catch (err) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server failed to connect with database."); 
     }
 
     // Check if password is correct
-    const validPass = await bcrypt.compare(req.body.password, user.password);
+    const validPass = await bcrypt.compare(req.body.password, 
+      user.password);
     if (!validPass) {
       const server_res = {
         message: "User password is incorrect!",
@@ -268,13 +273,13 @@ export class AuthenticationController extends ResourceController<IAuth> {
     // Create and assign token
     const accessToken = jwt.sign(
       { _id: user._id },
-      process.env.ACCESS_TOKEN_SECRET,
+      process.env.ACCESS_TOKEN_SECRET as string,
       { expiresIn: "4h" },
     );
 
     const refreshToken = jwt.sign(
       { _id: user._id },
-      process.env.REFRESH_TOKEN_SECRET,
+      process.env.REFRESH_TOKEN_SECRET as string,
     );
 
     // Create user session
@@ -293,7 +298,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
     };
 
     res.header("Access-Token", accessToken).send(server_res);
-  }; */
+  };
 
   logout = async (req: Request, res: Response) => {
     req.session.destroy(function (err) {
@@ -310,7 +315,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param res
    */
   ldapSearch() {
-    return async (req, res, next) => {
+    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
       try {
         const email = req.body.email;
         const searchOptions = {
@@ -332,25 +337,25 @@ export class AuthenticationController extends ResourceController<IAuth> {
               "LDAP connection error occurred! Please check your VPN connection. Error: " +
                 err,
             );
-            res.data = {};
+            res.data = [];
             next();
           });
 
         // console.log("Search Data (sent): ", entries);
-        res.data = entries;
+        res.data = entries as any;
         next();
-      } catch (err) {
+      } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
-        res.status(500).json({ message: err.message });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
         next();
       }
     };
   }
 
   ldapAuthenticate() {
-    return async (req, res, next) => {
+    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
       try {
-        if (Object.keys(res.data).length === 0) {
+        if (Object.keys(res.data!).length === 0) { // "!" it's not undefined, neither null
           // console.log("LDAP user not found!");
           res.results = {
             auth: "fail",
@@ -360,7 +365,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
         } else {
           // console.log("Authenticate Data (received): ", res.data);
           const password = req.body.password;
-          const dn = res.data[0].dn;
+          const dn = res.data![0].cnDn.dn;
           // console.log("User dn: ", dn);
           try {
             await this.client.bind(dn, password);
@@ -378,7 +383,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
           }
           next();
         }
-      } catch (err) {
+      } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
         res.status(500).json({ message: err.message });
         next();
@@ -387,7 +392,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
   }
 
   modifyData() {
-    return async (req, res, next) => {
+    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
       try {
         // if(res.results.auth === "fail") {
         //   res.status(400).send(res.results);
@@ -397,21 +402,21 @@ export class AuthenticationController extends ResourceController<IAuth> {
         // }
 
         // console.log("Modify Results: ", res.results);
-        if (res.data[0]) {
-          this.logger.debug("User Entry: ", res.data[0]);
-          const role = res.data[0].eduPersonAffiliation
-            ? res.data[0].eduPersonAffiliation.toLowerCase()
+        if (res.data![0]) {
+          this.logger.debug("User Entry: ", res.data![0]);
+          const role = res.data![0].eduPersonAffiliation
+            ? res.data![0].eduPersonAffiliation.toLowerCase()
             : "undefined";
 
           // console.log("User Role: ", role);
           if (role === "faculty") {
-            res.results.role = "professor";
-            res.results.group = "Professor";
-            res.results.email = res.data[0].mail;
+            res.results!.role = "professor";
+            res.results!.group = "Professor";
+            res.results!.email = res.data![0].mail;
           } else if (role === "student") {
-            const group = res.data[0].businessCategory.toLowerCase();
-            res.results.role = "student";
-            res.results.group =
+            const group = res.data![0].businessCategory.toLowerCase();
+            res.results!.role = "student";
+            res.results!.group =
               group === "ugrad"
                 ? "BSc"
                 : group === "msc"
@@ -419,7 +424,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
                   : group === "phd"
                     ? "PhD"
                     : "undefined";
-            res.results.email = res.data[0].mail;
+            res.results!.email = res.data![0].mail;
           } else {
             // console.log("Reading staff file..");
             // Read staff.json file
@@ -431,43 +436,43 @@ export class AuthenticationController extends ResourceController<IAuth> {
             const users = JSON.parse(data);
             if (users) {
               let find_user = users["administrator"].find(
-                (user) => user.email === res.data[0].mail,
+                (user: IUser) => user.email === res.data![0].mail,
               );
 
               if (!find_user) {
                 find_user = users["secretariat"].find(
-                  (user) => user.email === res.data[0].mail,
+                  (user: IUser) => user.email === res.data![0].mail,
                 );
                 if (!find_user) {
                   find_user = users["professor"].find(
-                    (user) => user.email === res.data[0].mail,
+                    (user: IUser) => user.email === res.data![0].mail,
                   );
                 }
               }
 
               if (find_user) {
                 // console.log("User found: ", find_user);
-                res.results.role = find_user.role;
-                res.results.group = find_user.group;
-                res.results.email = find_user.email;
+                res.results!.role = find_user.role;
+                res.results!.group = find_user.group;
+                res.results!.email = find_user.email;
               } else {
                 // console.log("User not found!");
-                res.results.auth = "fail";
-                res.results.message = "User not found!";
+                res.results!.auth = "fail";
+                res.results!.message = "User not found!";
               }
             } else {
               this.logger.debug("Staff file is empty!");
-              res.results.auth = "fail";
-              res.results.message = "User not found!";
+              res.results!.auth = "fail";
+              res.results!.message = "User not found!";
             }
           }
         } else {
-          res.results.auth = "fail";
-          res.results.message = "LDAP user not found!";
+          res.results!.auth = "fail";
+          res.results!.message = "LDAP user not found!";
         }
 
         next();
-      } catch (err) {
+      } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
         res.status(500).json({ message: err.message });
         next();
