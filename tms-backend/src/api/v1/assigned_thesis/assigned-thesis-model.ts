@@ -67,8 +67,14 @@ export const AssignedThesisModel: Model<IAssignedThesis> =
     "AssignedThesis",
   );
 
-export type Area_t = {
-  name: string;
-  description: string;
-  image: string;
+export type AssignedThesis_t = {
+  thesis: string;
+  professor: string;
+  supervisor: string[];
+  student: string;
+  title_greek: string;
+  title_english: string;
+  grade: string;
+  status: string;
+  date: Date;
 };
