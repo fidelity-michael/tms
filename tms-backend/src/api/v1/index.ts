@@ -15,7 +15,8 @@ import { rateLimit } from "express-rate-limit";
 import { config } from "../../config/environment";
 import { UserController } from "./users/user-controller";
 import { AuthenticationController } from "./authentication/auth-controller";
-import { AssignedThesisController } from "./assigned_thesis/assigned-thesis-controller";
+import { AssignedThesisController } from "./assigned_theses/assigned-thesis-controller";
+import { ThesisController } from "./theses/theses-controller";
 // import { TaskController } from './task/task.controller';
 
 const apiLimiter = rateLimit(config.apiLimiter);
@@ -32,6 +33,7 @@ apiV1Router
   .use("/resource", apiLimiter, new ResourcesController().applyRoutes())
   .use("/areas", apiLimiter, new AreaController().applyRoutes())
   .use("/users", apiLimiter, new UserController().applyRoutes())
+  .use("/theses", apiLimiter, new ThesisController().applyRoutes())
   .use("/assigned_theses", apiLimiter, new AssignedThesisController().applyRoutes());
 
 notificationV1Router.use(
