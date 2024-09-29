@@ -6,7 +6,7 @@ export class MongoAdapter {
   public static async connect(): Promise<void> {
 
     const defaultOptions = {
-      useNewUrlParser: true,            // make all connections set the useNewUrlParser option
+      // useNewUrlParser: true,            // make all connections set the useNewUrlParser option
       // useFindAndModify: false,          // use native `findOneAndUpdate()` rather than `findAndModify()`
       // useCreateIndex: true,             // Automatic index builds
       autoIndex: false,                 // Don't build indexes
@@ -16,7 +16,7 @@ export class MongoAdapter {
       connectTimeoutMS: 10000,          // Give up initial connection after 10 seconds
       socketTimeoutMS: 45000,           // Close sockets after 45 seconds of inactivity
       family: 4,                        // Use IPv4, skip trying IPv6
-      useUnifiedTopology: true          // Use the new Server Discover and Monitoring engine
+      // useUnifiedTopology: true          // Use the new Server Discover and Monitoring engine
     };
 
     // merge default options with config mongo options
