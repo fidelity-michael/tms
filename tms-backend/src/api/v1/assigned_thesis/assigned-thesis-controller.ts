@@ -18,12 +18,14 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
     const router = Router();
     router
       .get("/", this.getAssignedThesis)
-      // .get('/:id', this.getAreaById)
+      .get("/assigned_thesis/:userId", this.getUsersAssignedThesis)
+      .get("/supervised/:userId", this.getProfessorsAssignedThesis)
       .post("/", this.postAssignedThesis)
-      .patch("/:userId", this.patchAssignedThesis);
-    // .put('/:id', this.updateArea)
-    // .delete('/:id', this.deleteArea);
-
+      .patch("/:userId", this.patchAssignedThesis)
+      .patch("/thesis/:userId", this.patchAssignedThesisGrade)
+      .patch("/updateAttribute/:thesisId", this.patchAssignedThesisAttr)
+      .delete("/:thesisId", this.deleteThesis)
+      .delete("/delete/:assignedThesisId", this.deleteAssignedThesis);
     return router;
   }
 
@@ -68,47 +70,107 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR)
+        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
       });
   };
 
   /**
-   * Delete task by id
+   * Patches a assigned thesis
    * @param req
    * @param res
    */
-  deleteArea = async (req: Request, res: Response) => {
-    this.logger.debug("deleteArea request");
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.delete(req.params.id, req, res); // WARN: maybe areaId
-    // you can process the data retrieved here before returning it to the client
-    return res.status(StatusCodes.OK).json(task);
+  patchAssignedThesisGrade = async (req: Request, res: Response) => {
+    const updated_assigned_thesis = await AssignedThesisModel.findOneAndUpdate(
+      { student: req.params.userId },
+      {
+        $set: {
+          title_greek: req.body.title_greek,
+          title_english: req.body.title_english,
+          grade: req.body.grade,
+        },
+      },
+    )
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        console.log("Server internal error occurred!");
+      });
   };
 
   /**
-   * Update task by id
+   * Remove Assigned Thesis with param the thesis
    * @param req
    * @param res
    */
-  updateArea = async (req: Request, res: Response) => {
-    this.logger.debug("updateArea request");
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.update(req.params.id, req.body.blacklist, req, res); // WARN: check for correct params
-    // you can process the data retrieved here before returning it to the client
-    return res.status(StatusCodes.OK).json(task);
+  deleteThesis = async (req: Request, res: Response) => {
+    this.logger.debug("deleteThesis request"); // NOTE: _id is used to delete a resource
+    const thesis = await this.delete( req.params.thesisId, req, res);
+    return res.status(StatusCodes.OK).json(thesis);
   };
 
   /**
-   * Get single task by id
+   * Remove Assigned Thesis with assigned thesis id as param
    * @param req
    * @param res
    */
-  getAreaById = async (req: Request, res: Response) => {
-    this.logger.debug("getAreaById request");
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.getOne(req.params.id, req, res);
+  deleteAssignedThesis = async (req: Request, res: Response) => {
+    this.logger.debug("deleteAssignedThesis request");
+    const assigned_thesis = await this.delete(req.params.assignedThesisId, req, res);
+    return res.status(StatusCodes.OK).json(assigned_thesis);
+  };
 
-    // you can process the data retrieved here before returning it to the client
-    return res.status(StatusCodes.OK).json(task);
+  /**
+   * Get user's thesis info
+   * @param req
+   * @param res
+   */
+  getUsersAssignedThesis = async (req: Request, res: Response) => {
+    this.logger.debug("getUsersAssignedThesis request");
+    const assigned_thesis = await AssignedThesisModel.findOne({
+      student: req.params.userId,
+    })
+      .then((data: any) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+      });
+  };
+
+  /**
+   * Get a professor's supervised thesis info
+   * @param req
+   * @param res
+   */
+  getProfessorsAssignedThesis = async (req: Request, res: Response) => {
+    this.logger.debug("getProfessorsAssignedThesis request");
+    const assigned_thesis = await AssignedThesisModel.find({
+      supervisor: { $elemMatch: { $eq: req.params.userId } },
+    })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+      });
+  };
+
+  /**
+   * Update an assigned thesis attribute
+   * @param req
+   * @param res
+   */
+  patchAssignedThesisAttr = async (req: Request, res: Response) => {
+    const updatedAssignedThesis = await AssignedThesisModel.updateOne(
+      { _id: req.params.thesisId },
+      { $set: { [req.body.attr]: req.body.value } },
+    )
+      .then((data: any) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+      });
   };
 }
