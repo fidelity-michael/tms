@@ -17,6 +17,7 @@ import { UserController } from "./users/user-controller";
 import { AuthenticationController } from "./authentication/auth-controller";
 import { AssignedThesisController } from "./assigned_theses/assigned-thesis-controller";
 import { ThesisController } from "./theses/theses-controller";
+import { FavouritesController } from "./favourites/favourites-controller";
 // import { TaskController } from './task/task.controller';
 
 const apiLimiter = rateLimit(config.apiLimiter);
@@ -34,6 +35,7 @@ apiV1Router
   .use("/areas", apiLimiter, new AreaController().applyRoutes())
   .use("/users", apiLimiter, new UserController().applyRoutes())
   .use("/theses", apiLimiter, new ThesisController().applyRoutes())
+  .use("/favourites", apiLimiter, new FavouritesController().applyRoutes())
   .use("/assigned_theses", apiLimiter, new AssignedThesisController().applyRoutes());
 
 notificationV1Router.use(
