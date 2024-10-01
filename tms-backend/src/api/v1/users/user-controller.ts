@@ -15,7 +15,7 @@ export interface UserSockets {
 }
 
 export class UserController extends ResourceController<IUser> {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   constructor() {
     super(UserModel);
     this.checkAndInitialize(); // NOTE: This should initialize

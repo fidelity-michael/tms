@@ -46,7 +46,7 @@ interface CustomResponse extends Response {
 }
 
 export class AuthenticationController extends ResourceController<IAuth> {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
 
   private encryptPass = async (plainPass: any, rounds: any) => {
     const saltRounds = await bcrypt.genSalt(rounds);

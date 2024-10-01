@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
 
 export class AssignedThesisController extends ResourceController<IAssignedThesis> {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   constructor() {
     super(AssignedThesisModel);
   }

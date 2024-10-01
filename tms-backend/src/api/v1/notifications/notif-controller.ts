@@ -19,7 +19,7 @@ import { UserSockets } from "../users/user-controller";
 // TODO: Add socket event (from routes/notifications.js) in services folder
 
 export class NotificationController extends ResourceController<INotification> {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   private socketServer: SocketServer;
   private users: UserSockets; // TODO: Check if correct
   constructor() {

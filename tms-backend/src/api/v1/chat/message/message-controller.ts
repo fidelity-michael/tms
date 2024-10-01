@@ -6,7 +6,7 @@ import { Logger } from "../../../shared/utils/logger";
 import CryptoJS from "crypto-js";
 
 export class MessageController extends ResourceController<IMessage> {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   constructor() {
     super(MessageModel);
   }

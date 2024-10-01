@@ -15,7 +15,7 @@ import helmet from "helmet";
 import fileUpload from "express-fileupload";
 
 export class App {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   private app!: express.Application;
 
   constructor() {}
@@ -49,6 +49,14 @@ export class App {
   }
 
   // #region Private methods
+
+  /**
+   * Returns the app instance
+   * @returns the app instance of the express application
+   */
+  public getApp(): express.Application {
+    return this.app;
+  }
 
   /**
    * Setup express application

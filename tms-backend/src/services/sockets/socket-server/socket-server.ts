@@ -7,7 +7,7 @@ import { UserSockets } from "../../../api/v1/users/user-controller";
 import { RateLimiterMemory } from "rate-limiter-flexible";
 
 export class SocketServer {
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   public io!: io.Server;
   public users: UserSockets; // For notifications
 

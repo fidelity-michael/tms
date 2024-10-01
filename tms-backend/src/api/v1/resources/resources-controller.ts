@@ -5,7 +5,7 @@ import { ResourceController } from '../../shared';
 import { StatusCodes } from 'http-status-codes';
 import { Logger } from '../../shared/utils/logger';
 export class ResourcesController extends ResourceController<IResource>{
-  private logger: Logger = new Logger();
+  private logger: Logger = Logger.getInstance();
   constructor() {
     super(ResourceModel);
   }
