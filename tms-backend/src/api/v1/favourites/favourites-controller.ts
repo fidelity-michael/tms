@@ -68,7 +68,7 @@ export class FavouritesController extends ResourceController<IFavourites> {
   };
 
   /**
-   * Delete task by id
+   * Delete favourite by student & area_id
    * @param req
    * @param res
    */
