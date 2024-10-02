@@ -26,10 +26,10 @@ export class NotificationController extends ResourceController<INotification> {
     super(NotificationModel);
     this.socketServer = DIContainer.get(SocketsService).socketServer;
 
-    if(this.socketServer) // NOTE: Check this piece of code. users logic maybe incorrect
+    if (this.socketServer)
+      // NOTE: Check this piece of code. users logic maybe incorrect
       this.users = this.socketServer.users;
-    else
-      this.users = {};
+    else this.users = {};
   }
   /**
    * Apply all routes for notifications
@@ -57,7 +57,7 @@ export class NotificationController extends ResourceController<INotification> {
    * In case you need to do any preprocessing (e.g., filter a body's field) you can do it before calling the super class methods.
    */
   /**
-   * Sends a message containing all tasks back as a response
+   * Sends a message containing all notifications back as a response
    * @param req
    * @param res
    */
@@ -98,7 +98,7 @@ export class NotificationController extends ResourceController<INotification> {
       const saved_notification = await notification.save();
       res.send({ notification: notification._id });
 
-      let receiverSocketIds: {[index: string]: any} = [];
+      let receiverSocketIds: { [index: string]: any } = [];
       // let receiverSocketIds: string[] = [];
 
       //we get all the current socketIds of the receiver and the sender
@@ -111,7 +111,12 @@ export class NotificationController extends ResourceController<INotification> {
         }
       });
 
-      this.logger.debug("receivers: ", receiverSocketIds, "users: ", this.users)
+      this.logger.debug(
+        "receivers: ",
+        receiverSocketIds,
+        "users: ",
+        this.users,
+      );
 
       //emit to all of the receiver sockets
       // TODO: Check socket usability
@@ -127,8 +132,6 @@ export class NotificationController extends ResourceController<INotification> {
       console.log(err);
       res.status(400).send(err);
     }
-
-    // return res.status(StatusCodes.OK).json(task);
   };
 
   /**
@@ -138,10 +141,8 @@ export class NotificationController extends ResourceController<INotification> {
    */
   deleteNotification = async (req: Request, res: Response) => {
     this.logger.debug("deleteNotification request");
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.delete(req.params.id, req, res);
-    // you can process the data retrieved here before returning it to the client
-    return res.status(StatusCodes.OK).json(task);
+    const notification = await this.delete(req.params.id, req, res);
+    return res.status(StatusCodes.OK).json(notification);
   };
 
   /**
@@ -165,17 +166,14 @@ export class NotificationController extends ResourceController<INotification> {
   };
 
   /**
-   * Get single task by id
+   * Get single notification by id
    * @param req
    * @param res
    */
   getNotificationById = async (req: Request, res: Response) => {
     this.logger.debug("getNotificationById request");
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.getOne(req.params.userId, req, res);
-
-    // you can process the data retrieved here before returning it to the client
-    return res.status(StatusCodes.OK).json(task);
+    const notification = await this.getOne(req.params.userId, req, res);
+    return res.status(StatusCodes.OK).json(notification);
   };
 
   /**

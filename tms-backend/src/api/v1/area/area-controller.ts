@@ -10,7 +10,7 @@ export class AreaController extends ResourceController<IArea>{
     super(AreaModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for area
    *
    * @returns {Router}
    */
@@ -28,12 +28,7 @@ export class AreaController extends ResourceController<IArea>{
   }
 
   /**
-   * In all of the methods below, we are using the super class methods to perform the CRUD operations.
-   * Request and Response are passed to the super class methods so that they can be extracted and used.
-   * In case you need to do any preprocessing (e.g., filter a body's field) you can do it before calling the super class methods.
-   */
-  /**
-   * Sends a message containing all tasks back as a response
+   * Sends a message containing all areas back as a response
    * @param req
    * @param res
    */
@@ -48,61 +43,56 @@ export class AreaController extends ResourceController<IArea>{
   }
 
   /**
-   * Creates a new task
+   * Creates a new area
    * @param req
    * @param res
    */
   postArea = async (req: Request, res: Response) => {
     this.logger.debug('postArea request');
     // you can pre-process the request here before passing it to the super class method
-    const task = await this.create(req, res);
+    const area = await this.create(req, res);
     // you can process the data retrieved here before returning it to the client
     return res
       .status(StatusCodes.OK)
-      .json(task);
+      .json(area);
   }
 
   /**
-   * Delete task by id
+   * Delete area by id
    * @param req
    * @param res
    */
   deleteArea = async (req: Request, res: Response) => {
     this.logger.debug('deleteArea request');
     // you can pre-process the request here before passing it to the super class method
-    const task = await this.delete(req.params.id, req, res); // WARN: maybe areaId
+    const area = await this.delete(req.params.id, req, res); // WARN: maybe areaId
     // you can process the data retrieved here before returning it to the client
     return res
       .status(StatusCodes.OK)
-      .json(task);
+      .json(area);
   }
 
   /**
-   * Update task by id
+   * Update area by id
    * @param req
    * @param res
    */
   updateArea = async (req: Request, res: Response) => {
     this.logger.debug('updateArea request');
-    // you can pre-process the request here before passing it to the super class method
-    const task = await this.update(req.params.id, req.body.blacklist, req, res); // WARN: check for correct params
-    // you can process the data retrieved here before returning it to the client
+    const area = await this.update(req.params.id, req.body.blacklist, req, res);
     return res
       .status(StatusCodes.OK)
-      .json(task);
+      .json(area);
   }
 
   /**
-   * Get single task by id
+   * Get single area by id
    * @param req
    * @param res
    */
   getAreaById = async (req: Request, res: Response) => {
     this.logger.debug('getAreaById request');
-    // you can pre-process the request here before passing it to the super class method
     const task = await this.getOne(req.params.id, req, res);
-
-    // you can process the data retrieved here before returning it to the client
     return res
       .status(StatusCodes.OK)
       .json(task);

@@ -10,7 +10,7 @@ export class ThesisController extends ResourceController<IThesis> {
     super(ThesisModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for theses
    *
    * @returns {Router}
    */

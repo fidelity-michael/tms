@@ -10,7 +10,7 @@ export class FavouritesController extends ResourceController<IFavourites> {
     super(FavouritesModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for favourites
    *
    * @returns {Router}
    */
@@ -33,11 +33,11 @@ export class FavouritesController extends ResourceController<IFavourites> {
   getFavourites = async (req: Request, res: Response) => {
     this.logger.debug('getFavourites request');
     // you can pre-process the request here before passing it to the super class method
-    const allAreas = await this.getAll(req, res);
+    const allFavourites = await this.getAll(req, res);
     // you can process the data retrieved here before returning it to the client
     return res
       .status(StatusCodes.OK)
-      .json(allAreas);
+      .json(allFavourites);
   }
 
   /**

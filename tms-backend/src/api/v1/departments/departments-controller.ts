@@ -15,7 +15,7 @@ export class DepartmentController extends ResourceController<IDepartment> {
     this.checkAndInitialize();
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for department
    *
    * @returns {Router}
    */
@@ -60,8 +60,8 @@ export class DepartmentController extends ResourceController<IDepartment> {
    */
   updateDepartment = async (req: Request, res: Response) => {
     this.logger.debug("updateDepartment request");
-    const task = await this.update(req.params.id, req.body.blacklist, req, res);
-    return res.status(StatusCodes.OK).json(task);
+    const department = await this.update(req.params.id, req.body.blacklist, req, res);
+    return res.status(StatusCodes.OK).json(department);
   };
 
   /**

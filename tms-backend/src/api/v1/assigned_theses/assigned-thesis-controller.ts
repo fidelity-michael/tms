@@ -10,14 +10,14 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
     super(AssignedThesisModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for assigned theses
    *
    * @returns {Router}
    */
   public applyRoutes(): Router {
     const router = Router();
     router
-      .get("/", this.getAssignedThesis)
+      .get("/", this.getAssignedTheses)
       .get("/assigned_thesis/:userId", this.getUsersAssignedThesis)
       .get("/supervised/:userId", this.getProfessorsAssignedThesis)
       .post("/", this.postAssignedThesis)
@@ -30,11 +30,11 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
   }
 
   /**
-   * Sends a message containing all Assigned thesis back as a response
+   * Sends a message containing all Assigned theses back as a response
    * @param req
    * @param res
    */
-  getAssignedThesis = async (req: Request, res: Response) => {
+  getAssignedTheses = async (req: Request, res: Response) => {
     // NOTE: Works as intented
     this.logger.debug("getAssignedThesis request");
     const allAssignedThesis = await this.getAll(req, res);

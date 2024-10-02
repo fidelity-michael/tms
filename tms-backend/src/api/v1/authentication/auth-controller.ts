@@ -62,7 +62,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
     super(AuthModel);
   }
   /**
-   * Apply all routes for tasks
+   * Apply all routes for authentication
    *
    * @returns {Router}
    */
