@@ -34,7 +34,7 @@ export class ResourceController<T extends Document> {
       resources = await this.modelSchema
         .find(queryOptions.query)
         // .sort(sort ? { date: 1 } : { date: -1 }) // -1 descending, 1 ascending
-        .select(queryOptions.options.select as string | any) // WARN: possible breaking
+        .select(queryOptions.options.select as string | any)
         .populate(queryOptions.options.populate as string | any)
         .exec();
       return resources;
