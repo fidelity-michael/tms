@@ -37,6 +37,6 @@ export class Logger {
   }
 
   getDate = () => {
-    return new Date().toLocaleString();
+    return new Date().toLocaleString("en-US", { timeZone: "Europe/Helsinki" });
   };
 }
