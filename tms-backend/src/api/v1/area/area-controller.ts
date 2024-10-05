@@ -92,10 +92,10 @@ export class AreaController extends ResourceController<IArea>{
    */
   getAreaById = async (req: Request, res: Response) => {
     this.logger.debug('getAreaById request');
-    const task = await this.getOne(req.params.id, req, res);
+    const area = await this.getOne(req.params.id, req, res);
     return res
       .status(StatusCodes.OK)
-      .json(task);
+      .json(area);
   }
 
   /**

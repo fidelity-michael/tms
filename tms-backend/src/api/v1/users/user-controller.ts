@@ -29,7 +29,7 @@ export class UserController extends ResourceController<IUser> {
   public applyRoutes(): Router {
     const router = Router();
     router
-      .get("/", this.getUsers)
+      .get("/", this.getUsers) // TODO: remove get request and initialize
       .get("/initialize", this.initializeUsers)
       .get("/:userId", this.getUserById)
       .post("/", this.postUser)

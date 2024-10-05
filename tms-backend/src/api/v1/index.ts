@@ -14,6 +14,7 @@ import { AssignedThesisController } from "./assigned_theses/assigned-thesis-cont
 import { ThesisController } from "./theses/theses-controller";
 import { FavouritesController } from "./favourites/favourites-controller";
 import { DepartmentController } from "./departments/departments-controller";
+import { ThesesReqController } from "./theses_requests/theses-controller";
 
 const apiLimiter = rateLimit(config.apiLimiter);
 // const authLimiter = rateLimit(config.authLimiter);
@@ -32,6 +33,7 @@ apiV1Router
   .use("/theses", apiLimiter, new ThesisController().applyRoutes())
   .use("/favourites", apiLimiter, new FavouritesController().applyRoutes())
   .use("/departments", apiLimiter, new DepartmentController().applyRoutes())
+  .use("/theses_requests", apiLimiter, new ThesesReqController().applyRoutes())
   .use("/assigned_theses", apiLimiter, new AssignedThesisController().applyRoutes());
 
 notificationV1Router.use(
