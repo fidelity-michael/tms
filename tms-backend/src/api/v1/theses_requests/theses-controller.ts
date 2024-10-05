@@ -20,8 +20,8 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
     router
       .get("/student/:userId", this.getThesesRequests)
       .post("/", this.postThesis)
-      .put("/:id", this.updateArea)
-      .delete("/:id", this.deleteArea);
+      .patch("/:requestId", this.updateThesisReq)
+      .patch("/reapply/:requestId", this.updateThesisReqFiles);
 
     return router;
   }
@@ -53,7 +53,9 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
       if (thesis[0]) {
         professor = thesis[0].professor;
       } else {
-        throw this.logger.error("An error occurred: Thesis not found in database!");
+        throw this.logger.error(
+          "An error occurred: Thesis not found in database!",
+        );
       }
 
       const thesis_request = await this.create(req, res);
@@ -67,26 +69,38 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
   };
 
   /**
-   * Delete area by id
+   * Update thesis by id (for status)
    * @param req
    * @param res
    */
-  deleteArea = async (req: Request, res: Response) => {
-    this.logger.debug("deleteArea request");
-    // you can pre-process the request here before passing it to the super class method
-    const area = await this.delete(req.params.id, req, res); // WARN: maybe areaId
-    // you can process the data retrieved here before returning it to the client
+  updateThesisReq = async (req: Request, res: Response) => {
+    // NOTE: Works
+    this.logger.debug("updateThesisReq request");
+    const area = await this.update(
+      req.params.requestId,
+      req.body.blacklist,
+      req,
+      res,
+    );
     return res.status(StatusCodes.OK).json(area);
   };
 
   /**
-   * Update area by id
+   * Update thesis by id (Reapply files)
    * @param req
    * @param res
    */
-  updateArea = async (req: Request, res: Response) => {
-    this.logger.debug("updateArea request");
-    const area = await this.update(req.params.id, req.body.blacklist, req, res);
+  updateThesisReqFiles = async (req: Request, res: Response) => {
+    // NOTE: Works
+    this.logger.debug("updateThesisReqFiles request");
+    this.logger.debug("Id: ", req.params.requestId);
+    this.logger.debug("Files: ", req.body.files);
+    const area = await this.update(
+      req.params.requestId,
+      req.body.blacklist,
+      req,
+      res,
+    );
     return res.status(StatusCodes.OK).json(area);
   };
 }
