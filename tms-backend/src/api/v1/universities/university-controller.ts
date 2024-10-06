@@ -17,9 +17,10 @@ export class UniversityController extends ResourceController<IUniversity> {
    */
   public applyRoutes(): Router {
     const router = Router();
+    // NOTE: All routes work
     router
       .get("/", this.getUniversities)
-      .get("/initialize", this.initializeUniversity) // TODO: delete this
+      // .get("/initialize", this.initializeUniversity) // TODO: delete this
       .post("/", this.postUniverity)
       .patch("/:id", this.updateUniversity)
       .delete("/:universityId", this.deleteUniversity);
