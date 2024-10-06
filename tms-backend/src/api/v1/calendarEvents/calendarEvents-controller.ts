@@ -21,23 +21,11 @@ export class CalendarEventsController extends ResourceController<ICalendarEvents
   public applyRoutes(): Router {
     const router = Router();
     router
-      .get("/", this.getCalEvents)
       .get("/:userId", this.getCalendarEventsById)
       .post("/", this.postCalendarEvents);
 
     return router;
   }
-
-  /**
-   * Sends a message containing all calendar events back as a response
-   * @param req
-   * @param res
-   */
-  getCalEvents = async (req: Request, res: Response) => {
-    this.logger.debug("getArea request");
-    const allAreas = await this.getAll(req, res);
-    return res.status(StatusCodes.OK).json(allAreas);
-  };
 
   /**
    * Get all calendar events of a user

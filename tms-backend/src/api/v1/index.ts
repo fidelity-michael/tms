@@ -16,6 +16,7 @@ import { FavouritesController } from "./favourites/favourites-controller";
 import { DepartmentController } from "./departments/departments-controller";
 import { ThesesReqController } from "./theses_requests/theses-controller";
 import { UniversityController } from "./universities/university-controller";
+import { CalendarEventsController } from "./calendarEvents/calendarEvents-controller";
 
 const apiLimiter = rateLimit(config.apiLimiter);
 // const authLimiter = rateLimit(config.authLimiter);
@@ -35,6 +36,7 @@ apiV1Router
   .use("/favourites", apiLimiter, new FavouritesController().applyRoutes())
   .use("/departments", apiLimiter, new DepartmentController().applyRoutes())
   .use("/universities", apiLimiter, new UniversityController().applyRoutes())
+  .use("/calendarEvents", apiLimiter, new CalendarEventsController().applyRoutes())
   .use("/theses_requests", apiLimiter, new ThesesReqController().applyRoutes())
   .use("/assigned_theses", apiLimiter, new AssignedThesisController().applyRoutes());
 
