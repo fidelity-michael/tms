@@ -47,6 +47,32 @@ export class ResourceController<T extends Document> {
   }
 
   /**
+   * Get all resources matched by the id
+   */
+  public async getAllById(
+    id: string,
+    req: Request,
+    res: Response,
+    // sort: boolean,
+    next?: NextFunction,
+  ): Promise<any> {
+    try {
+      const modelId: any = id || req.params.id;
+      const queryOptions = this.parseQueryParameters(req);
+      let resources: T[];
+
+      resources = await this.modelSchema
+        .find({ _id: modelId })
+        .select(queryOptions.options.select as string | any)
+        .populate(queryOptions.options.populate as string | any)
+        .exec();
+      return resources;
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
+  }
+
+  /**
    * Get a limited amount of resources paginated based on limit variable
    */
   public async getLimited(
