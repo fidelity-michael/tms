@@ -6,6 +6,7 @@ import { Logger } from "../../shared/utils/logger";
 import fs from "fs";
 import { UserModel } from "../users/user-model";
 import { Model } from "mongoose";
+import { FavouritesModel } from "../favourites/favourites-model";
 
 export class ApiController extends ResourceController<IApi> {
   private logger: Logger = Logger.getInstance();
@@ -25,7 +26,8 @@ export class ApiController extends ResourceController<IApi> {
       .get("/users/professors", this.getAllProfessors)
       .get("/users/admins", this.getAllAdmins)
       .get("/users/secretariats", this.getAllSecretariats)
-      .get("/users/:userId", this.getUserById);
+      .get("/users/:userId", this.getUserById)
+      .get("/favourites/:userId", this.getFavouriteUser);
     // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
 
     return router;
@@ -178,6 +180,21 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   getAllUniversities = async (req: Request, res: Response) => {};
+
+  /**
+   * Request specific user (with id) in database
+   * @param req
+   * @param res
+   */
+  getFavouriteUser = async (req: Request, res: Response) => {
+    await FavouritesModel.find({ student: req.params.userId })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred: " + err)
+      });
+  };
 
   // private paginatedData<T extends Document>(model: Model<T>) {
   //   return async (req: Request, res: Response, next: NextFunction) => {
