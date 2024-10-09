@@ -22,7 +22,9 @@ export class ApiController extends ResourceController<IApi> {
     router
       .get("/uploads", this.verifyJWT)
       .get("/downloads/:folderName/:fileName", this.sendFile)
-      .get("/users/professors", this.getAllProfessors);
+      .get("/users/professors", this.getAllProfessors)
+      .get("/users/admins", this.getAllAdmins)
+      .get("/users/secretariats", this.getAllSecretariats);
     // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
 
     return router;
@@ -114,10 +116,10 @@ export class ApiController extends ResourceController<IApi> {
   };
 
   /**
-  * Request all professors in database
-  * @param req
-  * @param res
-  */
+   * Request all professors in database
+   * @param req
+   * @param res
+   */
   getAllProfessors = async (req: Request, res: Response) => {
     this.logger.debug("getAllProfessors request");
     const users_data = await UserModel.find({ role: "professor" })
@@ -128,6 +130,50 @@ export class ApiController extends ResourceController<IApi> {
         this.logger.error("Server internal error occurred!");
       });
   };
+
+  /**
+   * Request all admins in database
+   * @param req
+   * @param res
+   */
+  getAllAdmins = async (req: Request, res: Response) => {
+    await UserModel.find({ role: "administrator" })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("Server internal error occurred!");
+      });
+  };
+
+  /**
+   * Request all secretariats in database
+   * @param req
+   * @param res
+   */
+  getAllSecretariats = async (req: Request, res: Response) => {
+    await UserModel.find({ role: "secretariat" })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("Server internal error occurred!");
+      });
+  };
+
+  /**
+   * Request user by id
+   * @param req
+   * @param res
+   */
+  getUserById = async (req: Request, res: Response) => {};
+
+  /**
+   * Request all universities
+   * @param req
+   * @param res
+   */
+  getAllUniversities = async (req: Request, res: Response) => {};
 
   // private paginatedData<T extends Document>(model: Model<T>) {
   //   return async (req: Request, res: Response, next: NextFunction) => {
