@@ -22,7 +22,8 @@ export class ApiController extends ResourceController<IApi> {
     router
       .get("/uploads", this.verifyJWT)
       .get("/downloads/:folderName/:fileName", this.sendFile)
-      // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
+      .get("/users/professors", this.getAllProfessors);
+    // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
 
     return router;
   }
@@ -34,6 +35,7 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   sendFile = async (req: Request, res: Response) => {
+    this.logger.debug("sendFile request");
     try {
       const folder = req.params.folderName;
       const file = req.params.fileName;
@@ -109,6 +111,22 @@ export class ApiController extends ResourceController<IApi> {
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: "Server internal error occurred!" });
     }
+  };
+
+  /**
+  * Request all professors in database
+  * @param req
+  * @param res
+  */
+  getAllProfessors = async (req: Request, res: Response) => {
+    this.logger.debug("getAllProfessors request");
+    const users_data = await UserModel.find({ role: "professor" })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch(() => {
+        this.logger.error("Server internal error occurred!");
+      });
   };
 
   // private paginatedData<T extends Document>(model: Model<T>) {
