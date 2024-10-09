@@ -24,7 +24,8 @@ export class ApiController extends ResourceController<IApi> {
       .get("/downloads/:folderName/:fileName", this.sendFile)
       .get("/users/professors", this.getAllProfessors)
       .get("/users/admins", this.getAllAdmins)
-      .get("/users/secretariats", this.getAllSecretariats);
+      .get("/users/secretariats", this.getAllSecretariats)
+      .get("/users/:userId", this.getUserById);
     // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
 
     return router;
@@ -139,7 +140,7 @@ export class ApiController extends ResourceController<IApi> {
   getAllAdmins = async (req: Request, res: Response) => {
     await UserModel.find({ role: "administrator" })
       .then((data) => {
-        res.json(data);
+        return res.status(StatusCodes.OK).json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
@@ -154,7 +155,7 @@ export class ApiController extends ResourceController<IApi> {
   getAllSecretariats = async (req: Request, res: Response) => {
     await UserModel.find({ role: "secretariat" })
       .then((data) => {
-        res.json(data);
+        return res.status(StatusCodes.OK).json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
@@ -166,7 +167,10 @@ export class ApiController extends ResourceController<IApi> {
    * @param req
    * @param res
    */
-  getUserById = async (req: Request, res: Response) => {};
+  getUserById = async (req: Request, res: Response) => {
+    const user = this.getOne(req.params.userId, req, res);
+    return res.status(StatusCodes.OK).json(user);
+  };
 
   /**
    * Request all universities
