@@ -7,6 +7,7 @@ import fs from "fs";
 import { UserModel } from "../users/user-model";
 import { Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
+import { AreaModel } from "../area/area-model";
 
 export class ApiController extends ResourceController<IApi> {
   private logger: Logger = Logger.getInstance();
@@ -27,7 +28,8 @@ export class ApiController extends ResourceController<IApi> {
       .get("/users/admins", this.getAllAdmins)
       .get("/users/secretariats", this.getAllSecretariats)
       .get("/users/:userId", this.getUserById)
-      .get("/favourites/:userId", this.getFavouriteUser);
+      .get("/favourites/:userId", this.getFavouriteUser)
+      .get("/thesis/areas", this.getAreas);
     // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
 
     return router;
@@ -192,7 +194,38 @@ export class ApiController extends ResourceController<IApi> {
         res.json(data);
       })
       .catch((err) => {
-        this.logger.error("Server internal error occurred: " + err)
+        this.logger.error("Server internal error occurred: " + err);
+      });
+  };
+
+  /**
+   * Request areas for thesis dropdown
+   * @param req
+   * @param res
+   */
+  getAreas = async (req: Request, res: Response) => {
+    await AreaModel.find({})
+      .then((data) => {
+        let areas = data.map((area) => {
+          return {
+            _id: area._id,
+            name: area.name,
+          };
+        });
+
+        // console.log(areas);
+        areas.sort((a, b) => {
+          let result = 0;
+          if (a.name && b.name)
+            result = a.name.localeCompare(b.name, "en", {
+              sensitivity: "base",
+            });
+          return result;
+        });
+        res.json(areas);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred: " + err);
       });
   };
 
