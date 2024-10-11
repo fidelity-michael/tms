@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
 import fs from "fs";
 import { UserModel } from "../users/user-model";
-import { Model } from "mongoose";
+import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
 
@@ -108,7 +108,7 @@ export class ApiController extends ResourceController<IApi> {
    * @param req
    * @param res
    */
-  getAllUsers = async (req: Request, res: CustomResponse<UserModel>) => {
+  getAllUsers = async (req: Request, res: CustomResponse) => {
     try {
       res.json(res.paginatedData);
     } catch (err) {
