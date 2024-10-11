@@ -266,8 +266,8 @@ export class ApiController extends ResourceController<IApi> {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
-      const attr = req.query.attr;
-      const filter = req.query.filter;
+      const attr: any = req.query.attr;
+      const filter: any = req.query.filter;
       let results: {
         results?: {};
         next?: any;
@@ -312,7 +312,7 @@ export class ApiController extends ResourceController<IApi> {
             };
           }
 
-          filtered_data.sort((a, b) => {
+          filtered_data.sort((a: any, b: any) => {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
           });
 
@@ -321,7 +321,7 @@ export class ApiController extends ResourceController<IApi> {
             //console.log(results);
             res.paginatedData = results;
             next();
-          } catch (err) {
+          } catch (err: any) {
             res.status(500).json({ message: err.message });
           }
         }
@@ -334,7 +334,7 @@ export class ApiController extends ResourceController<IApi> {
             .exec();
 
           // console.log(results);
-          await model.count({}, function (err, count) {
+          await model.countDocuments({}, function (err: any, count: any) {
             // console.log("Number of items:", count);
             results.startIndex = startIndex;
             results.endIndex = endIndex;
@@ -343,7 +343,7 @@ export class ApiController extends ResourceController<IApi> {
             res.paginatedData = results;
             next();
           });
-        } catch (err: Error) {
+        } catch (err: any) {
           res.status(500).json({ message: err.message });
         }
       }
