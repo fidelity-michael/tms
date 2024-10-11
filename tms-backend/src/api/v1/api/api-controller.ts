@@ -9,6 +9,34 @@ import { Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
 
+type PaginatedData<T> = {
+  results: T[]; // Array of results of type T (where T is the model type)
+  startIndex: number;
+  endIndex: number;
+  total: number;
+  next?: { page: number; limit: number }; // Optional pagination navigation
+  previous?: { page: number; limit: number }; // Optional pagination navigation
+};
+
+// Define a custom interface to ensure req has a results property
+interface CustomResponse extends Response {
+  results?: {
+    auth?: string;
+    email?: string;
+    role?: string;
+    group?: string;
+    message?: string;
+  };
+  paginatedData?: {
+    results?: {};
+    next?: any;
+    previous?: any;
+    startIndex?: number;
+    endIndex?: number;
+    total?: number;
+  };
+}
+
 export class ApiController extends ResourceController<IApi> {
   private logger: Logger = Logger.getInstance();
   constructor() {
@@ -29,8 +57,8 @@ export class ApiController extends ResourceController<IApi> {
       .get("/users/secretariats", this.getAllSecretariats)
       .get("/users/:userId", this.getUserById)
       .get("/favourites/:userId", this.getFavouriteUser)
-      .get("/thesis/areas", this.getAreas);
-    // .get("/users", this.paginatedData(UserModel), this.getAllUsers)
+      .get("/thesis/areas", this.getAreas)
+      .get("/users", this.paginatedData(UserModel), this.getAllUsers);
 
     return router;
   }
@@ -80,15 +108,15 @@ export class ApiController extends ResourceController<IApi> {
    * @param req
    * @param res
    */
-  // getAllUsers = async (req: Request, res: Response) => {
-  //   try {
-  //     res.json(res.paginatedData);
-  //   } catch (err) {
-  //     res
-  //       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-  //       .json({ message: "Server internal error occurred!" });
-  //   }
-  // };
+  getAllUsers = async (req: Request, res: CustomResponse<UserModel>) => {
+    try {
+      res.json(res.paginatedData);
+    } catch (err) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
+    }
+  };
 
   /**
    * HTTP Request to verify JWT token
@@ -229,85 +257,96 @@ export class ApiController extends ResourceController<IApi> {
       });
   };
 
-  // private paginatedData<T extends Document>(model: Model<T>) {
-  //   return async (req: Request, res: Response, next: NextFunction) => {
-  //     const page = parseInt(req.query.page);
-  //     const limit = parseInt(req.query.limit);
-  //
-  //     const attr = req.query.attr;
-  //     const filter = req.query.filter;
-  //
-  //     if (page <= 0 || limit <= 0) {
-  //       const results = {};
-  //       results.results = {};
-  //       res.paginatedData = results;
-  //       next();
-  //     }
-  //
-  //     const startIndex = (page - 1) * limit;
-  //     const endIndex = page * limit;
-  //
-  //     const results = {};
-  //
-  //     let filtered_data;
-  //     if (attr && filter) {
-  //       filtered_data = await model.find({ [attr]: filter });
-  //
-  //       if (filtered_data) {
-  //         // console.log(filtered_data)
-  //         results.startIndex = startIndex;
-  //         results.endIndex = endIndex;
-  //         results.total = filtered_data.length;
-  //
-  //         if (endIndex < (await filtered_data.length)) {
-  //           results.next = {
-  //             page: page + 1,
-  //             limit: limit,
-  //           };
-  //         }
-  //
-  //         if (startIndex > 0) {
-  //           results.previous = {
-  //             page: page - 1,
-  //             limit: limit,
-  //           };
-  //         }
-  //
-  //         filtered_data.sort((a, b) => {
-  //           return new Date(b.date).getTime() - new Date(a.date).getTime();
-  //         });
-  //
-  //         try {
-  //           results.results = await filtered_data.slice(startIndex, endIndex);
-  //           //console.log(results);
-  //           res.paginatedData = results;
-  //           next();
-  //         } catch (err) {
-  //           res.status(500).json({ message: err.message });
-  //         }
-  //       }
-  //     } else {
-  //       try {
-  //         results.results = await model
-  //           .find()
-  //           .limit(limit)
-  //           .skip(startIndex)
-  //           .exec();
-  //
-  //         // console.log(results);
-  //         await model.count({}, function (err, count) {
-  //           // console.log("Number of items:", count);
-  //           results.startIndex = startIndex;
-  //           results.endIndex = endIndex;
-  //           results.total = count;
-  //
-  //           res.paginatedData = results;
-  //           next();
-  //         });
-  //       } catch (err) {
-  //         res.status(500).json({ message: err.message });
-  //       }
-  //     }
-  //   };
-  // }
+  private paginatedData<T extends Document>(model: Model<T>) {
+    return async (
+      req: Request,
+      res: CustomResponse,
+      next: NextFunction,
+    ) => {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const attr = req.query.attr;
+      const filter = req.query.filter;
+      let results: {
+        results?: {};
+        next?: any;
+        previous?: any;
+        startIndex?: number;
+        endIndex?: number;
+        total?: number;
+      } = {};
+
+      if (page <= 0 || limit <= 0) {
+        results.results = {};
+        res.paginatedData = results;
+        next();
+      }
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      results = {};
+
+      let filtered_data;
+      if (attr && filter) {
+        filtered_data = await model.find({ [attr]: filter });
+
+        if (filtered_data) {
+          // console.log(filtered_data)
+          results.startIndex = startIndex;
+          results.endIndex = endIndex;
+          results.total = filtered_data.length;
+
+          if (endIndex < (await filtered_data.length)) {
+            results.next = {
+              page: page + 1,
+              limit: limit,
+            };
+          }
+
+          if (startIndex > 0) {
+            results.previous = {
+              page: page - 1,
+              limit: limit,
+            };
+          }
+
+          filtered_data.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+
+          try {
+            results.results = await filtered_data.slice(startIndex, endIndex);
+            //console.log(results);
+            res.paginatedData = results;
+            next();
+          } catch (err) {
+            res.status(500).json({ message: err.message });
+          }
+        }
+      } else {
+        try {
+          results.results = await model
+            .find()
+            .limit(limit)
+            .skip(startIndex)
+            .exec();
+
+          // console.log(results);
+          await model.count({}, function (err, count) {
+            // console.log("Number of items:", count);
+            results.startIndex = startIndex;
+            results.endIndex = endIndex;
+            results.total = count;
+
+            res.paginatedData = results;
+            next();
+          });
+        } catch (err: Error) {
+          res.status(500).json({ message: err.message });
+        }
+      }
+    };
+  }
 }
