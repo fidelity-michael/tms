@@ -13,6 +13,7 @@ import { Logger } from "./api/shared/utils/logger";
 import session from "express-session";
 import helmet from "helmet";
 import fileUpload from "express-fileupload";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 export class App {
   private logger: Logger = Logger.getInstance();
@@ -72,9 +73,30 @@ export class App {
       .use(cors())
       .use(helmet()) // security
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
-      // .use(session(config.session)) // TODO: Check for session here
+      .use(session(config.session)) // TODO: Check for session here
       .use(bodyParser.json({ limit: "5MB" }))
-      .use(bodyParser.urlencoded({ extended: true }));
+      .use(bodyParser.urlencoded({ extended: true }))
+      .use(
+        "/notifications",
+        createProxyMiddleware({
+          target: "http://localhost:8080/",
+          changeOrigin: true,
+        }),
+      )
+      .use(
+        "/privateConversation",
+        createProxyMiddleware({
+          target: "http://localhost:8080/",
+          changeOrigin: true,
+        }),
+      )
+      .use(
+        "/message",
+        createProxyMiddleware({
+          target: "http://localhost:8080/",
+          changeOrigin: true,
+        }),
+      );
 
     // setup primary app routes.
     application.use(await Api.applyRoutes(application));
