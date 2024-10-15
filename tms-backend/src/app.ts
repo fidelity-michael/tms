@@ -73,7 +73,7 @@ export class App {
       .use(cors())
       .use(helmet()) // security
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
-      .use(session(config.session)) // TODO: Check for session here
+      .use(session(config.session))
       .use(bodyParser.json({ limit: "5MB" }))
       .use(bodyParser.urlencoded({ extended: true }))
       .use(
@@ -123,7 +123,7 @@ export class App {
       // connect to database
       await MongoAdapter.connect();
       this.logger.success(`MongoDB is connected on ${config.mongo.uri}`);
-      const Str = mongoose.Schema.Types.String as any;
+      const Str = mongoose.Schema.Types.String;
       Str.checkRequired((v: string) => v != null);
     } catch (e) {
       this.logger.error(`MongoDB connection error: `, e);

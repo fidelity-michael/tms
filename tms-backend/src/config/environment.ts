@@ -1,3 +1,6 @@
+import dotenv from "dotenv"
+dotenv.config(); // NOTE: Load config first such as SESSION_SECRET is not undefined
+
 // THIS IS THE DOCKER VERSION OF THE ENVIRONMENT
 export const config = {
   // application environment mode
@@ -21,12 +24,13 @@ export const config = {
 
   // Session options
   session: {
-    secret: process.env.SESSION_SECRET as any,
+    secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
     resave: true,
     rolling: true, //the session identifier cookie will expire in maxAge since the last response was sent
     cookie: {
-      maxAge: parseInt(process.env.SESSION_MAX_AGE as any),
+      // secure: isProd(), // Use secure cookies in production (requires HTTPS)
+      maxAge: parseInt(process.env.SESSION_MAX_AGE as string),
     },
   },
 
