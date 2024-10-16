@@ -1,7 +1,7 @@
 export class Logger {
   private static instance: Logger;
 
-  constructor() {}
+  private constructor() {}
 
   public static getInstance(): Logger {
     if (!Logger.instance) {
