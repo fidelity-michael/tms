@@ -70,12 +70,24 @@ export class App {
     application
       .set("port", config.port)
       .set("env", config.environment)
-      .use(cors())
+      .use(
+        cors({
+          origin: "http://localhost:4200", // Your frontend origin // TODO: Check origin
+          credentials: true, // Allow cookies to be sent
+        }),
+      )
       .use(helmet()) // security
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
       .use(session(config.session))
       .use(bodyParser.json({ limit: "5MB" }))
       .use(bodyParser.urlencoded({ extended: true }))
+      // .use(
+      //   "/api",
+      //   createProxyMiddleware({
+      //     target: "http://localhost:8080/",
+      //     changeOrigin: true,
+      //   }),
+      // )
       .use(
         "/notifications",
         createProxyMiddleware({
