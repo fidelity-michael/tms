@@ -1,4 +1,6 @@
-import dotenv from "dotenv"
+import MongoStore from "connect-mongo";
+import dotenv from "dotenv";
+import { mongo, Mongoose } from "mongoose";
 dotenv.config(); // NOTE: Load config first such as SESSION_SECRET is not undefined
 
 // THIS IS THE DOCKER VERSION OF THE ENVIRONMENT
@@ -26,8 +28,12 @@ export const config = {
   session: {
     secret: process.env.SESSION_SECRET as string,
     saveUninitialized: false,
-    resave: true,
+    resave: false,
     rolling: true, //the session identifier cookie will expire in maxAge since the last response was sent
+    store: MongoStore.create({
+      mongoUrl: `mongodb://${process.env.DB_ROOT_USERNAME}:${process.env.DB_ROOT_PASSWORD}@database:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin `,
+      collectionName: "session",
+    }),
     cookie: {
       // secure: isProd(), // Use secure cookies in production (requires HTTPS)
       maxAge: parseInt(process.env.SESSION_MAX_AGE as string),
