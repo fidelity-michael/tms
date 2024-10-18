@@ -39,8 +39,8 @@ export default function AdministratorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
-        // console.log(auth_data.data);
+        const auth_data = await axios.get("/api/auth/authorization", {withCredentials: true});
+        console.log(auth_data.data);
 
         if (auth_data.data.auth) {
           if(
@@ -72,8 +72,8 @@ export default function AdministratorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
-        // console.log(auth_data.data);
+        const auth_data = await axios.get('/api/auth/authorization', {withCredentials: true});
+        console.log(auth_data.data);
 
         if (auth_data.data.auth) {
           if(
@@ -134,8 +134,8 @@ export default function AdministratorPage() {
               {(page === "Users") ?
                 <div>
                   <div className="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" className="btn btn-light user-btn" onClick={(e) => toggleNewUser(false)}>Show Users</button>
-                    <button type="button" className="btn btn-info user-btn new" onClick={(e) => toggleNewUser(true)}>New User</button>
+                    <button type="button" className="btn btn-light user-btn" onClick={() => toggleNewUser(false)}>Show Users</button>
+                    <button type="button" className="btn btn-info user-btn new" onClick={() => toggleNewUser(true)}>New User</button>
                   </div>
 
                   {!newUser && <UsersTable />}
@@ -146,8 +146,8 @@ export default function AdministratorPage() {
               {(page === "Universities") ?
                 <div>
                   <div className="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" className="btn btn-light user-btn" onClick={(e) => toggleNewUniversity(false)}>Show Universities</button>
-                    <button type="button" className="btn btn-info user-btn new" onClick={(e) => toggleNewUniversity(true)}>New University</button>
+                    <button type="button" className="btn btn-light user-btn" onClick={() => toggleNewUniversity(false)}>Show Universities</button>
+                    <button type="button" className="btn btn-info user-btn new" onClick={() => toggleNewUniversity(true)}>New University</button>
                   </div>
                   {!newUniversity && <UniversitiesTable />} 
                   {newUniversity && <NewUniversityForm />}
@@ -157,8 +157,8 @@ export default function AdministratorPage() {
               {(page === "Departments") ?
                 <div>
                   <div className="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" className="btn btn-light user-btn" onClick={(e) => toggleNewDepartment(false)}>Show Departments</button>
-                    <button type="button" className="btn btn-info user-btn new" onClick={(e) => toggleNewDepartment(true)}>New Department</button>
+                    <button type="button" className="btn btn-light user-btn" onClick={() => toggleNewDepartment(false)}>Show Departments</button>
+                    <button type="button" className="btn btn-info user-btn new" onClick={() => toggleNewDepartment(true)}>New Department</button>
                   </div>
                   {!newDepartment && <DepartmentsTable />}
                   {newDepartment && <NewDepartmentForm />}
@@ -168,15 +168,15 @@ export default function AdministratorPage() {
               {(page === "Areas / Categories") ?
                 <div>
                   <div className="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" className="btn btn-light area-btn" onClick={(e) => toggleNewArea(false)}>Show Areas</button>
-                    <button type="button" className="btn btn-dark area-btn new" onClick={(e) => toggleNewArea(true)}>New Area</button>
+                    <button type="button" className="btn btn-light area-btn" onClick={() => toggleNewArea(false)}>Show Areas</button>
+                    <button type="button" className="btn btn-dark area-btn new" onClick={() => toggleNewArea(true)}>New Area</button>
                   </div>
 
                   {!newArea && <AreasTable />}
                   {newArea && <NewArea />}
                 </div>
                 : null}
-              {(page === "Assigned Theses") ? <AssignedThesesAvailable userId={userId} userGroup={"Administrator"} /> : null}
+              {(page === "Assigned Theses") ? <AssignedThesesAvailable userId={userId} /> : null}
               {(page === "Theses Archive") ? <ThesesTable userId={userId} userGroup={"Administrator"} /> : null}
               {(page === "My Roles") ? <MyRoles userId={userId}  currentRole="administrator"/> : null}
               {(page === "My Calendar") ? <Calendar userId={userId}/> : null}
