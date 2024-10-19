@@ -9,15 +9,6 @@ import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
 
-type PaginatedData<T> = {
-  results: T[]; // Array of results of type T (where T is the model type)
-  startIndex: number;
-  endIndex: number;
-  total: number;
-  next?: { page: number; limit: number }; // Optional pagination navigation
-  previous?: { page: number; limit: number }; // Optional pagination navigation
-};
-
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
   results?: {
@@ -258,11 +249,7 @@ export class ApiController extends ResourceController<IApi> {
   };
 
   private paginatedData<T extends Document>(model: Model<T>) {
-    return async (
-      req: Request,
-      res: CustomResponse,
-      next: NextFunction,
-    ) => {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 

@@ -24,7 +24,7 @@ export default function MyNotifications({ userId, notifications, setNotification
 
         if(userId) {
             if (socketRef.current == null) { //current will persist for the full lifetime of the component
-                socketRef.current = io('localhost:4000');
+                socketRef.current = io('http://localhost:8080');
                 
             }
             

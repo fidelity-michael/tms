@@ -31,7 +31,7 @@ function AdminDashboard({userId, setPage}) {
                 var completedTheses = 0;
                 var gradedTheses = 0;
 
-                res.data.map((thesis) => {
+                Array.isArray(res.data) && res.data.map((thesis) => {
                     if(thesis.status === "active"){
                         ++activeTheses
                     } else if(thesis.status === "archived"){
@@ -44,10 +44,10 @@ function AdminDashboard({userId, setPage}) {
                 })
 
                 setTheses(res.data.length)
-                setActiveTheses(activeTheses)
-                setArchivedTheses(archivedTheses)
-                setGradedTheses(gradedTheses)
-                setCompletedTheses(completedTheses)
+                setActiveTheses(String(activeTheses))
+                setArchivedTheses(String(archivedTheses))
+                setGradedTheses(String(gradedTheses))
+                setCompletedTheses(String(completedTheses))
             })
             .catch((err) => console.log(err))
         }
@@ -63,7 +63,7 @@ function AdminDashboard({userId, setPage}) {
                 var adminsNumber = 0
                 var secretariatsNumber = 0
 
-                res.data.results.map((user) => {
+                Array.isArray(res.data.results) && res.data.results.map((user) => {
                     user.role.map((role) => {
                         if(role === "student"){
                             ++studentsNumber
@@ -77,10 +77,10 @@ function AdminDashboard({userId, setPage}) {
                     })
                 })
                 
-                setStudents(studentsNumber)
-                setProfessors(professorsNumber)
-                setSecretariats(secretariatsNumber)
-                setAdmins(adminsNumber)
+                setStudents(String(studentsNumber))
+                setProfessors(String(professorsNumber))
+                setSecretariats(String(secretariatsNumber))
+                setAdmins(String(adminsNumber))
             })
             .catch((err) => console.log(err))
         }
@@ -113,7 +113,7 @@ function AdminDashboard({userId, setPage}) {
         }
 
         const sortByDate= async (myEvents) => {
-            myEvents.sort(function(a, b) {
+            Array.isArray(myEvents) && myEvents.sort((a, b) => {
                 var c = new Date(a.date);
                 var d = new Date(b.date);
                 return c-d;
@@ -140,7 +140,7 @@ function AdminDashboard({userId, setPage}) {
             return(
                 <ul>
                     {   
-                        events.map((ev, index) => {
+                        Array.isArray(events) && events.map((ev) => {
                             var date = new Date(ev.date)
                             
     

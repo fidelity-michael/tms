@@ -39,7 +39,7 @@ export default function AdministratorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get("/api/auth/authorization", {withCredentials: true});
+        const auth_data = await axios.get("/api/auth/authorization");
         console.log(auth_data.data);
 
         if (auth_data.data.auth) {
@@ -72,7 +72,7 @@ export default function AdministratorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/api/auth/authorization', {withCredentials: true});
+        const auth_data = await axios.get('/api/auth/authorization');
         console.log(auth_data.data);
 
         if (auth_data.data.auth) {
