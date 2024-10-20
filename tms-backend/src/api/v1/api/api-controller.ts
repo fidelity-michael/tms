@@ -7,7 +7,9 @@ import fs from "fs";
 import { UserModel } from "../users/user-model";
 import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
-import { AreaModel } from "../area/area-model";
+import { AreaModel, ThesesRepModel } from "../area/area-model";
+import { UniversityModel } from "../universities/university-model";
+import { DepartmentModel } from "../departments/departments-model";
 
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
@@ -39,6 +41,7 @@ export class ApiController extends ResourceController<IApi> {
    * @returns {Router}
    */
   public applyRoutes(): Router {
+    // WARN: Not complete yet
     const router = Router();
     router
       .get("/uploads", this.verifyJWT)
@@ -49,7 +52,18 @@ export class ApiController extends ResourceController<IApi> {
       .get("/users/:userId", this.getUserById)
       .get("/favourites/:userId", this.getFavouriteUser)
       .get("/thesis/areas", this.getAreas)
-      .get("/users", this.paginatedData(UserModel), this.getAllUsers);
+      .get("/users", this.paginatedData(UserModel), this.getAllUsers)
+      .get(
+        "/universities",
+        this.paginatedData(UniversityModel),
+        this.getAllUniversities,
+      )
+      .get(
+        "/departments",
+        this.paginatedData(DepartmentModel),
+        this.getAllDepartments,
+      )
+      .get("/areas", this.paginatedData(AreaModel), this.getAllAreas);
 
     return router;
   }
@@ -200,7 +214,43 @@ export class ApiController extends ResourceController<IApi> {
    * @param req
    * @param res
    */
-  getAllUniversities = async (req: Request, res: Response) => {};
+  getAllUniversities = async (req: Request, res: CustomResponse) => {
+    try {
+      res.json(res.paginatedData);
+    } catch (err) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
+    }
+  };
+
+  /**
+   * Request all departments in database
+   * @param req
+   * @param res
+   */
+  getAllDepartments = async (req: Request, res: CustomResponse) => {
+    try {
+      res.json(res.paginatedData);
+    } catch (err) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
+    }
+  };
+
+  /**
+   * Request all areas in database
+   * @param req
+   * @param res
+   */
+  getAllAreas = async (req: Request, res: CustomResponse) => {
+    try {
+      res.json(res.paginatedData);
+    } catch (err) {
+      res.status(500).json({ message: "Server internal error occurred!" });
+    }
+  };
 
   /**
    * Request specific user (with id) in database
@@ -223,7 +273,7 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   getAreas = async (req: Request, res: Response) => {
-    await AreaModel.find({})
+    await ThesesRepModel.find({})
       .then((data) => {
         let areas = data.map((area) => {
           return {
@@ -247,6 +297,10 @@ export class ApiController extends ResourceController<IApi> {
         this.logger.error("Server internal error occurred: " + err);
       });
   };
+
+  /**
+   * =============== Functions region ===============
+   */
 
   private paginatedData<T extends Document>(model: Model<T>) {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
@@ -336,4 +390,29 @@ export class ApiController extends ResourceController<IApi> {
       }
     };
   }
+
+  /* private convertDepartmentsData() {
+  return async (req: Request, res: CustomResponse, next: NextFunction) => {
+    try {
+      let converted_data = [];
+
+      if (res.paginatedData!.results) {
+        let index = 0;
+        while (res.paginatedData!.results[index]) {
+          const find_university = await UniversityModel.findById(
+            res.paginatedData!.results[index].university,
+            "name"
+          );
+
+          res.paginatedData.results[index].university = find_university.name;
+          index++;
+        }
+      }
+
+      next();
+    } catch (err) {
+      res.status(500).json({ message: "Server internal error occurred!" });
+    }
+  };
+} */
 }

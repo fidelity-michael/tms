@@ -210,7 +210,9 @@ export class UserController extends ResourceController<IUser> {
       });
   };
 
-  // Check if Model is empty, if empty initialize document
+  /**
+   *  Check if Model is empty, if empty initialize document
+   */
   private async checkAndInitialize(): Promise<void> {
     try {
       const data = await UserModel.findOne({})

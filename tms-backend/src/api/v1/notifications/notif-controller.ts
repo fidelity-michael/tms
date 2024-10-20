@@ -52,11 +52,6 @@ export class NotificationController extends ResourceController<INotification> {
   }
 
   /**
-   * In all of the methods below, we are using the super class methods to perform the CRUD operations.
-   * Request and Response are passed to the super class methods so that they can be extracted and used.
-   * In case you need to do any preprocessing (e.g., filter a body's field) you can do it before calling the super class methods.
-   */
-  /**
    * Sends a message containing all notifications back as a response
    * @param req
    * @param res

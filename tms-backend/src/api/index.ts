@@ -3,7 +3,7 @@ import { apiV1Router, notificationV1Router, chatV1Router } from "./v1";
 
 export class Api {
   /**
-   * Apply all app routes including models and auth
+   * Apply all app routes
    *
    * @param {express.Application} app
    * @returns {Promise<express.Router>}
