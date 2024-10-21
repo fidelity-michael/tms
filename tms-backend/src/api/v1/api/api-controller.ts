@@ -97,6 +97,12 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedData(AssignedThesisModel),
         this.convertAssignedThesissData(),
         this.getAllTheses,
+      )
+      .get(
+        "/assigned_theses/:userId",
+        this.paginatedFilteredData(AssignedThesisModel),
+        this.convertAssignedThesissData(),
+        this.getAllAssignedTheses,
       );
 
     return router;
@@ -296,10 +302,20 @@ export class ApiController extends ResourceController<IApi> {
   };
 
   /**
+   * Request User's assigned theses in database
+   * @param req
+   * @param res
+   */
+  getAllAssignedTheses = async (req: Request, res: CustomResponse) => {
+    this.logger.debug("getAllAssignedTheses request");
+    this.returnResults(req, res);
+  };
+
+  /**
    * Return the results obtained by paginatedData() equivelant functions
    * @param req
    * @param res
-   * @returns {results: PaginatedData}
+   * @returns object of type PaginatedData
    */
   private async returnResults(req: Request, res: CustomResponse) {
     try {
@@ -363,6 +379,9 @@ export class ApiController extends ResourceController<IApi> {
    *
    */
 
+  /**
+   * @returns PaginatedData
+   */
   private paginatedData<T extends Document>(model: Model<T>) {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
       const page = parseInt(req.query.page as string) || 1;
