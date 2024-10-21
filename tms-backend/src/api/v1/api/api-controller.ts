@@ -12,6 +12,15 @@ import { UniversityModel } from "../universities/university-model";
 import { DepartmentModel } from "../departments/departments-model";
 import { ThesisModel } from "../theses/theses-model";
 
+type PaginatedData = {
+  results?: {} | [];
+  next?: any;
+  previous?: any;
+  startIndex?: number;
+  endIndex?: number;
+  total?: number;
+};
+
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
   results?: {
@@ -21,14 +30,7 @@ interface CustomResponse extends Response {
     group?: string;
     message?: string;
   };
-  paginatedData?: {
-    results?: {} | [];
-    next?: any;
-    previous?: any;
-    startIndex?: number;
-    endIndex?: number;
-    total?: number;
-  };
+  paginatedData?: PaginatedData;
 }
 
 export class ApiController extends ResourceController<IApi> {
@@ -70,6 +72,12 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedData(ThesisModel),
         this.convertThesesData(),
         this.getAllTheses,
+      )
+      .get(
+        "/theses/:userId",
+        this.paginatedFilteredData(ThesisModel),
+        this.convertThesesData(),
+        this.getAllThesesByUserId,
       );
 
     return router;
@@ -252,13 +260,8 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   getAllAreas = async (req: Request, res: CustomResponse) => {
-    try {
-      res.json(res.paginatedData);
-    } catch (err) {
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: "Server internal error occurred!" });
-    }
+    this.logger.debug("getAllAreas request");
+    this.returnResults(req, res);
   };
 
   /**
@@ -267,6 +270,21 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   getAllTheses = async (req: Request, res: CustomResponse) => {
+    this.logger.debug("getAllTheses request");
+    this.returnResults(req, res);
+  };
+
+  getAllThesesByUserId = async (req: Request, res: CustomResponse) => {
+    this.logger.debug("getAllThesesByUserId request");
+    this.returnResults(req, res);
+  };
+
+  /**
+   * Request all theses in database
+   * @param req
+   * @param res
+   */
+  private async returnResults(req: Request, res: CustomResponse) {
     try {
       res.json(res.paginatedData);
     } catch (err) {
@@ -274,7 +292,7 @@ export class ApiController extends ResourceController<IApi> {
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: "Server internal error occurred!" });
     }
-  };
+  }
 
   /**
    * Request specific user (with id) in database
@@ -323,7 +341,9 @@ export class ApiController extends ResourceController<IApi> {
   };
 
   /**
-   * =============== Functions region ===============
+   *
+   * #region private Functions
+   *
    */
 
   private paginatedData<T extends Document>(model: Model<T>) {
@@ -333,14 +353,7 @@ export class ApiController extends ResourceController<IApi> {
 
       const attr: any = req.query.attr;
       const filter: any = req.query.filter;
-      let results: {
-        results?: {};
-        next?: any;
-        previous?: any;
-        startIndex?: number;
-        endIndex?: number;
-        total?: number;
-      } = {};
+      let results: PaginatedData = {};
 
       if (page <= 0 || limit <= 0) {
         results.results = {};
@@ -468,6 +481,82 @@ export class ApiController extends ResourceController<IApi> {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
+      }
+    };
+  }
+
+  private paginatedFilteredData<T extends Document>(model: Model<T>) {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      const page = parseInt(req.query.page as string);
+      const limit = parseInt(req.query.limit as string);
+
+      const user: any = req.query.user;
+      const userId: any = req.params.userId;
+
+      const attr: any = req.query.attr;
+      const filter: any = req.query.filter;
+
+      if (page <= 0 || limit <= 0) {
+        const results: PaginatedData = {};
+        results.results = {};
+        res.paginatedData = results;
+        next();
+      }
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      const results: PaginatedData = {};
+
+      let filtered_data;
+      if (!userId) {
+        filtered_data = await model.find({ [attr]: filter });
+      } else if (userId && filter === "none") {
+        // console.log("UserId: ", userId);
+        filtered_data = await model.find({ [user]: userId });
+      } else {
+        try {
+          const temp_data: any = await model.find({ [user]: userId });
+          filtered_data = temp_data.filter((obj: any) => obj[attr] === filter);
+        } catch (err: any) {
+          this.logger.error(err);
+        }
+      }
+
+      if (filtered_data) {
+        // console.log(filtered_data)
+        results.startIndex = startIndex;
+        results.endIndex = endIndex;
+        results.total = filtered_data.length;
+
+        if (endIndex < filtered_data.length) {
+          results.next = {
+            page: page + 1,
+            limit: limit,
+          };
+        }
+
+        if (startIndex > 0) {
+          results.previous = {
+            page: page - 1,
+            limit: limit,
+          };
+        }
+      }
+
+      filtered_data?.sort((a: any, b: any) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+
+      try {
+        results.results = await filtered_data.slice(startIndex, endIndex);
+        //console.log(results);
+        res.paginatedData = results;
+        next();
+      } catch (err: any) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message });
       }
     };
   }
