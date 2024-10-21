@@ -11,6 +11,7 @@ import { AreaModel } from "../area/area-model";
 import { UniversityModel } from "../universities/university-model";
 import { DepartmentModel } from "../departments/departments-model";
 import { ThesisModel } from "../theses/theses-model";
+import { ThesesReqModel } from "../theses_requests/theses-model";
 
 type PaginatedData = {
   results?: {} | [];
@@ -77,7 +78,12 @@ export class ApiController extends ResourceController<IApi> {
         "/theses/:userId",
         this.paginatedFilteredData(ThesisModel),
         this.convertThesesData(),
-        this.getAllThesesByUserId,
+        this.getAllTheses,
+      )
+      .get(
+        "/theses_requests",
+        this.paginatedData(ThesesReqModel),
+        this.getAllTheses,
       );
 
     return router;
@@ -274,15 +280,11 @@ export class ApiController extends ResourceController<IApi> {
     this.returnResults(req, res);
   };
 
-  getAllThesesByUserId = async (req: Request, res: CustomResponse) => {
-    this.logger.debug("getAllThesesByUserId request");
-    this.returnResults(req, res);
-  };
-
   /**
-   * Request all theses in database
+   * Return the results obtained by paginatedData() equivelant functions
    * @param req
    * @param res
+   * @returns {results: PaginatedData}
    */
   private async returnResults(req: Request, res: CustomResponse) {
     try {
