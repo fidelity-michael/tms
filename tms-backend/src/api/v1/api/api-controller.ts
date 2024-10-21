@@ -7,9 +7,10 @@ import fs from "fs";
 import { UserModel } from "../users/user-model";
 import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
-import { AreaModel, ThesesRepModel } from "../area/area-model";
+import { AreaModel } from "../area/area-model";
 import { UniversityModel } from "../universities/university-model";
 import { DepartmentModel } from "../departments/departments-model";
+import { ThesisModel } from "../theses/theses-model";
 
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
@@ -21,7 +22,7 @@ interface CustomResponse extends Response {
     message?: string;
   };
   paginatedData?: {
-    results?: {};
+    results?: {} | [];
     next?: any;
     previous?: any;
     startIndex?: number;
@@ -63,7 +64,13 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedData(DepartmentModel),
         this.getAllDepartments,
       )
-      .get("/areas", this.paginatedData(AreaModel), this.getAllAreas);
+      .get("/areas", this.paginatedData(AreaModel), this.getAllAreas)
+      .get(
+        "/theses",
+        this.paginatedData(ThesisModel),
+        this.convertThesesData(),
+        this.getAllTheses,
+      );
 
     return router;
   }
@@ -248,7 +255,24 @@ export class ApiController extends ResourceController<IApi> {
     try {
       res.json(res.paginatedData);
     } catch (err) {
-      res.status(500).json({ message: "Server internal error occurred!" });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
+    }
+  };
+
+  /**
+   * Request all theses in database
+   * @param req
+   * @param res
+   */
+  getAllTheses = async (req: Request, res: CustomResponse) => {
+    try {
+      res.json(res.paginatedData);
+    } catch (err) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
     }
   };
 
@@ -273,7 +297,7 @@ export class ApiController extends ResourceController<IApi> {
    * @param res
    */
   getAreas = async (req: Request, res: Response) => {
-    await ThesesRepModel.find({})
+    await AreaModel.find({})
       .then((data) => {
         let areas = data.map((area) => {
           return {
@@ -293,7 +317,7 @@ export class ApiController extends ResourceController<IApi> {
         });
         res.json(areas);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         this.logger.error("Server internal error occurred: " + err);
       });
   };
@@ -387,6 +411,63 @@ export class ApiController extends ResourceController<IApi> {
         } catch (err: any) {
           res.status(500).json({ message: err.message });
         }
+      }
+    };
+  }
+
+  private convertThesesData() {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      try {
+        let converted_data = [];
+
+        if (
+          Array.isArray(res.paginatedData!.results) &&
+          res.paginatedData!.results
+        ) {
+          let index = 0;
+          while (res.paginatedData!.results[index]) {
+            const professor = await UserModel.findById(
+              res.paginatedData!.results[index].professor,
+              "email first_name last_name",
+            );
+
+            if (professor) {
+              let newObject = {
+                _id: res.paginatedData!.results[index]._id,
+                date: res.paginatedData!.results[index].date,
+                title: res.paginatedData!.results[index].title,
+                topic: res.paginatedData!.results[index].topic,
+                area: res.paginatedData!.results[index].area,
+                description: res.paginatedData!.results[index].description,
+                prerequisites: res.paginatedData!.results[index].prerequisites,
+                group: res.paginatedData!.results[index].group,
+                status: res.paginatedData!.results[index].status,
+                required_files:
+                  res.paginatedData!.results[index].required_files,
+                thesis_files: res.paginatedData!.results[index].thesis_files,
+                professor_id: professor._id,
+                professor_email: professor.email,
+                professor_name:
+                  professor.first_name + " " + professor.last_name,
+              };
+
+              converted_data.push(newObject);
+            }
+
+            index++;
+          }
+
+          // console.log("Current Data : ", res.paginatedData.results);
+          // console.log("Converted Data : ", converted_data);
+          res.paginatedData!.results = converted_data;
+        }
+
+        next();
+      } catch (err: any) {
+        this.logger.error(err);
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Server internal error occurred!" });
       }
     };
   }
