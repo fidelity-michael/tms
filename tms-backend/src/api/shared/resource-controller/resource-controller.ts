@@ -89,7 +89,7 @@ export class ResourceController<T extends Document> {
         .find(queryOptions.query)
         .sort({ date: -1 })
         .limit(limit)
-        .select(queryOptions.options.select as string | any) // WARN: possible breaking
+        .select(queryOptions.options.select as string | any)
         .populate(queryOptions.options.populate as string | any)
         .exec();
       return resources;

@@ -4,7 +4,7 @@ import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
 import fs from "fs";
-import { UserModel } from "../users/user-model";
+import { IUser, UserModel } from "../users/user-model";
 import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
@@ -12,6 +12,7 @@ import { UniversityModel } from "../universities/university-model";
 import { DepartmentModel } from "../departments/departments-model";
 import { ThesisModel } from "../theses/theses-model";
 import { ThesesReqModel } from "../theses_requests/theses-model";
+import { AssignedThesisModel } from "../assigned_theses/assigned-thesis-model";
 
 type PaginatedData = {
   results?: {} | [];
@@ -90,6 +91,12 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedFilteredData(ThesesReqModel),
         this.convertRequestsData(),
         this.getAllTheses,
+      )
+      .get(
+        "/assigned_theses",
+        this.paginatedData(AssignedThesisModel),
+        this.convertAssignedThesissData(),
+        this.getAllTheses,
       );
 
     return router;
@@ -115,7 +122,9 @@ export class ApiController extends ResourceController<IApi> {
           folder === "chat"
         )
       ) {
-        res.status(StatusCodes.UNAUTHORIZED).send({ message: "Folder doesn't exist!" });
+        res
+          .status(StatusCodes.UNAUTHORIZED)
+          .send({ message: "Folder doesn't exist!" });
       }
 
       const filepath = "./public/uploads/" + folder + "/" + file;
@@ -124,8 +133,8 @@ export class ApiController extends ResourceController<IApi> {
       };
 
       res.sendFile(file, options, (err: any, ...data: any) => {
-        if (err) console.log(err);
-        else this.logger.log("Sent: ", file);
+        if (err) this.logger.error(err);
+        else this.logger.debug("Sent: ", file);
       });
     } catch (err: any) {
       this.logger.error(err);
@@ -408,7 +417,9 @@ export class ApiController extends ResourceController<IApi> {
             res.paginatedData = results;
             next();
           } catch (err: any) {
-            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+            res
+              .status(StatusCodes.INTERNAL_SERVER_ERROR)
+              .json({ message: err.message });
           }
         }
       } else {
@@ -430,7 +441,9 @@ export class ApiController extends ResourceController<IApi> {
             next();
           });
         } catch (err: any) {
-          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+          res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err.message });
         }
       }
     };
@@ -574,7 +587,10 @@ export class ApiController extends ResourceController<IApi> {
       try {
         let converted_data = [];
 
-        if (Array.isArray(res.paginatedData!.results) && res.paginatedData!.results) {
+        if (
+          Array.isArray(res.paginatedData!.results) &&
+          res.paginatedData!.results
+        ) {
           let index = 0;
           while (res.paginatedData!.results[index]) {
             const thesis = await ThesisModel.findById(
@@ -602,7 +618,8 @@ export class ApiController extends ResourceController<IApi> {
                 student_id: student._id,
                 student_email: student.email,
                 student_name: student.first_name + " " + student.last_name,
-                required_files: res.paginatedData!.results[index].required_files,
+                required_files:
+                  res.paginatedData!.results[index].required_files,
                 professor_id: professor._id,
                 professor_email: professor.email,
                 professor_name:
@@ -623,7 +640,105 @@ export class ApiController extends ResourceController<IApi> {
         next();
       } catch (err: any) {
         this.logger.error(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Server internal error occurred!" });
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Server internal error occurred!" });
+      }
+    };
+  }
+
+  /**
+   * Get as input (from response) the GET request data for assignedTheses and converts them
+   */
+  private convertAssignedThesissData() {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      try {
+        let converted_data = [];
+
+        // console.log(res.paginatedData.results)
+        if (
+          Array.isArray(res.paginatedData!.results) &&
+          res.paginatedData!.results
+        ) {
+          let index = 0;
+          while (res.paginatedData!.results[index]) {
+            const thesis = await ThesisModel.findById(
+              res.paginatedData!.results[index].thesis,
+              "title topic area group",
+            );
+            const student = await UserModel.findById(
+              res.paginatedData!.results[index].student,
+              "email first_name last_name",
+            );
+            const professor = await UserModel.findById(
+              res.paginatedData!.results[index].professor,
+              "email first_name last_name",
+            );
+
+            /*
+          const supervisor = await User.findById(
+            res.paginatedData.results[index].supervisor,
+            "email first_name last_name"
+          );*/
+
+            var supervisor: (IUser | null)[] = [];
+            var newSupervisor;
+            for (const sup in res.paginatedData!.results[index].supervisor) {
+              newSupervisor = await UserModel.findById(
+                res.paginatedData!.results[index].supervisor[sup],
+                "email first_name last_name",
+              );
+
+              supervisor.push(newSupervisor);
+            }
+
+            let newObject = {
+              _id: res.paginatedData!.results[index]._id,
+              date: res.paginatedData!.results[index].date,
+              thesis_title: thesis!.title,
+              thesis_topic: thesis!.topic,
+              thesis_area: thesis!.area,
+              thesis_group: thesis!.group,
+              thesis_status: res.paginatedData!.results[index].status,
+              thesis_title_greek: res.paginatedData!.results[index].title_greek,
+              thesis_title_english:
+                res.paginatedData!.results[index].title_english,
+              thesis_grade: res.paginatedData!.results[index].grade,
+              student_id: student!._id,
+              student_email: student!.email,
+              student_name: student!.first_name + " " + student!.last_name,
+              professor_email: professor!.email,
+              professor_name:
+                professor!.first_name + " " + professor!.last_name,
+              supervisor_email: supervisor.map((element) =>
+                element ? element.email : null,
+              ),
+              // supervisor_name: supervisor.map((supe) => { // NOTE: This returns all supervisors names
+              //   supe ? supe.first_name + " " + supe.last_name : null;
+              // }),
+              supervisor_name:
+                supervisor[0]!.first_name + " " + supervisor[0]!.last_name, // WARN: Check this
+              supervisor_id: supervisor.map((element) =>
+                element ? element.id : null,
+              ),
+            };
+
+            //newObject.supervisor_id = supervisor.map(element => element.id)
+            //console.log('oi supervisors:', newObject.supervisor_id)
+
+            // console.log(newObject);
+            converted_data.push(newObject);
+            index++;
+          }
+          res.paginatedData!.results = converted_data;
+        }
+
+        next();
+      } catch (err) {
+        console.log(err);
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Server internal error occurred!" });
       }
     };
   }
