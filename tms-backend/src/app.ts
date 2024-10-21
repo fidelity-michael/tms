@@ -67,48 +67,45 @@ export class App {
    */
   private async setupExpressApp(): Promise<express.Application> {
     const application = express();
+
+    application.use(session(config.session));
+
     application
       .set("port", config.port)
       .set("env", config.environment)
-      .use(
-        cors({
-          origin: "http://localhost:4200", // Your frontend origin // TODO: Check origin
-          credentials: true, // Allow cookies to be sent
-        }),
-      )
+      .use(cors())
       .use(helmet()) // security
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
-      .use(session(config.session))
       .use(bodyParser.json({ limit: "5MB" }))
-      .use(bodyParser.urlencoded({ extended: true }))
+      .use(bodyParser.urlencoded({ extended: true }));
       // .use(
       //   "/api",
+      //   createProxyMiddleware({
+      //     target: "http://localhost:8080",
+      //     changeOrigin: true,
+      //   }),
+      // );
+      // .use(
+      //   "/notifications",
       //   createProxyMiddleware({
       //     target: "http://localhost:8080/",
       //     changeOrigin: true,
       //   }),
       // )
-      .use(
-        "/notifications",
-        createProxyMiddleware({
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-        }),
-      )
-      .use(
-        "/privateConversation",
-        createProxyMiddleware({
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-        }),
-      )
-      .use(
-        "/message",
-        createProxyMiddleware({
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-        }),
-      );
+      // .use(
+      //   "/privateConversation",
+      //   createProxyMiddleware({
+      //     target: "http://localhost:8080/",
+      //     changeOrigin: true,
+      //   }),
+      // )
+      // .use(
+      //   "/message",
+      //   createProxyMiddleware({
+      //     target: "http://localhost:8080/",
+      //     changeOrigin: true,
+      //   }),
+      // );
 
     // setup primary app routes.
     application.use(await Api.applyRoutes(application));
