@@ -3,7 +3,8 @@ import { IAuth, AuthModel } from "./auth-model";
 import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
-import mongoose, { ObjectId } from "mongoose"
+import mongoose, { ObjectId } from "mongoose";
+import dotenv from "dotenv";
 
 import bcrypt from "bcryptjs";
 import LdapClient from "ldapjs-client";
@@ -42,11 +43,17 @@ interface CustomResponse extends Response {
     group?: string;
     message?: string;
   };
-  data?: Array<{ cnDn: { cn: string; dn:string; }; mail: string; eduPersonAffiliation: string; businessCategory: string }>;
+  data?: Array<{
+    cnDn: { cn: string; dn: string };
+    mail: string;
+    eduPersonAffiliation: string;
+    businessCategory: string;
+  }>;
 }
 
 export class AuthenticationController extends ResourceController<IAuth> {
   private logger: Logger = Logger.getInstance();
+  private dotenv = dotenv.config();
 
   private encryptPass = async (plainPass: any, rounds: any) => {
     const saltRounds = await bcrypt.genSalt(rounds);
@@ -87,7 +94,9 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param req
    * @param res
    */
-  authorization = async (req: Request, res: Response) => {
+  authorization = async (req: CustomRequest, res: Response) => {
+    this.logger.debug("authorization request. ID: " + req.sessionID);
+    this.logger.debug("SESSION: " + req.session.user);
     if (req.session.user) {
       const server_res = {
         id: req.session.user.id,
@@ -97,6 +106,8 @@ export class AuthenticationController extends ResourceController<IAuth> {
         message: "User is signed in!",
         auth: true,
       };
+
+      this.logger.debug("" + server_res);
 
       res.json(server_res);
     } else {
@@ -127,13 +138,13 @@ export class AuthenticationController extends ResourceController<IAuth> {
           // Create and assign token
           const accessToken = jwt.sign(
             { _id: user._id },
-            process.env.ACCESS_TOKEN_SECRET as string,
+            process.env.ACCESS_TOKEN_SECRET as jwt.Secret,
             { expiresIn: "4h" },
           );
 
           const refreshToken = jwt.sign(
             { _id: user._id },
-            process.env.REFRESH_TOKEN_SECRET as string,
+            process.env.REFRESH_TOKEN_SECRET as jwt.Secret,
           );
 
           // Create user session
@@ -228,8 +239,9 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param res
    */
   loginWithoutLDAP = async (req: CustomRequest, res: CustomResponse) => {
+    this.logger.debug("loginWithoutLDAP request. ID: " + req.sessionID);
     mongoose.connection.on("error", (err) => {
-      this.logger.error("MongoDB failed to connect!")
+      this.logger.error("MongoDB failed to connect!");
       res.status(StatusCodes.SERVICE_UNAVAILABLE).send(err);
     });
 
@@ -254,41 +266,45 @@ export class AuthenticationController extends ResourceController<IAuth> {
 
         return res.status(StatusCodes.NOT_FOUND).send(server_res);
       }
-
     } catch (err) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server failed to connect with database."); 
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send("Server failed to connect with database.");
     }
 
     // Check if password is correct
-    const validPass = await bcrypt.compare(req.body.password, 
-      user.password);
+    const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) {
       const server_res = {
         message: "User password is incorrect!",
       };
 
-      return res.status(400).send(server_res);
+      return res.status(StatusCodes.BAD_REQUEST).send(server_res);
     }
 
+    this.logger.debug("" + user);
     // Create and assign token
     const accessToken = jwt.sign(
       { _id: user._id },
-      process.env.ACCESS_TOKEN_SECRET as string,
+      process.env.ACCESS_TOKEN_SECRET as jwt.Secret,
       { expiresIn: "4h" },
     );
 
     const refreshToken = jwt.sign(
       { _id: user._id },
-      process.env.REFRESH_TOKEN_SECRET as string,
+      process.env.REFRESH_TOKEN_SECRET as jwt.Secret,
     );
 
     // Create user session
+    this.logger.debug("SESSION (before): " + req.session.user);
     req.session.user = {
       id: user._id,
       role: user.role,
       group: user.group,
       email: user.email,
     };
+
+    this.logger.debug("SESSION (after)" + req.session.user);
 
     // Send back token and user's role
     const server_res = {
@@ -298,6 +314,14 @@ export class AuthenticationController extends ResourceController<IAuth> {
     };
 
     res.header("Access-Token", accessToken).send(server_res);
+    req.session.save((err) => {
+      if (err) {
+        this.logger.error("Failed to save session: ", err);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .send("Session save error");
+      }
+    });
   };
 
   logout = async (req: Request, res: Response) => {
@@ -315,7 +339,11 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param res
    */
   ldapSearch() {
-    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
+    return async (
+      req: CustomRequest,
+      res: CustomResponse,
+      next: NextFunction,
+    ) => {
       try {
         const email = req.body.email;
         const searchOptions = {
@@ -346,16 +374,23 @@ export class AuthenticationController extends ResourceController<IAuth> {
         next();
       } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message });
         next();
       }
     };
   }
 
   ldapAuthenticate() {
-    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
+    return async (
+      req: CustomRequest,
+      res: CustomResponse,
+      next: NextFunction,
+    ) => {
       try {
-        if (Object.keys(res.data!).length === 0) { // "!" it's not undefined, neither null
+        if (Object.keys(res.data!).length === 0) {
+          // "!" it's not undefined, neither null
           // console.log("LDAP user not found!");
           res.results = {
             auth: "fail",
@@ -392,7 +427,11 @@ export class AuthenticationController extends ResourceController<IAuth> {
   }
 
   modifyData() {
-    return async (req: CustomRequest, res: CustomResponse, next: NextFunction) => {
+    return async (
+      req: CustomRequest,
+      res: CustomResponse,
+      next: NextFunction,
+    ) => {
       try {
         // if(res.results.auth === "fail") {
         //   res.status(400).send(res.results);
