@@ -84,6 +84,12 @@ export class ApiController extends ResourceController<IApi> {
         "/theses_requests",
         this.paginatedData(ThesesReqModel),
         this.getAllTheses,
+      )
+      .get(
+        "/theses_requests/:userId",
+        this.paginatedFilteredData(ThesesReqModel),
+        this.convertRequestsData(),
+        this.getAllTheses,
       );
 
     return router;
@@ -109,7 +115,7 @@ export class ApiController extends ResourceController<IApi> {
           folder === "chat"
         )
       ) {
-        res.status(401).send({ message: "Folder doesn't exist!" });
+        res.status(StatusCodes.UNAUTHORIZED).send({ message: "Folder doesn't exist!" });
       }
 
       const filepath = "./public/uploads/" + folder + "/" + file;
@@ -121,8 +127,8 @@ export class ApiController extends ResourceController<IApi> {
         if (err) console.log(err);
         else this.logger.log("Sent: ", file);
       });
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      this.logger.error(err);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: "Server internal error occurred!" });
@@ -402,7 +408,7 @@ export class ApiController extends ResourceController<IApi> {
             res.paginatedData = results;
             next();
           } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
           }
         }
       } else {
@@ -424,7 +430,7 @@ export class ApiController extends ResourceController<IApi> {
             next();
           });
         } catch (err: any) {
-          res.status(500).json({ message: err.message });
+          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
         }
       }
     };
@@ -559,6 +565,65 @@ export class ApiController extends ResourceController<IApi> {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: err.message });
+      }
+    };
+  }
+
+  private convertRequestsData() {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      try {
+        let converted_data = [];
+
+        if (Array.isArray(res.paginatedData!.results) && res.paginatedData!.results) {
+          let index = 0;
+          while (res.paginatedData!.results[index]) {
+            const thesis = await ThesisModel.findById(
+              res.paginatedData!.results[index].thesis,
+              "title topic area group",
+            );
+            const student = await UserModel.findById(
+              res.paginatedData!.results[index].student,
+              "email first_name last_name",
+            );
+            const professor = await UserModel.findById(
+              res.paginatedData!.results[index].professor,
+              "email first_name last_name",
+            );
+
+            if (thesis && student && professor) {
+              let newObject = {
+                _id: res.paginatedData!.results[index]._id,
+                date: res.paginatedData!.results[index].date,
+                thesis_id: thesis._id,
+                thesis_title: thesis.title,
+                thesis_topic: thesis.topic,
+                thesis_area: thesis.area,
+                thesis_group: thesis.group,
+                student_id: student._id,
+                student_email: student.email,
+                student_name: student.first_name + " " + student.last_name,
+                required_files: res.paginatedData!.results[index].required_files,
+                professor_id: professor._id,
+                professor_email: professor.email,
+                professor_name:
+                  professor.first_name + " " + professor.last_name,
+              };
+
+              converted_data.push(newObject);
+            }
+
+            index++;
+          }
+
+          // console.log("Current Data : ", res.paginatedData.results);
+          // console.log("Converted Data : ", converted_data);
+          res.paginatedData!.results = converted_data;
+        }
+
+        next();
+      } catch (err: any) {
+        this.logger.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Server internal error occurred!" });
       }
     };
   }
