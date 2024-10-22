@@ -13,6 +13,7 @@ import { DepartmentModel } from "../departments/departments-model";
 import { Thesis_t, ThesisModel } from "../theses/theses-model";
 import { ThesesReqModel } from "../theses_requests/theses-model";
 import { AssignedThesisModel } from "../assigned_theses/assigned-thesis-model";
+import { ThesesRepModel } from "../theses_reports/theses_rep-model";
 
 type PaginatedData = {
   results?: {} | [];
@@ -29,7 +30,7 @@ type Data = {
   professor?: string;
   supervisor?: string[];
   date?: Date;
-}
+};
 
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
@@ -113,10 +114,11 @@ export class ApiController extends ResourceController<IApi> {
         this.convertAssignedThesissData(),
         this.getAllAssignedTheses,
       )
+      .get("/my_thesis/:userId", this.convertThesissData(), this.getUsersThesis)
       .get(
-        "/my_thesis/:userId",
-        this.convertThesissData(),
-        this.getUsersThesis,
+        "/reports/:userId",
+        this.paginatedFilteredData(ThesesRepModel),
+        this.getAllTheses,
       );
 
     return router;
@@ -201,8 +203,8 @@ export class ApiController extends ResourceController<IApi> {
       }
 
       return res.status(StatusCodes.OK).send(filenames);
-    } catch (err) {
-      this.logger.error("" + err);
+    } catch (err: any) {
+      this.logger.error(err);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: "Server internal error occurred!" });
@@ -335,7 +337,9 @@ export class ApiController extends ResourceController<IApi> {
     try {
       res.json(res.data);
     } catch (err) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Server internal error occurred!" });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Server internal error occurred!" });
     }
   };
 
@@ -794,13 +798,13 @@ export class ApiController extends ResourceController<IApi> {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
       try {
         type converted_data_t = {
-          date?: Date,
-          thesis?: Thesis_t,
-          status?: string,
-          professor?: string,
-          supervisor?: string[],
+          date?: Date;
+          thesis?: Thesis_t;
+          status?: string;
+          professor?: string;
+          supervisor?: string[];
         };
-        let converted_data: Data = {}
+        let converted_data: Data = {};
         //we get the theisis id
         const thesis_assigned = await AssignedThesisModel.find({
           student: req.params.userId,
