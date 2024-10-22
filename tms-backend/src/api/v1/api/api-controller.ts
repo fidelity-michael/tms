@@ -106,13 +106,13 @@ export class ApiController extends ResourceController<IApi> {
       .get(
         "/assigned_theses",
         this.paginatedData(AssignedThesisModel),
-        this.convertAssignedThesissData(),
+        this.convertAssignedThesesData(),
         this.getAllTheses,
       )
       .get(
         "/assigned_theses/:userId",
         this.paginatedFilteredData(AssignedThesisModel),
-        this.convertAssignedThesissData(),
+        this.convertAssignedThesesData(),
         this.getAllAssignedTheses,
       )
       .get("/my_thesis/:userId", this.convertThesissData(), this.getUsersThesis)
@@ -889,7 +889,7 @@ export class ApiController extends ResourceController<IApi> {
   /**
    * Get as input (from response) the GET request data for assignedTheses and converts them
    */
-  private convertAssignedThesissData() {
+  private convertAssignedThesesData() {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
       try {
         let converted_data = [];
