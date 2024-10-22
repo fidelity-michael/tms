@@ -10,7 +10,7 @@ import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
 import { UniversityModel } from "../universities/university-model";
 import { DepartmentModel } from "../departments/departments-model";
-import { ThesisModel } from "../theses/theses-model";
+import { Thesis_t, ThesisModel } from "../theses/theses-model";
 import { ThesesReqModel } from "../theses_requests/theses-model";
 import { AssignedThesisModel } from "../assigned_theses/assigned-thesis-model";
 
@@ -23,6 +23,14 @@ type PaginatedData = {
   total?: number;
 };
 
+type Data = {
+  thesis?: Thesis_t;
+  status?: string;
+  professor?: string;
+  supervisor?: string[];
+  date?: Date;
+}
+
 // Define a custom interface to ensure req has a results property
 interface CustomResponse extends Response {
   results?: {
@@ -33,6 +41,7 @@ interface CustomResponse extends Response {
     message?: string;
   };
   paginatedData?: PaginatedData;
+  data?: Data;
 }
 
 export class ApiController extends ResourceController<IApi> {
@@ -103,6 +112,11 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedFilteredData(AssignedThesisModel),
         this.convertAssignedThesissData(),
         this.getAllAssignedTheses,
+      )
+      .get(
+        "/my_thesis/:userId",
+        this.convertThesissData(),
+        this.getUsersThesis,
       );
 
     return router;
@@ -309,6 +323,20 @@ export class ApiController extends ResourceController<IApi> {
   getAllAssignedTheses = async (req: Request, res: CustomResponse) => {
     this.logger.debug("getAllAssignedTheses request");
     this.returnResults(req, res);
+  };
+
+  /**
+   * Request User's thesis
+   * @param req
+   * @param res
+   */
+  getUsersThesis = async (req: Request, res: CustomResponse) => {
+    this.logger.debug("getUsersThesis request");
+    try {
+      res.json(res.data);
+    } catch (err) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Server internal error occurred!" });
+    }
   };
 
   /**
@@ -755,6 +783,56 @@ export class ApiController extends ResourceController<IApi> {
         next();
       } catch (err) {
         console.log(err);
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Server internal error occurred!" });
+      }
+    };
+  }
+
+  private convertThesissData() {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      try {
+        type converted_data_t = {
+          date?: Date,
+          thesis?: Thesis_t,
+          status?: string,
+          professor?: string,
+          supervisor?: string[],
+        };
+        let converted_data: Data = {}
+        //we get the theisis id
+        const thesis_assigned = await AssignedThesisModel.find({
+          student: req.params.userId,
+        });
+
+        let thesis_data;
+        if (thesis_assigned[0]) {
+          // we get extra thesis data (like title)
+          thesis_data = await ThesisModel.findById(thesis_assigned[0].thesis);
+
+          const professor = await UserModel.findById(
+            thesis_assigned[0].professor,
+          );
+
+          //the supervisors
+          //console.log(thesis_assigned[0].supervisor)
+
+          converted_data.date = thesis_assigned[0].date;
+          converted_data.thesis = thesis_data!;
+          converted_data.thesis.status = thesis_assigned[0].status;
+          converted_data.thesis.professor = professor!.email;
+          thesis_assigned[0].supervisor.map((sup) => {
+            converted_data.supervisor!.push(sup);
+          }); // ids of the supervisors
+        } else {
+          converted_data.thesis = thesis_data;
+        }
+
+        res.data = converted_data;
+        // console.log(res.data);
+        next();
+      } catch (err) {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
