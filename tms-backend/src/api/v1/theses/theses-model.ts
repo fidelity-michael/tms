@@ -79,13 +79,15 @@ export const ThesisModel: Model<IThesis> =
   );
 
 export type Thesis_t = {
-  thesis: string;
+  title: string;
+  topic: string;
+  area: string;
+  description: string;
+  prerequisites: string;
+  group: string;
   professor: string;
-  supervisor: string[];
-  student: string;
-  title_greek: string;
-  title_english: string;
-  grade: string;
+  required_files: string[];
+  thesis_files: string[];
   status: string;
   date: Date;
 };
