@@ -14,6 +14,7 @@ import { Thesis_t, ThesisModel } from "../theses/theses-model";
 import { ThesesReqModel } from "../theses_requests/theses-model";
 import { AssignedThesisModel } from "../assigned_theses/assigned-thesis-model";
 import { ThesesRepModel } from "../theses_reports/theses_rep-model";
+import path from "path";
 
 type PaginatedData = {
   results?: {} | [];
@@ -119,7 +120,8 @@ export class ApiController extends ResourceController<IApi> {
         "/reports/:userId",
         this.paginatedFilteredData(ThesesRepModel),
         this.getAllTheses,
-      );
+      )
+      .post("/uploads/:folderName", this.uploadFile);
 
     return router;
   }
@@ -145,7 +147,7 @@ export class ApiController extends ResourceController<IApi> {
         )
       ) {
         res
-          .status(StatusCodes.UNAUTHORIZED)
+          .status(StatusCodes.NOT_FOUND)
           .send({ message: "Folder doesn't exist!" });
       }
 
@@ -403,6 +405,94 @@ export class ApiController extends ResourceController<IApi> {
       .catch((err: any) => {
         this.logger.error("Server internal error occurred: " + err);
       });
+  };
+
+  /**
+   * Upload file
+   * @param req
+   * @param res
+   */
+  uploadFile = async (req: Request, res: Response) => {
+    try {
+      const folder = req.params.folderName;
+      const files = req.files!.files;
+
+      let newFilenames = [];
+
+      if (
+        !(
+          folder === "theses" ||
+          folder === "requests" ||
+          folder === "reports" ||
+          folder === "chat"
+        )
+      ) {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .send({ message: "Folder doesn't exist!" });
+      }
+
+      // console.log(files);
+      if (files instanceof Array) {
+        Promise.all(
+          files.map((file, index) => {
+            let filename = file.name;
+            let ext = path.extname(filename);
+            let name = path.basename(filename, ext);
+            let filename_timestamp =
+              name + "_" + new Date().getTime().toString() + ext;
+
+            newFilenames.push(filename_timestamp);
+
+            let directory = "./public/uploads";
+            file.mv(`${directory}/${folder}/${filename_timestamp}`, (err) => {
+              if (err) {
+                console.log(err);
+                return res
+                  .status(500)
+                  .send({ message: "Server internal error occurred!" });
+              } else {
+                this.logger.debug("Modified Names: " + filename_timestamp);
+                // console.log(`File Path: ./public/uploads/${folder}/${filename_timestamp}`);
+              }
+            });
+
+            return index;
+          }),
+        );
+      } else {
+        let filename = files.name;
+        let ext = path.extname(filename);
+        let name = path.basename(filename, ext);
+        let filename_timestamp =
+          name + "_" + new Date().getTime().toString() + ext;
+
+        newFilenames.push(filename_timestamp);
+
+        let directory = "./public/uploads";
+        files.mv(`${directory}/${folder}/${filename_timestamp}`, (err) => {
+          if (err) {
+            console.log(err);
+            return res
+              .status(500)
+              .send({ message: "Server internal error occurred!" });
+          } else {
+            console.log("Modified Name: ", filename_timestamp);
+            // console.log(`File Path: ./public/uploads/${folder}/${filename_timestamp}`);
+          }
+        });
+      }
+
+      // console.log("Files uploaded successfully!");
+      // console.log("Filenames: ", newFilenames);
+      res.send({
+        files_list: newFilenames,
+        message: "Files uploaded!",
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
   };
 
   /**
