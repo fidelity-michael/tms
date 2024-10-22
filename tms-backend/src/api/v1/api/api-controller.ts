@@ -79,7 +79,7 @@ export class ApiController extends ResourceController<IApi> {
         this.paginatedData(DepartmentModel),
         this.getAllDepartments,
       )
-      .get("/areas", this.paginatedData(AreaModel), this.getAllAreas)
+      .get("/areas", this.paginatedAreaData(AreaModel), this.getAllAreas)
       .get(
         "/theses",
         this.paginatedData(ThesisModel),
@@ -719,6 +719,104 @@ export class ApiController extends ResourceController<IApi> {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: err.message });
+      }
+    };
+  }
+
+  /**
+   *
+   * Return Paginated Data for areas
+   * @returns PaginatedData
+   */
+  private paginatedAreaData<T extends Document>(model: Model<T>) {
+    return async (req: Request, res: CustomResponse, next: NextFunction) => {
+      const page = parseInt(req.query.page as string);
+      const limit = parseInt(req.query.limit as string);
+
+      const attr: any = req.query.attr;
+      const filter: any = req.query.filter;
+
+      this.logger.debug("Pagination: ", page, limit);
+      if (page <= 0 || limit <= 0) {
+        const results: PaginatedData = {};
+        results.results = {};
+        res.paginatedData = results;
+        next();
+      }
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      const results: PaginatedData = {};
+
+      let filtered_data;
+      if (attr && filter) {
+        filtered_data = await model.find({ [attr]: filter });
+
+        if (filtered_data) {
+          // console.log(filtered_data)
+          results.startIndex = startIndex;
+          results.endIndex = endIndex;
+          results.total = filtered_data.length;
+
+          if (endIndex < (await filtered_data.length)) {
+            results.next = {
+              page: page + 1,
+              limit: limit,
+            };
+          }
+
+          if (startIndex > 0) {
+            results.previous = {
+              page: page - 1,
+              limit: limit,
+            };
+          }
+
+          filtered_data.sort((a: any, b: any) => {
+            const result = a["name"].localeCompare(b["name"], "en", {
+              sensitivity: "base",
+            });
+            return result;
+          });
+
+          try {
+            results.results = await filtered_data.slice(startIndex, endIndex);
+            //console.log(results);
+            res.paginatedData = results;
+            next();
+          } catch (err: any) {
+            res
+              .status(StatusCodes.INTERNAL_SERVER_ERROR)
+              .json({ message: err.message });
+          }
+        }
+      } else {
+        try {
+          await model.countDocuments({}, async function (err: any, count: any) {
+            // console.log("Number of items:", count);
+            if (count < limit && page > 1) {
+              results.startIndex = 1;
+              results.endIndex = limit;
+            } else {
+              results.startIndex = startIndex;
+              results.endIndex = endIndex;
+            }
+            results.total = count;
+            results.results = await model
+              .find()
+              .sort("name")
+              .limit(limit)
+              .skip(startIndex);
+
+            res.paginatedData = results;
+            next();
+          });
+        } catch (err: any) {
+          res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err.message });
+        }
       }
     };
   }
