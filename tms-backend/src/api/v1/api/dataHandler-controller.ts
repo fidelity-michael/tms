@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { IApi, ApiModel } from "./api-model";
+import { DataHandler, DataHandlerModel } from "./dataHandler-model";
 import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
-import fs from "fs";
 import { IUser, UserModel } from "../users/user-model";
 import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
@@ -15,6 +14,8 @@ import { ThesesReqModel } from "../theses_requests/theses-model";
 import { AssignedThesisModel } from "../assigned_theses/assigned-thesis-model";
 import { ThesesRepModel } from "../theses_reports/theses_rep-model";
 import path from "path";
+import fs from "fs";
+import jwt from "jsonwebtoken";
 
 type PaginatedData = {
   results?: {} | [];
@@ -46,10 +47,10 @@ interface CustomResponse extends Response {
   data?: Data;
 }
 
-export class ApiController extends ResourceController<IApi> {
+export class DataHandlerController extends ResourceController<DataHandler> {
   private logger: Logger = Logger.getInstance();
   constructor() {
-    super(ApiModel);
+    super(DataHandlerModel);
   }
   /**
    * Apply all routes for api
@@ -57,7 +58,6 @@ export class ApiController extends ResourceController<IApi> {
    * @returns {Router}
    */
   public applyRoutes(): Router {
-    // WARN: Not complete yet
     const router = Router();
     router
       .get("/uploads", this.verifyJWT)
@@ -516,6 +516,7 @@ export class ApiController extends ResourceController<IApi> {
       if (page <= 0 || limit <= 0) {
         results.results = {};
         res.paginatedData = results;
+        this.logger.debug("res.paginatedData: " + res.paginatedData);
         next();
       }
 
@@ -534,7 +535,7 @@ export class ApiController extends ResourceController<IApi> {
           results.endIndex = endIndex;
           results.total = filtered_data.length;
 
-          if (endIndex < (await filtered_data.length)) {
+          if (endIndex < filtered_data.length) {
             results.next = {
               page: page + 1,
               limit: limit,
@@ -553,9 +554,10 @@ export class ApiController extends ResourceController<IApi> {
           });
 
           try {
-            results.results = await filtered_data.slice(startIndex, endIndex);
+            results.results = filtered_data.slice(startIndex, endIndex);
             //console.log(results);
             res.paginatedData = results;
+            this.logger.debug("res.paginatedData: " + res.paginatedData);
             next();
           } catch (err: any) {
             res
@@ -572,15 +574,16 @@ export class ApiController extends ResourceController<IApi> {
             .exec();
 
           // console.log(results);
-          await model.countDocuments({}, function (err: any, count: any) {
-            // console.log("Number of items:", count);
-            results.startIndex = startIndex;
-            results.endIndex = endIndex;
-            results.total = count;
+          const count = await model.countDocuments({});
+          // console.log("Number of items:", count);
+          results.startIndex = startIndex;
+          results.endIndex = endIndex;
+          results.total = count;
 
-            res.paginatedData = results;
-            next();
-          });
+          res.paginatedData = results;
+          next();
+
+          this.logger.debug("res.paginatedData: " + res.paginatedData);
         } catch (err: any) {
           res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -793,25 +796,27 @@ export class ApiController extends ResourceController<IApi> {
         }
       } else {
         try {
-          await model.countDocuments({}, async function (err: any, count: any) {
-            // console.log("Number of items:", count);
-            if (count < limit && page > 1) {
-              results.startIndex = 1;
-              results.endIndex = limit;
-            } else {
-              results.startIndex = startIndex;
-              results.endIndex = endIndex;
-            }
-            results.total = count;
-            results.results = await model
-              .find()
-              .sort("name")
-              .limit(limit)
-              .skip(startIndex);
 
-            res.paginatedData = results;
-            next();
-          });
+          const count = await model.countDocuments({});
+
+          // console.log("Number of items:", count);
+          if (count < limit && page > 1) {
+            results.startIndex = 1;
+            results.endIndex = limit;
+          } else {
+            results.startIndex = startIndex;
+            results.endIndex = endIndex;
+          }
+          results.total = count;
+          results.results = await model
+            .find()
+            .sort("name")
+            .limit(limit)
+            .skip(startIndex);
+
+          res.paginatedData = results;
+          next();
+
         } catch (err: any) {
           res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -1056,4 +1061,53 @@ export class ApiController extends ResourceController<IApi> {
     }
   };
 } */
+
+  /**
+   * Verify user's token (authentication)
+   */
+  // private verifyToken() {
+  //   return async (req: any, res: any, next: NextFunction) => {
+  //     const token = req.body.accessToken;
+  //     if (!token) {
+  //       req.verified = {
+  //         message: "Authentication failed. Access denied!",
+  //         status: 401,
+  //         user: {},
+  //       };
+  //       next();
+  //     }
+  //
+  //     try {
+  //       //console.log("Token: ", token);
+  //       const verified = jwt.verify(
+  //         token,
+  //         process.env.ACCESS_TOKEN_SECRET,
+  //         (err: any, verifiedJwt: any) => {
+  //           if (err) {
+  //             req.verified = {
+  //               message: "Authentication failed. Invalid token!",
+  //               status: 403,
+  //               user: {},
+  //             };
+  //           } else {
+  //             //console.log("Verified JWT: ", verifiedJwt);
+  //             req.verified = {
+  //               message: "Authentication succeeded. User is verified!",
+  //               status: 200,
+  //               user: verifiedJwt,
+  //             };
+  //           }
+  //         },
+  //       );
+  //       next();
+  //     } catch (err) {
+  //       req.verified = {
+  //         message: "Server internal error occurred!",
+  //         status: 500,
+  //         user: {},
+  //       };
+  //       next();
+  //     }
+  //   };
+  // }
 }
