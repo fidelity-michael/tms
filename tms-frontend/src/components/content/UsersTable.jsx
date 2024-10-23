@@ -28,9 +28,9 @@ export default function UsersTable() {
 
     const componentIsMounted = useRef(true)
     useEffect(() => {
-        return () => {
-            componentIsMounted.current = false
-        }
+        // return () => {
+        //     componentIsMounted.current = true
+        // }
     }, []);
 
     //fetch users and pagination
@@ -38,14 +38,15 @@ export default function UsersTable() {
         const fetchUsers = async () => {
             try {
                 setLoadingUsers(true);
-                const users_data = await axios.get('/api/users', {
+                const users_data = await axios.get('/api/data/users', {
                     params: {
                         page: usersPage,
                         limit: usersLimit
                     }
                 });
 
-                // console.log("Users: ", users_data.data.results);
+                console.log("[Table]Users: ", users_data.data.results);
+                console.log("mounted: " + componentIsMounted.current);
                 if (componentIsMounted.current) {
                     setPagination({
                         startIndex: users_data.data.startIndex,
@@ -164,12 +165,14 @@ export default function UsersTable() {
     const fetchUsers = async () => {
         try {
             setLoadingUsers(true);
-            const users_data = await axios.get('/api/users', {
+            const users_data = await axios.get('/api/data/users', {
                 params: {
                     page: usersPage,
                     limit: usersLimit
                 }
             });
+
+            console.log("users_data: " + users_data)
 
             if (componentIsMounted.current) {
                 if (users_data.data.results.length > 0) setUsers(users_data.data.results);
