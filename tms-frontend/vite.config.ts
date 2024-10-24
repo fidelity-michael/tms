@@ -16,6 +16,14 @@ export default defineConfig({
         target: 'http://backend:8080', // Your backend server
         changeOrigin: true,
       },
+      '/notifications': {
+        target: 'http://backend:8080', // Your backend server
+        changeOrigin: true,
+      },
+      '/chat': {
+        target: 'http://backend:8080', // Your backend server
+        changeOrigin: true,
+      },
     },
     configure: (proxy, options) => {
       proxy.on('error', (err, req, res) => {
