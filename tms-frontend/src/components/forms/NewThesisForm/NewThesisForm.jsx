@@ -33,7 +33,7 @@ export default function NewThesisForm({ userId, email }) {
   const componentIsMounted = useRef(true)
 
   useEffect(() => {
-    axios.get('api/thesis/areas')
+    axios.get('api/data/thesis/areas')
       .then((res) => {
         // console.log("Areas: ", res.data)
         if (componentIsMounted.current) setAreas(res.data);
@@ -208,7 +208,7 @@ export default function NewThesisForm({ userId, email }) {
     // console.log("Upload Thesis: ", thesis);
     const uploadData = async () => {
 
-      await axios.post('/theses', thesis)
+      await axios.post('/api/theses', thesis)
         .then(res => {
           setVariant('success');
           setMessage('Thesis submitted successfully!');
@@ -249,7 +249,7 @@ export default function NewThesisForm({ userId, email }) {
 
     var studentIds = []
     //get all the studentIds with this favorite area
-    await axios.get('/favourites/'+thesis.area)
+    await axios.get('/api/favourites/'+thesis.area)
     .then(async (res) => {
       await res.data.map((favourite) => {
         return studentIds.push(favourite.student)
@@ -276,7 +276,7 @@ export default function NewThesisForm({ userId, email }) {
       }
 
       const uploadData = async () => {
-        await axios.post('/api/uploads/theses', formData)
+        await axios.post('/api/data/uploads/theses', formData) // NOTE: Check this route
           .then(res => {
             // console.log("Response: ", res.data);
             thesis.thesis_files = res.data.files_list;

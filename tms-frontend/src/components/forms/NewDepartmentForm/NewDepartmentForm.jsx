@@ -21,7 +21,7 @@ function NewDepartmentForm() {
 
     useEffect(() => {
         const getUniversities = async () => {
-            await axios.get('/universities')
+            await axios.get('/api/universities')
             .then((res) => {
                 res.data.map((university) => {
                     var newOption = {
@@ -48,7 +48,7 @@ function NewDepartmentForm() {
             var phoneNumber = "+";
             phoneNumber = phoneNumber.concat(phone)
 
-            await axios.post('/departments', {
+            await axios.post('/api/departments', {
                 name: name,
                 university: university,
                 phone: phoneNumber,

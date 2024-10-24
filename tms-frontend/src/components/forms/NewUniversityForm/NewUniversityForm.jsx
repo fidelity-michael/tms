@@ -14,7 +14,7 @@ function NewUniversityForm() {
     async function submitUniversity(e) {
         e.preventDefault();
 
-        await axios.post('/universities', {
+        await axios.post('/api/universities', {
             name: name,
             country: country
         })
