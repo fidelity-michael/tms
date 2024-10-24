@@ -22,7 +22,7 @@ export default function NewUser() {
     function uploadUser() {
         // console.log("New User: ", user);
         const uploadData = async () => {
-            await axios.post('/users', user)
+            await axios.post('/api/users', user)
                 .then(res => {
                     setVariant('success');
                     setMessage('User submitted successfully!');
