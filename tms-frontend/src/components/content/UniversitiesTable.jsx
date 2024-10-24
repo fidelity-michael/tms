@@ -31,7 +31,8 @@ export default function UniversitiesArchive() {
   const componentIsMounted = useRef(true)
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      // componentIsMounted.current = false
+      componentIsMounted.current = true
     }
   }, []);
 
@@ -39,7 +40,7 @@ export default function UniversitiesArchive() {
     const fetchUniversities = async () => {
       try {
         setLoadingUniversities(true);
-        const universities_data = await axios.get('/api/universities', {
+        const universities_data = await axios.get('/api/data/universities', {
           params: {
             page: universitiesPage,
             limit: universitiesLimit
@@ -71,7 +72,7 @@ export default function UniversitiesArchive() {
     const fetchUniversities = async () => {
       try {
         setLoadingUniversities(true);
-        const universities_data = await axios.get('/api/universities', {
+        const universities_data = await axios.get('/api/data/universities', {
           params: {
             page: universitiesPage,
             limit: universitiesLimit
@@ -217,7 +218,7 @@ export default function UniversitiesArchive() {
 
   async function deleteUniversity(universityId){
     const index = universities.findIndex((university) => university._id===universityId)
-    setPath('/universities/'+universityId)
+    setPath('/api/universities/'+universityId)
     setConfirmationMessage("Do you want to delete "+universities[index].name+" ?")
     setShowConfirmation(true)
   }
