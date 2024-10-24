@@ -30,7 +30,7 @@ const notificationV1Router = express.Router();
 const chatV1Router = express.Router();
 
 apiV1Router
-  .use("/data_handle", new DataHandlerController().applyRoutes())
+  .use("/data", new DataHandlerController().applyRoutes())
   .use("/auth", apiLimiter, new AuthenticationController().applyRoutes()) // ldap
   .use("/resource", apiLimiter, new ResourcesController().applyRoutes())
   .use("/areas", apiLimiter, new AreaController().applyRoutes())
