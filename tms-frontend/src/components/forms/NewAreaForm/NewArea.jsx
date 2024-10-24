@@ -17,7 +17,7 @@ export default function NewArea() {
 
     function uploadArea() {
         const uploadData = async () => {
-            await axios.post('/areas', area)
+            await axios.post('/api/areas', area)
                 .then(res => {
                     setVariant('success');
                     setMessage('Area submitted successfully!');
