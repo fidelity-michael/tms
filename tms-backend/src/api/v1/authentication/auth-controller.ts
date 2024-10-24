@@ -95,8 +95,6 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param res
    */
   authorization = async (req: CustomRequest, res: Response) => {
-    this.logger.debug("authorization request. ID: " + req.sessionID);
-    this.logger.debug("SESSION: " + req.session.user);
     if (req.session.user) {
       const server_res = {
         id: req.session.user.id,
@@ -106,8 +104,6 @@ export class AuthenticationController extends ResourceController<IAuth> {
         message: "User is signed in!",
         auth: true,
       };
-
-      this.logger.debug("" + server_res);
 
       res.json(server_res);
     } else {
@@ -296,15 +292,12 @@ export class AuthenticationController extends ResourceController<IAuth> {
     );
 
     // Create user session
-    this.logger.debug("SESSION (before): " + req.session.user);
     req.session.user = {
       id: user._id,
       role: user.role,
       group: user.group,
       email: user.email,
     };
-
-    this.logger.debug("SESSION (after)" + req.session.user);
 
     // Send back token and user's role
     const server_res = {
