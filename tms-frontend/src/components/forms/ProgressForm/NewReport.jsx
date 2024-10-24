@@ -62,7 +62,7 @@ export default function NewReport({ userId, thesisCompleted, onSubmitThesis, the
     function uploadReport() {
         // console.log("Upload Report: ", report);
         const uploadData = async () => {
-            await axios.post('/theses_reports', report)
+            await axios.post('/api/theses_reports', report)
                 .then(res => {
                     sendNotifications()
 
@@ -77,7 +77,7 @@ export default function NewReport({ userId, thesisCompleted, onSubmitThesis, the
                 });
 
             if(report.isFinal) {
-                await axios.patch('/assigned_theses/' + userId,
+                await axios.patch('/api/assigned_theses/' + userId,
                 { 
                     attr: "status",
                     value: "completed"
@@ -103,7 +103,7 @@ export default function NewReport({ userId, thesisCompleted, onSubmitThesis, the
             
 
             const uploadData = async () => {
-                await axios.post('/api/uploads/reports', formData)
+                await axios.post('/api/data/uploads/reports', formData)
                     .then(res => {
                         // console.log("Response: ", res.data);
                         report.report_files = res.data.files_list;

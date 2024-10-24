@@ -42,7 +42,7 @@ export default function UploadFile({ onFilesChange }) {
 
             setShowProgress(true);
 
-            axios.post('/api/uploads', formData, {
+            axios.post('/api/data/uploads', formData, {
                 onUploadProgress: (progressEvent) => {
                     console.log(progressEvent.loaded / progressEvent.total * 100);
                     let status = Math.round(progressEvent.loaded / progressEvent.total * 100);
