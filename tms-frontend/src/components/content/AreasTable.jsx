@@ -31,7 +31,8 @@ export default function AreasTable() {
   const componentIsMounted = useRef(true)
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -40,7 +41,7 @@ export default function AreasTable() {
       try {
         setLoadingAreas(true);
         const pageFix = areasLimit === "50" ? 1 : areasPage;
-        const areas_data = await axios.get('/api/areas', {
+        const areas_data = await axios.get('/api/data/areas', {
           params: {
             page: pageFix,
             limit: areasLimit
@@ -79,7 +80,7 @@ export default function AreasTable() {
       const fetchAreas = async () => {
         try {
           setLoadingAreas(true);
-          const areas_data = await axios.get('/api/areas', {
+          const areas_data = await axios.get('/api/data/areas', {
             params: {
               page: areasPage,
               limit: areasLimit
@@ -186,7 +187,7 @@ export default function AreasTable() {
       const fetchAreas = async () => {
         try {
           setLoadingAreas(true);
-          const areas_data = await axios.get('/api/areas', {
+          const areas_data = await axios.get('/api/data/areas', {
             params: {
               page: areasPage,
               limit: areasLimit
@@ -210,7 +211,7 @@ export default function AreasTable() {
 
         areaKeys.map(key => {
           // console.log(key);
-          axios.patch('/areas/' + target.getAttribute("data-key"), {
+          axios.patch('/api/areas/' + target.getAttribute("data-key"), {
             attr: key,
             value: updateArea[index][key]
           })
@@ -240,7 +241,7 @@ export default function AreasTable() {
 
   function handleCellDelete(target) {
     const area = target.getAttribute("data-key");
-    setPath("/areas/" + area);
+    setPath("/api/areas/" + area);
     setShowConfirmation(true);
   }
 
