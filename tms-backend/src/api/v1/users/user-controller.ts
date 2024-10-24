@@ -41,15 +41,14 @@ export class UserController extends ResourceController<IUser> {
   }
 
   /**
-   * Sends a message containing all tasks back as a response
+   * Sends a message containing all users back as a response
    * @param req
    * @param res
    */
   getUsers = async (req: Request, res: Response) => {
     this.logger.debug("getUsers request");
-    // you can pre-process the request here before passing it to the super class method
     const allUsers = await this.getAll(req, res);
-    // you can process the data retrieved here before returning it to the client
+    this.logger.debug("allUsers: " + allUsers);
     return res.status(StatusCodes.OK).json(allUsers);
   };
 
