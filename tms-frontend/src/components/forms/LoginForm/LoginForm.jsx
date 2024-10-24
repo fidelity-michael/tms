@@ -45,8 +45,8 @@ export default function LoginForm() {
       setLoading(true);
       // axios.post("/api/auth/login", user_data, {proxy: {protocol: "http", host: "http://localhost", port: 8080}})
       axios({
-        url: "http://localhost:8080/api/auth/login", // before use of proxy server
-        // url: "/api/auth/ldap_login",
+        // url: "http://localhost:8080/api/auth/login", // before use of proxy server
+        url: "/api/auth/ldap_login",
         method: "POST",
         data: user_data,
       })
@@ -69,11 +69,8 @@ export default function LoginForm() {
         });
     } else {
       setLoading(true);
-      // axios.post("/api/auth/login", user_data)
-      // axios.post("/api/auth/login", user_data, {proxy: {protocol: "http", host: "http://localhost", port: 8080}})
       axios({
-        url: "/api/auth/login", // before use of proxy server
-        // url: "/api/auth/login", // after use of proxy server
+        url: "/api/auth/login", // after use of proxy server
         method: "POST",
         data: user_data,
       })
