@@ -23,7 +23,7 @@ function CalendarEventModal({show, onShow, userId, fetchEvents}) {
         }
 
         if(title && date!==''){
-            await axios.post('/calendarEvents', {
+            await axios.post('/api/calendarEvents', {
                 userId: userId,
                 title: title,
                 date: date
@@ -57,7 +57,7 @@ function CalendarEventModal({show, onShow, userId, fetchEvents}) {
     }
 
     const getEventsfromDB = async ()  => {
-        await axios.get('/calendarEvents/'+userId)
+        await axios.get('/api/calendarEvents/'+userId)
         .then((res) => {
             fetchEvents(res.data)
         })
