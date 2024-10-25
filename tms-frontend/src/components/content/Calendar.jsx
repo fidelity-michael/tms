@@ -13,7 +13,7 @@ function Calendar({userId}) {
     
     useEffect(() => {
         const getEvents = async ()  => {
-            await axios.get('/calendarEvents/'+userId)
+            await axios.get('/api/calendarEvents/'+userId)
             .then((res) => {
                 console.log(res.data)
                 setEvents(res.data)
