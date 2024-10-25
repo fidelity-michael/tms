@@ -31,7 +31,8 @@ export default function ThesesTable({ userId, userGroup }) {
   const componentIsMounted = useRef(true)
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -41,7 +42,7 @@ export default function ThesesTable({ userId, userGroup }) {
       try {
         setLoadingTheses(true);
         if (userGroup === "Administrator") {
-          theses_data = await axios.get('/api/theses/', {
+          theses_data = await axios.get('/api/data/theses/', {
             params: {
               page: thesesPage,
               limit: thesesLimit
@@ -49,7 +50,7 @@ export default function ThesesTable({ userId, userGroup }) {
           });
         }
         else {
-          theses_data = await axios.get('/api/theses/' + userId, {
+          theses_data = await axios.get('/api/data/theses/' + userId, {
             params: {
               page: thesesPage,
               limit: thesesLimit,
@@ -85,7 +86,7 @@ export default function ThesesTable({ userId, userGroup }) {
         try {
           setLoadingTheses(true);
           if (userGroup === "Administrator") {
-            theses_data = await axios.get('/api/theses/', {
+            theses_data = await axios.get('/api/data/theses/', {
               params: {
                 page: thesesPage,
                 limit: thesesLimit
@@ -93,7 +94,7 @@ export default function ThesesTable({ userId, userGroup }) {
             });
           }
           else {
-            theses_data = await axios.get('/api/theses/' + userId, {
+            theses_data = await axios.get('/api/data/theses/' + userId, {
               params: {
                 page: thesesPage,
                 limit: thesesLimit,
@@ -220,7 +221,7 @@ export default function ThesesTable({ userId, userGroup }) {
         try {
           setLoadingTheses(true);
           if (userGroup === "Administrator") {
-            theses_data = await axios.get('/api/theses/', {
+            theses_data = await axios.get('/api/data/theses/', {
               params: {
                 page: thesesPage,
                 limit: thesesLimit
@@ -228,7 +229,7 @@ export default function ThesesTable({ userId, userGroup }) {
             });
           }
           else {
-            theses_data = await axios.get('/api/theses/' + userId, {
+            theses_data = await axios.get('/api/data/theses/' + userId, {
               params: {
                 page: thesesPage,
                 limit: thesesLimit,
@@ -253,7 +254,7 @@ export default function ThesesTable({ userId, userGroup }) {
         const thesisKeys = Object.keys(updateThesis[index]);
         // console.log("Keys: ", thesisKeys);
         thesisKeys.map(key => {
-          axios.patch('/theses/' + target.getAttribute("data-key"), {
+          axios.patch('/api/theses/' + target.getAttribute("data-key"), {
             attr: key,
             value: updateThesis[index][key]
           })
@@ -310,7 +311,7 @@ export default function ThesesTable({ userId, userGroup }) {
 
   function handleCellDelete(target) {
     const thesis = target.getAttribute("data-key");
-    setPath("/theses/" + thesis);
+    setPath("/api/theses/" + thesis);
     setShowConfirmation(true);
   }
 
