@@ -70,7 +70,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+        this.logger.error("Server internal error occurred!");
       });
   };
 
@@ -94,7 +94,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        console.log("Server internal error occurred!");
+        this.logger.error("Server internal error occurred!");
       });
   };
 
@@ -134,7 +134,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+        this.logger.error("Server internal error occurred!");
       });
   };
 
@@ -152,7 +152,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+        this.logger.error("Server internal error occurred!");
       });
   };
 
@@ -170,7 +170,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
         res.json(data);
       })
       .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+        this.logger.error("Server internal error occurred!");
       });
   };
 }
