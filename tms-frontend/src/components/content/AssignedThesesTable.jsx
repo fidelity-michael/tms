@@ -39,7 +39,7 @@ export default function AssignedThesesTable({ userId }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses/' + userId, {
+        const theses_data = await axios.get('/api/data/assigned_theses/' + userId, {
           params: {
             page: thesesPage,
             limit: thesesLimit,
@@ -74,7 +74,7 @@ export default function AssignedThesesTable({ userId }) {
   //getting all the proffesors and setting them into potential supervisors
   useEffect(() => {
 
-    axios.get('api/users/professors')
+    axios.get('/api/data/users/professors')
       .then((res) => {
         // console.log("Professors: ", res.data)
         console.log("Professors: ", res.data)
@@ -164,7 +164,7 @@ export default function AssignedThesesTable({ userId }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses/' + userId, {
+        const theses_data = await axios.get('/api/data/assigned_theses/' + userId, {
           params: {
             page: thesesPage,
             limit: thesesLimit,
@@ -211,7 +211,7 @@ export default function AssignedThesesTable({ userId }) {
     console.log('ela oi neoiiii', newSupervisorsIdArray)
 
     if(newSupervisorsIdArray.length > 0){
-      axios.patch('/assigned_theses/' + student_id, {
+      axios.patch('/api/assigned_theses/' + student_id, {
         attr: "supervisor",
         value: newSupervisorsIdArray
       })
@@ -230,7 +230,7 @@ export default function AssignedThesesTable({ userId }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses/' + userId, {
+        const theses_data = await axios.get('/api/data/assigned_theses/' + userId, {
           params: {
             page: thesesPage,
             limit: thesesLimit,
@@ -260,7 +260,7 @@ export default function AssignedThesesTable({ userId }) {
 
     console.log(updatedSupervisorsId)
 
-    axios.patch('/assigned_theses/' + theses[index].student_id, {
+    axios.patch('/api/assigned_theses/' + theses[index].student_id, {
       attr: "supervisor",
       value: updatedSupervisorsId
     })

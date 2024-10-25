@@ -32,7 +32,8 @@ export default function AssignedThesesAvailable({ userId }) {
   useEffect(() => {
 
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -40,7 +41,7 @@ export default function AssignedThesesAvailable({ userId }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses', {
+        const theses_data = await axios.get('/api/data/assigned_theses', {
           params: {
             page: thesesPage,
             limit: thesesLimit
@@ -73,7 +74,7 @@ export default function AssignedThesesAvailable({ userId }) {
       const fetchTheses = async () => {
         try {
           setLoadingTheses(true);
-          const theses_data = await axios.get('/api/assigned_theses', {
+          const theses_data = await axios.get('/api/data/assigned_theses', {
             params: {
               page: thesesPage,
               limit: thesesLimit
@@ -186,7 +187,7 @@ export default function AssignedThesesAvailable({ userId }) {
       const fetchTheses = async () => {
         try {
           setLoadingTheses(true);
-          const theses_data = await axios.get('/api/assigned_theses', {
+          const theses_data = await axios.get('/api/data/assigned_theses', {
             params: {
               page: thesesPage,
               limit: thesesLimit
@@ -207,7 +208,7 @@ export default function AssignedThesesAvailable({ userId }) {
 
       try {
         // console.log("Theses Data: ", updateThesis);
-        axios.patch('/assigned_theses/' + updateThesis[index].studentId,
+        axios.patch('/api/assigned_theses/' + updateThesis[index].studentId,
           {
             attr: "status",
             value: updateThesis[index].thesis_status
@@ -235,7 +236,7 @@ export default function AssignedThesesAvailable({ userId }) {
 
   function handleCellDelete(target) {
     const thesis = target.getAttribute("data-key");
-    setPath("/assigned_theses/" + thesis);
+    setPath("/api/assigned_theses/" + thesis);
     setShowConfirmation(true);
   }
 
