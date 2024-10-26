@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from 'react-bootstrap';
 import Carousel from '@itseasy21/react-elastic-carousel'; // NOTE: Changed import because of dependency conflicts
 // import axios from 'axios';
@@ -11,6 +11,12 @@ export default function FavouritesCarousel({ userId, studentFavourites }) {
     const loadingFavourites = false;
 
     const componentIsMounted = useRef(true)
+
+    function getRandomImage(){
+        let image_path = "src/components/images/computer_science_" + Math.floor(Math.random() * 7).toString() + ".jpg";
+        console.log(image_path);
+        return image_path;
+    }
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 600) {
@@ -67,6 +73,7 @@ export default function FavouritesCarousel({ userId, studentFavourites }) {
                 // enableAutoPlay
                 // autoPlaySpeed={7500}
                 itemsToShow={items}
+                isRTL={false}
             >
                 {
                     renderFavourites()
@@ -80,9 +87,9 @@ export default function FavouritesCarousel({ userId, studentFavourites }) {
             const { area_id, area_name } = favourite;
             return (
                 <div key={area_id}>
-                    <Card className='card'>
+                    <Card className='card w-100'>
                         {/* <span className="badge heart"><i id={_id} className="fas fa-heart" onClick={(e) => toggleFavourite(e.target)}></i></span> */}
-                        <Card.Img variant="top" src={require("../images/computer_science_" + Math.floor(Math.random() * 7).toString() + ".jpg")} />
+                        <Card.Img variant="top" src={getRandomImage()} />
                         <Card.Body>
                             <Card.Title>{area_name}</Card.Title>
                             {/* <Card.Text>
