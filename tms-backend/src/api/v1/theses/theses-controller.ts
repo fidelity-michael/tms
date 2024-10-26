@@ -17,12 +17,24 @@ export class ThesisController extends ResourceController<IThesis> {
   public applyRoutes(): Router {
     const router = Router();
     router
+      .get("/", this.getTheses) // TODO: Probably remove this get() func
       .get("/:thesisId", this.getThesisById)
       .post("/", this.postThesis)
       .patch("/:thesisId", this.patchThesis)
       .delete("/:thesisId", this.deleteThesis);
     return router;
   }
+
+  /**
+   * Sends a message containing all theses back as a response
+   * @param req
+   * @param res
+   */
+  getTheses = async (req: Request, res: Response) => {
+    this.logger.debug("getTheses request");
+    const allTheses = await this.getAll(req, res);
+    return res.status(StatusCodes.OK).json(allTheses);
+  };
 
   /**
    * Get user's thesis info
@@ -58,6 +70,7 @@ export class ThesisController extends ResourceController<IThesis> {
    * @param res
    */
   patchThesis = async (req: Request, res: Response) => {
+    this.logger.debug("patchThesis request")
     await ThesisModel.updateOne(
       { _id: req.params.thesisId },
       { $set: { [req.body.attr]: req.body.value } },
