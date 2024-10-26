@@ -86,7 +86,8 @@ export default function AssignedThesesTable({ userId }) {
     
     
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
 
   }, []);

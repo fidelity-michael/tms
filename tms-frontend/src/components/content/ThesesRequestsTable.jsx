@@ -35,7 +35,7 @@ export default function ThesesRequestsTable({ userId, email, thesesRequest, requ
     const fetchRequests = async () => {
       try {
         setLoadingRequests(true);
-        const requests_data = await axios.get('/api/theses_requests/' + userId, {
+        const requests_data = await axios.get('/api/data/theses_requests/' + userId, {
           params: {
             page: requestsPage,
             limit: requestsLimit,
@@ -131,7 +131,7 @@ export default function ThesesRequestsTable({ userId, email, thesesRequest, requ
 
   function handleAcceptClicked(target) {
     try {
-      axios.patch('/theses_requests/' + target.id, { status: "accepted" })
+      axios.patch('/api/theses_requests/' + target.id, { status: "accepted" })
         .then(data => {
           // console.log("Request ID: ", target.id, " accepted!");
           const newData = {
@@ -206,7 +206,7 @@ export default function ThesesRequestsTable({ userId, email, thesesRequest, requ
 
     const fetchData = async () => {
       console.log("File to download: ", target.name)
-      await axios.get('/api/downloads/requests/' + target.name,
+      await axios.get('/api/data/downloads/requests/' + target.name,
         { responseType: 'blob' })
         .then(res => {
           // console.log("Response: ", res.data);

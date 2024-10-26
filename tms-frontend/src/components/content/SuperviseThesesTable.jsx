@@ -27,7 +27,8 @@ export default function SuperviseThesesTable({ userId, email }) {
   const componentIsMounted = useRef(true)
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -35,7 +36,7 @@ export default function SuperviseThesesTable({ userId, email }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses/' + userId, {
+        const theses_data = await axios.get('/api/data/assigned_theses/' + userId, {
           params: {
             page: thesesPage,
             limit: thesesLimit,
