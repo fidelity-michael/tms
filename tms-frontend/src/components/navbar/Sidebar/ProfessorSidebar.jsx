@@ -9,7 +9,7 @@ function ProfessorSidebar(props) {
 
   //for sockets
   const socketRef = useRef(null);  
-  const ENDPOINT = 'localhost:4002';
+  const ENDPOINT = 'http://localhost:8080';
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -21,7 +21,7 @@ function ProfessorSidebar(props) {
 
     //check if there are unread messages
     const checkUnread = async () => {
-      await axios.get('/privateConversation/'+props.userId)
+      await axios.get('/chat/privateConversation/'+props.userId)
       .then((res) => {
         console.log(res.data, selected)
 

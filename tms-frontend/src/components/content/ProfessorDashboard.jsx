@@ -25,15 +25,15 @@ function ProfessorDashboard({userId, myStudents, setPage}) {
 
                 myStudents.map(async (studentId) => {
 
-                    axios.get('/assigned_theses/assigned_thesis/'+studentId)
+                    axios.get('/api/assigned_theses/assigned_thesis/'+studentId)
                     .then((res) => {
 
                         //if thesis is active
                         if(res.data.status === "active"){
-                            axios.get('/theses/'+res.data.thesis)
+                            axios.get('/api/theses/'+res.data.thesis)
                             .then((thesisRes) => {
 
-                                axios.get('/api/users/'+studentId)
+                                axios.get('/api/data/users/'+studentId)
                                 .then((studentRes) => {
                                     
                                     //data of thesis and student
@@ -72,7 +72,7 @@ function ProfessorDashboard({userId, myStudents, setPage}) {
     useEffect(() => {
         const getEvents = async ()  => {
             setLoadingEvents(true)
-            await axios.get('/calendarEvents/'+userId)
+            await axios.get('/api/calendarEvents/'+userId)
             .then((res) => {
                 console.log(res.data)
                 sortByDate(res.data)

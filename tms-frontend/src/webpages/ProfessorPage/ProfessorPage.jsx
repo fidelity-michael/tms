@@ -39,7 +39,7 @@ function ProfessorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         // console.log(auth_data.data);
         if (auth_data.data.auth) {
           if(
@@ -77,7 +77,7 @@ function ProfessorPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         // console.log(auth_data.data);
         if (auth_data.data.auth) {
           if(
@@ -120,7 +120,7 @@ function ProfessorPage() {
   //get all the students ids that this professor is supervising
   useEffect(() => {
     const supervisedTheses = async () => {
-      await axios.get('/assigned_theses/supervised/'+user.userId)
+      await axios.get('/api/assigned_theses/supervised/'+user.userId)
       .then((res) => {
         console.log(res.data)
         var students=res.data.map((elem) => {return elem.student})
