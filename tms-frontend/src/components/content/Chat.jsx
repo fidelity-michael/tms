@@ -1,274 +1,271 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './chatStyle.css';
-import io from 'socket.io-client'
-import axios from 'axios';
-import sound from '../../assets/sound.mp3';
-import newMessage from '../../assets/newMessage.mp3';
-import FilesContainer from './FilesContainer';
-import Contacts from './Contacts';
+import React, { useEffect, useState, useRef } from "react";
+import "./chatStyle.css";
+import io from "socket.io-client";
+import axios from "axios";
+import sound from "../../assets/sound.mp3";
+import newMessage from "../../assets/newMessage.mp3";
+import FilesContainer from "./FilesContainer";
+import Contacts from "./Contacts";
 
 export default function Chat({ userId, role }) {
-
-  //supervisors for students and students for 
+  //supervisors for students and students for
   const [myContacts, setMyContacts] = useState([]);
 
-  const [currentContact, setCurrentContact] = useState('');
-  const [currentChatId, setCurrentChatId] = useState('');
+  const [currentContact, setCurrentContact] = useState("");
+  const [currentChatId, setCurrentChatId] = useState("");
 
   const [loadingConversations, setLoadingConversations] = useState(true);
 
-  const [contactsTitle, setContactsTitle] = useState('')
+  const [contactsTitle, setContactsTitle] = useState("");
 
-  const [conversations, setConversations] = useState([])
+  const [conversations, setConversations] = useState([]);
 
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState([]);
 
-  const componentIsMounted = useRef(true)
+  const componentIsMounted = useRef(true);
 
   //for sockets
   //TODO: [Frontend] Check Port here, probably needs a change
   const socketRef = useRef(null);
-  const ENDPOINT = 'http://localhost:8080';
+  const ENDPOINT = "http://localhost:8080";
 
   //we establish connection with endpoint
   useEffect(() => {
-
-    if (socketRef.current == null) { //current will persist for the full lifetime of the component
+    if (socketRef.current == null) {
+      //current will persist for the full lifetime of the component
       socketRef.current = io(ENDPOINT);
     }
 
     socketRef.current.on("connect", () => {
-      console.log('Connected to chat!')
-      socketRef.current.emit('map', userId);
-    })
+      console.log("Connected to chat!");
+      socketRef.current.emit("map", userId);
+    });
 
     socketRef.current.on("disconnect", () => {
-      console.log('Disonnected from chat!')
-    })
+      console.log("Disonnected from chat!");
+    });
 
     //cleanup (disconnect from chat server)
     return () => {
       if (socketRef.current) {
-        socketRef.current.disconnect()
-        socketRef.current.close()
-        componentIsMounted.current = false
+        socketRef.current.disconnect();
+        socketRef.current.close();
+        componentIsMounted.current = false;
       }
-
     };
-
-  }, [ENDPOINT, userId])
+  }, [ENDPOINT, userId]);
 
   //setting title of contacts depending on our role
   useEffect(() => {
-
     //---for students-----
     //get data of supervisors (we pass supervisors id)
     const fetchSupervisors = async () => {
-
       const getSupervisorsData = async (id) => {
         //console.log('supervisor: ', id)
-        await axios.get("/api/data/users/" + id)
+        await axios
+          .get("/api/data/users/" + id)
           .then((res) => {
             //console.log(res.data)
-            setMyContacts(prev => [...prev, res.data])
+            setMyContacts((prev) => [...prev, res.data]);
           })
           .catch(() => {
-            console.log('Server internal Error.')
-          })
-      }
+            console.log("Server internal Error.");
+          });
+      };
 
       //get my thesis_data
-      const thesis_data = await axios.get('/api/data/my_thesis/' + userId);
+      const thesis_data = await axios.get("/api/data/my_thesis/" + userId);
 
       //get supervisors data
-      if (thesis_data.data.supervisor && Array.isArray(thesis_data.data.supervisor)){
-
-        thesis_data.data.supervisor.map(async (id) => { (await getSupervisorsData(id)) });
+      if (
+        thesis_data.data.supervisor &&
+        Array.isArray(thesis_data.data.supervisor)
+      ) {
+        thesis_data.data.supervisor.map(async (id) => {
+          await getSupervisorsData(id);
+        });
       }
 
-      fetchConversations()
-    }
+      fetchConversations();
+    };
 
     //---professors---
     //get data of students we supervise
     const fetchStudents = async () => {
-      var studentsIds = []
+      var studentsIds = [];
 
       const getStudentsIds = async () => {
-        await axios.get('/assigned_theses/supervised/' + userId)
+        await axios
+          .get("/assigned_theses/supervised/" + userId)
           .then((res) => {
-            console.log(res.data)
-            studentsIds = res.data.map((elem) => { return elem.student })
+            console.log(res.data);
+            studentsIds = res.data.map((elem) => {
+              return elem.student;
+            });
           })
           .catch(() => {
-            console.log("Errooor")
-          })
-      }
+            console.log("Errooor");
+          });
+      };
 
       const getStudentsObjects = async () => {
         studentsIds.map((studentId) => {
-          axios.get('/api/data/users/' + studentId)
+          axios
+            .get("/api/data/users/" + studentId)
             .then((res) => {
-              setMyContacts(prev => [...prev, res.data])
+              setMyContacts((prev) => [...prev, res.data]);
             })
             .catch(() => {
-              console.log('errroor')
-            })
-        })
-      }
+              console.log("errroor");
+            });
+        });
+      };
 
-      await getStudentsIds()
-      await getStudentsObjects()
-      fetchConversations()
-
-    }
-
+      await getStudentsIds();
+      await getStudentsObjects();
+      fetchConversations();
+    };
 
     if (role === "student") {
-      setContactsTitle("My Supervisors")
-      fetchSupervisors()
-
+      setContactsTitle("My Supervisors");
+      fetchSupervisors();
     } else if (role === "professor") {
-      setContactsTitle("My Students")
-      fetchStudents()
+      setContactsTitle("My Students");
+      fetchStudents();
     } else {
-      setContactsTitle("")
+      setContactsTitle("");
     }
-
-
-  }, [role, userId])
-
+  }, [role, userId]);
 
   //socket events and basic fetching
   useEffect(() => {
-    console.log("new current contact:", currentContact)
+    console.log("new current contact:", currentContact);
 
     //receiving message event
-    socketRef.current.on("privateMessage", (data) => { receiveMessage(data) })
+    socketRef.current.on("privateMessage", (data) => {
+      receiveMessage(data);
+    });
 
     //display my message event
     socketRef.current.on("myMessage", (data) => {
       if (currentContact._id === data.receiverId) {
-        var date = new Date(data.date)
-        displayMyMessage(data, date)
+        var date = new Date(data.date);
+        displayMyMessage(data, date);
       }
-    })
+    });
 
     //cleanup events
     return () => {
-      console.log("clean")
-      socketRef.current.off("privateMessage")
-    }
-
-  }, [currentContact])
+      console.log("clean");
+      socketRef.current.off("privateMessage");
+    };
+  }, [currentContact]);
 
   //loadMessages of currentchat
   useEffect(() => {
-
     const renderMessages = async () => {
-      loadingMessages()
+      loadingMessages();
       const chatId = currentChatId;
       try {
         //get messages
-        var messages = await axios.get('/chat/message/' + chatId);
+        var messages = await axios.get("/chat/message/" + chatId);
 
-        resetConversation()
+        resetConversation();
 
         //render messages
         messages.data.map((message) => {
-
-
-          var date = new Date(message.date)
+          var date = new Date(message.date);
           if (message.sender === userId) {
-            displayMyMessage(message, date)
+            displayMyMessage(message, date);
           } else {
-            displayIncomingMessage(message, date)
-            checkRead(message)
+            displayIncomingMessage(message, date);
+            checkRead(message);
           }
-        })
+        });
         //scroll down
-        var scrollBar = document.getElementById('conversation');
+        var scrollBar = document.getElementById("conversation");
         scrollBar.scrollTop = scrollBar.scrollHeight;
-
       } catch {
         console.log("Server internal error occurred!");
       }
+    };
+
+    resetConversation();
+    if (currentChatId !== "") {
+      renderMessages();
     }
-
-    resetConversation()
-    if (currentChatId !== '') {
-      renderMessages()
-    }
-
-  }, [currentChatId])
-
+  }, [currentChatId]);
 
   useEffect(() => {
-
-    console.log('ta files', files)
-    //append file 
+    console.log("ta files", files);
+    //append file
     if (files.length > 0 && files[files.length - 1]) {
-      appendFileStyle()
+      appendFileStyle();
     }
-  }, [files])
-
-
+  }, [files]);
 
   async function fetchConversations() {
-
     try {
-      const res = await axios.get('/chat/privateConversation/' + userId)
+      const res = await axios.get("/chat/privateConversation/" + userId);
       if (res.data.length > 0) {
-        console.log('OOK', res.data)
-        console.log("Conversations SETing")
+        console.log("OOK", res.data);
+        console.log("Conversations SETing");
 
         setConversations(res.data);
-        console.log("Conversations SET")
-        setTimeout(function() { setLoadingConversations(false) }, 800); //lathos alla exw kollhsei kai douleuei
+        console.log("Conversations SET");
+        setTimeout(function () {
+          setLoadingConversations(false);
+        }, 800); //lathos alla exw kollhsei kai douleuei
         //setLoadingConversations(false);
       } else {
-        setLoadingConversations(false)
+        setLoadingConversations(false);
       }
     } catch {
-      console.log('err')
+      console.log("err");
     }
-
   }
 
   //reset previous currentContact style
   function resetStyle(contactId) {
     if (document.getElementById("contact" + contactId))
-      if (document.getElementById("contact" + contactId).attributeStyleMap !== undefined) {
-        document.getElementById("contact" + contactId).attributeStyleMap.clear()
-      }
-      else {
+      if (
+        document.getElementById("contact" + contactId).attributeStyleMap !==
+        undefined
+      ) {
+        document
+          .getElementById("contact" + contactId)
+          .attributeStyleMap.clear();
+      } else {
         // For browsers that do not support gradients
-        document.getElementById("contact" + contactId).style.backgroundColor = "rgb(242, 249, 250)"
+        document.getElementById("contact" + contactId).style.backgroundColor =
+          "rgb(242, 249, 250)";
 
         //gradient
-        document.getElementById("contact" + contactId).style.backgroundImage = ""
-        document.getElementById("contact" + contactId).style.color = "rgb(100, 98, 98)"
+        document.getElementById("contact" + contactId).style.backgroundImage =
+          "";
+        document.getElementById("contact" + contactId).style.color =
+          "rgb(100, 98, 98)";
       }
   }
 
   //switch to new current contact
   function switchContact(contact, chatId) {
     if (currentContact._id !== contact._id) {
-      resetStyle(currentContact._id)
-      setCurrentChatId(chatId)
-      setCurrentContact(contact)
+      resetStyle(currentContact._id);
+      setCurrentChatId(chatId);
+      setCurrentContact(contact);
     }
   }
 
   async function toggleMyMessageInfo(messageInfo, messageId, readIcon) {
     try {
-      console.log(messageId)
-      const messageData = await axios.get('/chat/message/data/' + messageId);
+      console.log(messageId);
+      const messageData = await axios.get("/chat/message/data/" + messageId);
       const read = messageData.data[0].read;
 
       if (read.length > 0) {
-        readIcon.style.backgroundColor = "green"
-        readIcon.style.color = "white"
+        readIcon.style.backgroundColor = "green";
+        readIcon.style.color = "white";
       }
 
       if (messageInfo.style.display === "block") {
@@ -276,12 +273,9 @@ export default function Chat({ userId, role }) {
       } else if (messageInfo.style.display === "none") {
         messageInfo.style.display = "block";
       }
-
-    }
-    catch (err) {
+    } catch (err) {
       console.log("Server internal error occurred!");
     }
-
   }
 
   function toggleIncomingMessageInfo(messageInfo) {
@@ -299,28 +293,26 @@ export default function Chat({ userId, role }) {
       sender: userId,
       chatId: chatId,
       text: text,
-    }
+    };
 
-    await axios.post('/message', newMessage)
+    await axios
+      .post("/message", newMessage)
       .then(async (res) => {
+        var messageData = res.data;
+        messageData.text = text;
 
-
-        var messageData = res.data
-        messageData.text = text
-
-        var fileNames = []
+        var fileNames = [];
 
         if (files.length > 0) {
-          fileNames = await uploadFiles(messageData._id)
-          messageData.files = fileNames
+          fileNames = await uploadFiles(messageData._id);
+          messageData.files = fileNames;
         }
 
-
         console.log("Message sent succesfuly: ", messageData);
-        var date = new Date(messageData.date)
+        var date = new Date(messageData.date);
 
-        displayMyMessage(messageData, date)
-        updateLastMessage(chatId, messageData)
+        displayMyMessage(messageData, date);
+        updateLastMessage(chatId, messageData);
 
         //emit new message event
         socketRef.current.emit("privateMessage", {
@@ -331,144 +323,147 @@ export default function Chat({ userId, role }) {
           text: messageData.text,
           files: fileNames,
           date: messageData.date,
-          read: messageData.read
-        })
+          read: messageData.read,
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Message failed to send!");
       });
   }
 
   //update lastmessage property of current chat
   async function updateLastMessage(chatId, message) {
-
-    await axios.patch('/privateConversation/updateLastMessage/' + chatId, {
-      lastMessage: message
-    })
+    await axios
+      .patch("/privateConversation/updateLastMessage/" + chatId, {
+        lastMessage: message,
+      })
       .then(() => {
-        console.log("Chat updated succesfuly")
+        console.log("Chat updated succesfuly");
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Failed to update chat!");
-      })
+      });
   }
 
   function sendMessage() {
-
     const message = document.getElementById("messageInput").value;
 
     //valid message and receiver
-    if (currentContact !== '' && ((message.length > 0) || files.length > 0)) {
-
+    if (currentContact !== "" && (message.length > 0 || files.length > 0)) {
       //if there is not already a conversation with current contact we add a new contact and then post the message
-      if (currentChatId === '') {
+      if (currentChatId === "") {
         (async () => {
-          var chatId = await postNewConversation(currentContact._id)
+          var chatId = await postNewConversation(currentContact._id);
 
-          await postMessage(chatId, message)
-          switchContact(currentContact, chatId)
-          contactSelectStyleNew(currentContact._id)
-        })()
+          await postMessage(chatId, message);
+          switchContact(currentContact, chatId);
+          contactSelectStyleNew(currentContact._id);
+        })();
+      } else {
+        //we just post the message
 
-      } else { //we just post the message
-
-        postMessage(currentChatId, message)
-        document.getElementById("myContacts").prepend(document.getElementById("contact" + currentChatId))
+        postMessage(currentChatId, message);
+        document
+          .getElementById("myContacts")
+          .prepend(document.getElementById("contact" + currentChatId));
       }
 
-      resetFiles()
-    } else { //no receiver or message
-      console.log("NO message")
+      resetFiles();
+    } else {
+      //no receiver or message
+      console.log("NO message");
     }
   }
 
   function receiveMessage(message) {
-
     //just display the message
-    if (currentContact._id === message.senderId && document.getElementById("icon" + message.chatId)) {
-
-      var date = new Date(message.date)
-      console.log('giaaa dateee, ', message)
-      displayIncomingMessage(message, date)
-      checkRead(message)
+    if (
+      currentContact._id === message.senderId &&
+      document.getElementById("icon" + message.chatId)
+    ) {
+      var date = new Date(message.date);
+      console.log("giaaa dateee, ", message);
+      displayIncomingMessage(message, date);
+      checkRead(message);
       //scroll down
-      var scrollBar = document.getElementById('conversation');
+      var scrollBar = document.getElementById("conversation");
       scrollBar.scrollTop = scrollBar.scrollHeight;
 
       let audio = new Audio(sound);
       audio.play();
 
-
       //notify
-    } else if (currentContact._id !== message.senderId && document.getElementById("icon" + message.chatId)) {
+    } else if (
+      currentContact._id !== message.senderId &&
+      document.getElementById("icon" + message.chatId)
+    ) {
+      document
+        .getElementById("myContacts")
+        .prepend(document.getElementById("contact" + message.chatId));
 
-      document.getElementById("myContacts").prepend(document.getElementById("contact" + message.chatId))
-
-      notify(message.chatId)
+      notify(message.chatId);
 
       let audio = new Audio(newMessage);
       audio.play();
+    } else {
+      //fetch conversations again
+      fetchConversations();
 
-
-    } else {   //fetch conversations again
-      fetchConversations()
-
-      if (currentContact._id === message.senderId)
-        setCurrentContact('')
+      if (currentContact._id === message.senderId) setCurrentContact("");
 
       let audio = new Audio(newMessage);
       audio.play();
     }
-
   }
 
   function hideNotifyIcon(chatId) {
-
-    if (chatId !== '' && document.getElementById("icon" + chatId)) {
-      console.log('AAAAAAAAAAAAAAAAAAAA icon', chatId)
-      console.log('elemmm', document.getElementById("icon" + chatId))
-      document.getElementById("icon" + chatId).style = "display: none"
+    if (chatId !== "" && document.getElementById("icon" + chatId)) {
+      console.log("AAAAAAAAAAAAAAAAAAAA icon", chatId);
+      console.log("elemmm", document.getElementById("icon" + chatId));
+      document.getElementById("icon" + chatId).style = "display: none";
     }
-
   }
 
   function contactSelectStyle(contactId) {
-    if ((currentContact._id !== contactId) && document.getElementById("contact" + contactId)) {
+    if (
+      currentContact._id !== contactId &&
+      document.getElementById("contact" + contactId)
+    ) {
       // For browsers that do not support gradients
-      document.getElementById("contact" + contactId).style.backgroundColor = "rgb(50, 87, 211)"
+      document.getElementById("contact" + contactId).style.backgroundColor =
+        "rgb(50, 87, 211)";
 
       //gradient
-      document.getElementById("contact" + contactId).style.backgroundImage = "linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206))"
-      document.getElementById("contact" + contactId).style.color = "white"
+      document.getElementById("contact" + contactId).style.backgroundImage =
+        "linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206))";
+      document.getElementById("contact" + contactId).style.color = "white";
     }
-
   }
 
   function contactSelectStyleNew(contactId) {
-
     if (document.getElementById("contact" + contactId)) {
       // For browsers that do not support gradients
-      document.getElementById("contact" + contactId).style.backgroundColor = "rgb(50, 87, 211)"
+      document.getElementById("contact" + contactId).style.backgroundColor =
+        "rgb(50, 87, 211)";
 
       //gradient
-      document.getElementById("contact" + contactId).style.backgroundImage = "linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206))"
-      document.getElementById("contact" + contactId).style.color = "white"
+      document.getElementById("contact" + contactId).style.backgroundImage =
+        "linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206))";
+      document.getElementById("contact" + contactId).style.color = "white";
     }
-
   }
 
   //show notify icon in a contact
   function notify(chatId) {
-    document.getElementById("icon" + chatId).style = "display: block"
+    document.getElementById("icon" + chatId).style = "display: block";
   }
 
   function displayMyMessage(message, date) {
-
     const myMessageWrapper = document.createElement("div");
     const myMessage = document.createElement("div");
     const infoWrapper = document.createElement("div");
     const timestamp = document.createElement("small");
-    const read = document.createElement("i")
+    const read = document.createElement("i");
 
     //my message wrapper div
     myMessageWrapper.className = "myMessageWrapper";
@@ -476,9 +471,9 @@ export default function Chat({ userId, role }) {
     //my message div
     myMessage.className = "myMessage";
     myMessage.textContent = message.text;
-    myMessage.setAttribute('type', 'button');
-    myMessage.onclick = function() {
-      toggleMyMessageInfo(infoWrapper, message._id, read)
+    myMessage.setAttribute("type", "button");
+    myMessage.onclick = function () {
+      toggleMyMessageInfo(infoWrapper, message._id, read);
     };
 
     //my message info div
@@ -492,26 +487,23 @@ export default function Chat({ userId, role }) {
     read.className = "far fa-check-circle";
 
     //calculate time and date
-    var month = (date.getMonth() + 1);
+    var month = date.getMonth() + 1;
     var day = date.getDate();
     var year = date.getFullYear();
     var minutes = date.getMinutes();
     var hours = date.getHours();
 
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-    if (hours < 10)
-      hours = '0' + hours;
-    if (minutes < 10)
-      minutes = '0' + minutes;
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    if (hours < 10) hours = "0" + hours;
+    if (minutes < 10) minutes = "0" + minutes;
 
-    timestamp.innerHTML = hours + ':' + minutes + '  ' + '  ' + day + '/' + month + '/' + year;
+    timestamp.innerHTML =
+      hours + ":" + minutes + "  " + "  " + day + "/" + month + "/" + year;
 
     //-----append------
     //for text
-    if (message.text !== '') {
+    if (message.text !== "") {
       myMessageWrapper.append(myMessage);
       infoWrapper.append(timestamp);
       infoWrapper.append(read);
@@ -521,48 +513,45 @@ export default function Chat({ userId, role }) {
 
     //for files
     if (message.files.length > 0) {
-      console.log('eeeexw', message.files)
-
+      console.log("eeeexw", message.files);
 
       message.files.forEach((file) => {
-        const messageFilesDiv = document.createElement("div")
-        messageFilesDiv.className = "messageFilesDiv"
+        const messageFilesDiv = document.createElement("div");
+        messageFilesDiv.className = "messageFilesDiv";
 
-        const wrapper = document.createElement("div")
-        wrapper.className = "myMessageFilesWrapper"
-        wrapper.onclick = function() {
-          downloadFile(file)
-        }
+        const wrapper = document.createElement("div");
+        wrapper.className = "myMessageFilesWrapper";
+        wrapper.onclick = function () {
+          downloadFile(file);
+        };
 
-        const p = document.createElement("p")
-        p.className = "fileName"
-        p.innerHTML = file
-        p.setAttribute('type', 'button');
+        const p = document.createElement("p");
+        p.className = "fileName";
+        p.innerHTML = file;
+        p.setAttribute("type", "button");
 
-        const fileIcon = document.createElement("i")
-        fileIcon.className = "far fa-file-alt"
-        fileIcon.id = "fileIcon"
-        fileIcon.setAttribute('type', 'button');
+        const fileIcon = document.createElement("i");
+        fileIcon.className = "far fa-file-alt";
+        fileIcon.id = "fileIcon";
+        fileIcon.setAttribute("type", "button");
 
         wrapper.append(fileIcon);
         wrapper.append(p);
         messageFilesDiv.append(wrapper);
 
         document.getElementById("conversation").append(messageFilesDiv);
-      })
-
+      });
     }
 
     //reset input
     document.getElementById("messageInput").value = "";
 
     //scroll down
-    var scrollBar = document.getElementById('conversation');
+    var scrollBar = document.getElementById("conversation");
     scrollBar.scrollTop = scrollBar.scrollHeight;
   }
 
   function displayIncomingMessage(message, date) {
-
     const incomingMessageWrapper = document.createElement("div");
     const incomingMessage = document.createElement("div");
     const infoWrapper = document.createElement("div");
@@ -575,9 +564,9 @@ export default function Chat({ userId, role }) {
     incomingMessage.className = " incomingMessage";
     incomingMessage.textContent = message.text;
 
-    incomingMessage.setAttribute('type', 'button');
-    incomingMessage.onclick = function() {
-      toggleIncomingMessageInfo(infoWrapper)
+    incomingMessage.setAttribute("type", "button");
+    incomingMessage.onclick = function () {
+      toggleIncomingMessageInfo(infoWrapper);
     };
 
     //my message info div
@@ -588,27 +577,23 @@ export default function Chat({ userId, role }) {
     timestamp.className = "incomingTimestamp";
 
     //calculate time and date
-    var month = (date.getMonth() + 1);
+    var month = date.getMonth() + 1;
     var day = date.getDate();
     var year = date.getFullYear();
     var minutes = date.getMinutes();
     var hours = date.getHours();
 
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-    if (hours < 10)
-      hours = '0' + hours;
-    if (minutes < 10)
-      minutes = '0' + minutes;
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    if (hours < 10) hours = "0" + hours;
+    if (minutes < 10) minutes = "0" + minutes;
 
-    timestamp.innerHTML = hours + ':' + minutes + '  ' + '  ' + day + '/' + month + '/' + year;
-
+    timestamp.innerHTML =
+      hours + ":" + minutes + "  " + "  " + day + "/" + month + "/" + year;
 
     //-----append------
     //for text
-    if (message.text !== '') {
+    if (message.text !== "") {
       infoWrapper.append(timestamp);
       incomingMessageWrapper.append(incomingMessage);
       document.getElementById("conversation").append(incomingMessageWrapper);
@@ -617,154 +602,156 @@ export default function Chat({ userId, role }) {
 
     //for files
     if (message.files.length > 0) {
-
       message.files.forEach((file) => {
-        const messageFilesDiv = document.createElement("div")
-        messageFilesDiv.className = "messageFilesDiv"
+        const messageFilesDiv = document.createElement("div");
+        messageFilesDiv.className = "messageFilesDiv";
 
-        const wrapper = document.createElement("div")
-        wrapper.className = "incomingFilesWrapper"
-        wrapper.onclick = function() {
-          downloadFile(file)
-        }
+        const wrapper = document.createElement("div");
+        wrapper.className = "incomingFilesWrapper";
+        wrapper.onclick = function () {
+          downloadFile(file);
+        };
 
+        const p = document.createElement("p");
+        p.className = "fileName";
+        p.innerHTML = file;
+        p.setAttribute("type", "button");
 
-        const p = document.createElement("p")
-        p.className = "fileName"
-        p.innerHTML = file
-        p.setAttribute('type', 'button');
-
-        const fileIcon = document.createElement("i")
-        fileIcon.className = "far fa-file-alt"
-        fileIcon.id = "fileIcon"
-        fileIcon.setAttribute('type', 'button');
+        const fileIcon = document.createElement("i");
+        fileIcon.className = "far fa-file-alt";
+        fileIcon.id = "fileIcon";
+        fileIcon.setAttribute("type", "button");
 
         wrapper.append(fileIcon);
         wrapper.append(p);
-        messageFilesDiv.append(wrapper)
+        messageFilesDiv.append(wrapper);
 
         document.getElementById("conversation").append(messageFilesDiv);
-      })
-
+      });
     }
   }
 
   //reset conversations style (clear divs)
   function resetConversation() {
-    var conversation = document.getElementById("conversation")
-    while (conversation.firstChild && conversation.removeChild(conversation.firstChild));
+    var conversation = document.getElementById("conversation");
+    while (
+      conversation.firstChild &&
+      conversation.removeChild(conversation.firstChild)
+    );
   }
 
   function loadingMessages() {
-    var conversation = document.getElementById("conversation")
-    var loader = document.createElement("div")
-    loader.className = "loader"
-    conversation.append(loader)
+    var conversation = document.getElementById("conversation");
+    var loader = document.createElement("div");
+    loader.className = "loader";
+    conversation.append(loader);
   }
 
   //set as read from user if not already read
   async function checkRead(message) {
+    const index = message.read.indexOf(userId);
 
-    const index = message.read.indexOf(userId)
-
-    if (index < 0) { //if user not in read array
+    if (index < 0) {
+      //if user not in read array
 
       try {
-        console.log(message, ' and ', userId)
-        const read = await axios.patch('/message/read/' + message._id, {
-          userId: userId
-        })
-        const readInChat = await axios.patch('/privateConversation/readLastMessage/' + currentChatId, {
-          userId: userId
-        })
-        console.log('Message set as read succesfuly!')
+        console.log(message, " and ", userId);
+        const read = await axios.patch("/message/read/" + message._id, {
+          userId: userId,
+        });
+        const readInChat = await axios.patch(
+          "/privateConversation/readLastMessage/" + currentChatId,
+          {
+            userId: userId,
+          },
+        );
+        console.log("Message set as read succesfuly!");
       } catch {
-        console.log('Server Internal error!')
+        console.log("Server Internal error!");
       }
     }
-
   }
 
   //we check if the last message is read (for notify icon)
   function checkLastMessageRead(message) {
     if (message) {
-
-      if (message.sender !== userId) { //we are the receiver
+      if (message.sender !== userId) {
+        //we are the receiver
         var read;
-        console.log('periexei?? ', userId, '   ', message.read)
-        message.read.includes(userId) ? read = true : read = false
-        console.log(read)
-        return read
+        console.log("periexei?? ", userId, "   ", message.read);
+        message.read.includes(userId) ? (read = true) : (read = false);
+        console.log(read);
+        return read;
       } else {
-        return true
+        return true;
       }
-
     } else {
-      return true
+      return true;
     }
   }
-
 
   async function postNewConversation(id) {
     try {
       const newConversation = {
         user1: userId,
-        user2: id
-      }
+        user2: id,
+      };
 
-      const newConvo = await axios.post('/privateConversation', newConversation);
+      const newConvo = await axios.post(
+        "/privateConversation",
+        newConversation,
+      );
 
-      fetchConversations()
-      setCurrentChatId(newConvo.data._id)
-      return newConvo.data._id
-
+      fetchConversations();
+      setCurrentChatId(newConvo.data._id);
+      return newConvo.data._id;
     } catch {
       console.log("Server internal error occurred!");
-      return null
+      return null;
     }
   }
 
-
   function loading() {
     return (
-      <p className='animated headShake infinite' style={{ marginBottom: '-0.1rem' }}>Loading Contacts..</p>
-
+      <p
+        className="animated headShake infinite"
+        style={{ marginBottom: "-0.1rem" }}
+      >
+        Loading Contacts..
+      </p>
     );
   }
 
   function addFile(newFile) {
     //if we cancel selecting the file on the pop up window, the filevalue will be undefined
     if (newFile !== undefined) {
-      setFiles((prevState) => [...prevState, newFile])
-      document.getElementById("fileUpload").value = '' //reset value
+      setFiles((prevState) => [...prevState, newFile]);
+      document.getElementById("fileUpload").value = ""; //reset value
     }
-
   }
 
-
-
-  //we manipulate the style in order to fit the files 
+  //we manipulate the style in order to fit the files
   function appendFileStyle() {
-    document.getElementById("filesOl").style.display = "block"
+    document.getElementById("filesOl").style.display = "block";
 
-    document.getElementById("filesContainer").style.width = "20vw"
-    document.getElementById("filesContainer").style.height = "10vh"
+    document.getElementById("filesContainer").style.width = "20vw";
+    document.getElementById("filesContainer").style.height = "10vh";
 
-    document.getElementById("messageInput").style.width = "29vw"
+    document.getElementById("messageInput").style.width = "29vw";
 
-    document.getElementById("iconsDiv").style.marginLeft = "23vw"
+    document.getElementById("iconsDiv").style.marginLeft = "23vw";
   }
 
   //setState for files
   function removeFile(file, index) {
     //element.style.display = "none"
 
-    const arr = files.filter((_, i) => i !== index)
+    const arr = files.filter((_, i) => i !== index);
 
     if (files.length > 1) {
       setFiles(arr);
     } else if (files.length === 1) {
-      setFiles([])
+      setFiles([]);
     }
   }
 
@@ -772,119 +759,115 @@ export default function Chat({ userId, role }) {
     // console.log("File Upload: ", reportFiles);
     let formData = new FormData();
     for (let index = 0; index < files.length; index++) {
-      formData.append('files', files[index]);
+      formData.append("files", files[index]);
     }
 
-    console.log('uploaaaaaad: ', formData)
-    var fileNames = []
+    console.log("uploaaaaaad: ", formData);
+    var fileNames = [];
 
     const uploadData = async () => {
-      await axios.post('/api/uploads/chat', formData)
-        .then(res => {
+      await axios
+        .post("/api/uploads/chat", formData)
+        .then((res) => {
           console.log("Saved: ", res.data);
-          uploadFileNamestoDB(messageId, res.data.files_list) //update message to db
+          uploadFileNamestoDB(messageId, res.data.files_list); //update message to db
           //resetFiles()
 
-          fileNames = res.data.files_list //the filenames
+          fileNames = res.data.files_list; //the filenames
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("Something went wrong: ", err);
         });
-    }
+    };
 
-    await uploadData() //storing the file in the public folder   
-    return fileNames
+    await uploadData(); //storing the file in the public folder
+    return fileNames;
   }
 
   function uploadFileNamestoDB(messageId, fileNames) {
-    console.log('eeeela', fileNames)
+    console.log("eeeela", fileNames);
 
     const upload = async () => {
-      await axios.patch('/message/addFiles/' + messageId,
-        {
-          fileNames: fileNames
-        }
-      )
-        .then(res => {
+      await axios
+        .patch("/message/addFiles/" + messageId, {
+          fileNames: fileNames,
+        })
+        .then((res) => {
           console.log("Succesful upload: ", res.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("Something went wrong: ", err);
         });
-    }
+    };
 
-    upload()
+    upload();
   }
 
   //reset files array and ui of message input
   function resetFiles() {
-    setFiles([])
+    setFiles([]);
     //document.getElementById("filesOl").innerHTML = "" //lagare me auto
 
-    document.getElementById("filesContainer").style.width = "0"
-    document.getElementById("filesContainer").style.height = "0"
+    document.getElementById("filesContainer").style.width = "0";
+    document.getElementById("filesContainer").style.height = "0";
 
-    document.getElementById("messageInput").style.width = "49vw"
+    document.getElementById("messageInput").style.width = "49vw";
 
-    document.getElementById("iconsDiv").style.marginLeft = "3vw"
+    document.getElementById("iconsDiv").style.marginLeft = "3vw";
 
-    document.getElementById("fileUpload").value = ''
-
+    document.getElementById("fileUpload").value = "";
   }
 
-
   function downloadFile(file) {
-    const saveData = (function() {
+    const saveData = (function () {
       var a = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
-      return function(data, fileName) {
+      return function (data, fileName) {
         const url = window.URL.createObjectURL(new Blob([data]));
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', fileName);
+        link.setAttribute("download", fileName);
         document.body.appendChild(link);
         link.click();
       };
-    }());
+    })();
 
     const fetchData = async () => {
-      console.log("File to download: ", file)
-      await axios.get('/api/downloads/chat/' + file,
-        { responseType: 'blob' })
-        .then(res => {
+      console.log("File to download: ", file);
+      await axios
+        .get("/api/downloads/chat/" + file, { responseType: "blob" })
+        .then((res) => {
           // console.log("Response: ", res.data);
-          // Redirect to file (open file in browser) : window.location.assign(res.data);  
+          // Redirect to file (open file in browser) : window.location.assign(res.data);
           saveData(res.data, file);
         })
-        .then(blob => {
+        .then((blob) => {
           console.log("File downloaded successfully!");
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
           console.log("File failed to download!");
         });
-    }
+    };
 
     fetchData();
   }
 
-
   return (
     <div>
-
       {/**contacts */}
       <div className="contactsWrapper" type="button">
-
-
         <div className="titleWrapper">
           <h5 className="titleContactGroup">{contactsTitle}</h5>
         </div>
 
         <div className="contacts">
           <ul className="contactGroup list-group" id="myContacts">
-            {
-              loadingConversations ? loading() : <Contacts
+            {loadingConversations ? (
+              loading()
+            ) : (
+              <Contacts
                 myContacts={myContacts}
                 conversations={conversations}
                 hideNotifyIcon={hideNotifyIcon}
@@ -892,34 +875,32 @@ export default function Chat({ userId, role }) {
                 switchContact={switchContact}
                 checkLastMessageRead={checkLastMessageRead}
               />
-            }
+            )}
           </ul>
-
         </div>
-
       </div>
-
 
       {/**chat */}
       <div className="chatContainer z-depth-3">
         <div className="chatTitle">
-          {
-            (currentContact !== '') ? <h5>{currentContact.first_name + ' ' + currentContact.last_name}</h5>
-              : <small>Choose someone to chat with...</small>
-          }
+          {currentContact !== "" ? (
+            <h5>
+              {currentContact.first_name + " " + currentContact.last_name}
+            </h5>
+          ) : (
+            <small>Choose someone to chat with...</small>
+          )}
         </div>
 
-
-        <div className="conversation" id="conversation">
-        </div>
+        <div className="conversation" id="conversation"></div>
 
         <div className="newMessageContainer">
-
-          <textarea name="input" id="messageInput"
+          <textarea
+            name="input"
+            id="messageInput"
             className="messageInput md-form md-outline input-with-pre-icon"
-            placeholder='Type your message'
-          >
-          </textarea>
+            placeholder="Type your message"
+          ></textarea>
 
           <div className="container" id="filesContainer">
             <ol id="filesOl">
@@ -927,22 +908,34 @@ export default function Chat({ userId, role }) {
             </ol>
           </div>
 
-
           <div className="icons" id="iconsDiv">
             <label htmlFor="fileUpload" className="customFileUpload">
-              <i className="fas fa-paperclip" type="button" onClick={() => {/*uploadFile()*/ }}></i>
+              <i
+                className="fas fa-paperclip"
+                type="button"
+                onClick={() => {
+                  /*uploadFile()*/
+                }}
+              ></i>
             </label>
-            <input id="fileUpload" type="file" onChange={(e) => { addFile(e.target.files[0]) }} />
+            <input
+              id="fileUpload"
+              type="file"
+              onChange={(e) => {
+                addFile(e.target.files[0]);
+              }}
+            />
 
-
-            <i className="fas fa-paper-plane" type="button" onClick={() => { sendMessage() }}></i>
+            <i
+              className="fas fa-paper-plane"
+              type="button"
+              onClick={() => {
+                sendMessage();
+              }}
+            ></i>
           </div>
-
         </div>
-
       </div>
-
-
     </div>
-  )
+  );
 }
