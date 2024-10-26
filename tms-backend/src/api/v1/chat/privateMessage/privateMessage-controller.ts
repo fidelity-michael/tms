@@ -17,7 +17,7 @@ export class PrivateMessageController extends ResourceController<IPMessage> {
   public applyRoutes(): Router {
     const router = Router();
     router
-      .get("/userId", this.getUserConversations)
+      .get("/:userId", this.getUserConversations)
       .post("/", this.postMessage)
       .patch("/readLastMessage/:chatId", this.updateReadStatus)
       .patch("/updateLastMessage/:chatId", this.updateLastMessage)
