@@ -12,7 +12,7 @@ function StudentDashboard({userId, setPage}) {
 
     useEffect(() => {
         const getCompletedTheses = async() => {
-            axios.get('/assigned_theses')
+            axios.get('/api/assigned_theses')
             .then((res) => {
                 var completed = 0; 
                 res.data.map((thesis) => {
@@ -35,7 +35,7 @@ function StudentDashboard({userId, setPage}) {
     useEffect(() => {
         const getEvents = async ()  => {
             setLoadingEvents(true)
-            await axios.get('/calendarEvents/'+userId)
+            await axios.get('/api/calendarEvents/'+userId)
             .then((res) => {
                 console.log(res.data)
                 sortByDate(res.data)

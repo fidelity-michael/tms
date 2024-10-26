@@ -22,7 +22,7 @@ export default function SecretariatTopbar(props) {
         //clear all localstorage
         localStorage.clear();
         sessionStorage.clear();
-        axios.post('/auth/logout')
+        axios.post('/api/auth/logout')
             .then(data => {
                 // console.log("User should be logged out!");
                 history.push("/");

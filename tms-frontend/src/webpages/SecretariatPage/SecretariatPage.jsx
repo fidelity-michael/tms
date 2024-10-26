@@ -27,7 +27,7 @@ function SecretariatPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         //console.log(auth_data.data);
 
         if (auth_data.data.auth) {
@@ -60,7 +60,7 @@ function SecretariatPage() {
   useEffect(() => {
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         //console.log(auth_data.data);
 
         if (auth_data.data.auth) {
