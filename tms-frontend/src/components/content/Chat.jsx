@@ -28,7 +28,7 @@ export default function Chat({ userId, role }) {
   //for sockets
   //TODO: [Frontend] Check Port here, probably needs a change
   const socketRef = useRef(null);
-  const ENDPOINT = 'localhost:4002';
+  const ENDPOINT = 'http://localhost:8080';
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function Chat({ userId, role }) {
 
       const getSupervisorsData = async (id) => {
         //console.log('supervisor: ', id)
-        await axios.get("/api/users/" + id)
+        await axios.get("/api/data/users/" + id)
           .then((res) => {
             //console.log(res.data)
             setMyContacts(prev => [...prev, res.data])
@@ -78,10 +78,13 @@ export default function Chat({ userId, role }) {
       }
 
       //get my thesis_data
-      const thesis_data = await axios.get('/api/my_thesis/' + userId);
+      const thesis_data = await axios.get('/api/data/my_thesis/' + userId);
 
       //get supervisors data
-      thesis_data.data.supervisor.map(async (id) => { (await getSupervisorsData(id)) });
+      if (thesis_data.data.supervisor && Array.isArray(thesis_data.data.supervisor)){
+
+        thesis_data.data.supervisor.map(async (id) => { (await getSupervisorsData(id)) });
+      }
 
       fetchConversations()
     }
@@ -104,7 +107,7 @@ export default function Chat({ userId, role }) {
 
       const getStudentsObjects = async () => {
         studentsIds.map((studentId) => {
-          axios.get('/api/users/' + studentId)
+          axios.get('/api/data/users/' + studentId)
             .then((res) => {
               setMyContacts(prev => [...prev, res.data])
             })
@@ -167,7 +170,7 @@ export default function Chat({ userId, role }) {
       const chatId = currentChatId;
       try {
         //get messages
-        var messages = await axios.get('/message/' + chatId);
+        var messages = await axios.get('/chat/message/' + chatId);
 
         resetConversation()
 
@@ -214,7 +217,7 @@ export default function Chat({ userId, role }) {
   async function fetchConversations() {
 
     try {
-      const res = await axios.get('/privateConversation/' + userId)
+      const res = await axios.get('/chat/privateConversation/' + userId)
       if (res.data.length > 0) {
         console.log('OOK', res.data)
         console.log("Conversations SETing")
@@ -260,7 +263,7 @@ export default function Chat({ userId, role }) {
   async function toggleMyMessageInfo(messageInfo, messageId, readIcon) {
     try {
       console.log(messageId)
-      const messageData = await axios.get('/message/data/' + messageId);
+      const messageData = await axios.get('/chat/message/data/' + messageId);
       const read = messageData.data[0].read;
 
       if (read.length > 0) {
