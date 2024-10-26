@@ -33,7 +33,7 @@ export default function NewThesisForm({ userId, email }) {
   const componentIsMounted = useRef(true)
 
   useEffect(() => {
-    axios.get('api/data/thesis/areas')
+    axios.get('/api/data/thesis/areas')
       .then((res) => {
         // console.log("Areas: ", res.data)
         if (componentIsMounted.current) setAreas(res.data);
@@ -43,7 +43,8 @@ export default function NewThesisForm({ userId, email }) {
       });
 
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -416,10 +417,11 @@ export default function NewThesisForm({ userId, email }) {
       <Form.Group className="upload-files">
         <Form.Group>
           <Form.Label>Upload files (optional) :</Form.Label>
-          <Form.File
+          <Form.Control
             key={fileKey}
             id="formControlFile"
             name="thesis_files"
+            type="file"
             className='file-input'
             onChange={(e) => handleFileChange(e.target)}
             accept=".zip,.pdf,.doc,.docx,.txt"
