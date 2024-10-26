@@ -13,9 +13,7 @@ export default function FavouritesCarousel({ userId, studentFavourites }) {
     const componentIsMounted = useRef(true)
 
     function getRandomImage(){
-        let image_path = "src/components/images/computer_science_" + Math.floor(Math.random() * 7).toString() + ".jpg";
-        console.log(image_path);
-        return image_path;
+        return "src/components/images/computer_science_" + Math.floor(Math.random() * 7).toString() + ".jpg";
     }
     useEffect(() => {
         const handleResize = () => {
