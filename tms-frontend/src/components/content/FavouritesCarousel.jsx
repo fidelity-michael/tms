@@ -86,8 +86,8 @@ export default function FavouritesCarousel({ userId, studentFavourites }) {
         return favourites.map((favourite) => {
             const { area_id, area_name } = favourite;
             return (
-                <div key={area_id}>
-                    <Card className='card w-100'>
+                <div key={area_id} className='card-container'>
+                    <Card className='card'>
                         {/* <span className="badge heart"><i id={_id} className="fas fa-heart" onClick={(e) => toggleFavourite(e.target)}></i></span> */}
                         <Card.Img variant="top" src={getRandomImage()} />
                         <Card.Body>

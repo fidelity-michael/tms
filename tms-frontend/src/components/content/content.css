@@ -181,9 +181,15 @@ Table .table-data {
   visibility: hidden;
 }
 
-/* Card */
-.card {
-  margin: 0.3rem !important;
+.card-container {
+    max-width: 30rem; /* set the maximum width for the card */
+    max-height: 30rem; /* set the maximum width for the card */
+    margin: 0.3rem auto; /* center the card */
+}
+
+.card img {
+    width: 100%; /* Ensure the image stays within the card's width */
+    height: auto;
 }
 
 .card-title {
@@ -398,6 +404,7 @@ span .fa-paperclip {
   color: white !important;
   border-radius: 0.2rem !important;
   background-color: #0b7ce6 !important;
+  /* background-color: #de0a26 !important; */
 }
 
 .confirm-modal:hover {
