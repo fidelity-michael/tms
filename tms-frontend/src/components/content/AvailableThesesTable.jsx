@@ -39,7 +39,8 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
   useEffect(() => {
 
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -50,7 +51,8 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
     }));
 
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, [userId]);
 
@@ -61,11 +63,11 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
         setLoadingTheses(true);
         
         //get the Ids of the assigned thesis
-        const assignedThesesData = await axios.get('/assigned_theses');
+        const assignedThesesData = await axios.get('/api/assigned_theses');
         var assignedIds = assignedThesesData.data.map(thesis => thesis.thesis)
 
         //get all the thesis
-        const theses_data = await axios.get('/api/theses/' + group, {
+        const theses_data = await axios.get('/api/data/theses/' + group, {
           params: {
             page: thesesPage,
             limit: thesesLimit,
@@ -184,14 +186,14 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
 
   //fetch user's theses requests
   async function fetchThesesApplied(){
-    await axios.get('/theses_requests/student/'+userId)
+    await axios.get('/api/theses_requests/student/'+userId)
     .then(res => setThesesApplied(res.data))
     .catch(err => console.log(err))
   }
 
   function uploadRequest(target) {
     const uploadData = async () => {
-      await axios.post('/theses_requests', requestThesis)
+      await axios.post('/api/theses_requests', requestThesis)
         .then(res => {
           fetchThesesApplied()
           setThesisFiles([])
@@ -209,7 +211,7 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
     if (thesisFiles.length > 0) {
       const index = thesisFiles.findIndex(files => files.id === target.id);
       const uploadData = async (filesData) => {
-        await axios.post('/api/uploads/requests', filesData)
+        await axios.post('/api/data/uploads/requests', filesData)
           .then(res => {
             // console.log("Response: ", res.data);
             requestThesis.required_files = res.data.files_list;
@@ -245,7 +247,7 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
   
   async function editRequest(target, files){
     const edit = async (requestId) => {
-      await axios.patch("/theses_requests/reapply/"+requestId, {
+      await axios.patch("/api/theses_requests/reapply/"+requestId, {
         files: files
       })
       .then((res) => {
@@ -269,7 +271,7 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
       const index = thesisFiles.findIndex(files => files.id === target.id);
       const uploadData = async (target, filesData) => {
         console.log('aaaaaaaaaaaaaa', filesData)
-        await axios.post('/api/uploads/requests', filesData)
+        await axios.post('/api/data/uploads/requests', filesData)
           .then(res => {
             console.log("Response: ", res.data);
             requestThesis.required_files = res.data.files_list;
@@ -439,7 +441,7 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
 
         const fetchData = async () => {
             console.log("File to download: ", file)
-            await axios.get('/api/downloads/theses/' + file,
+            await axios.get('/api/data/downloads/theses/' + file,
                 { responseType: 'blob' })
                 .then(res => {
                     // console.log("Response: ", res.data);
