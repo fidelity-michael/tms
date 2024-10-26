@@ -23,14 +23,15 @@ export default function FavouritesTable({ userId, studentFavourites }) {
     const componentIsMounted = useRef(true)
     useEffect(() => {
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
 
     useEffect(() => {
         const fetchFavourites = async () => {
             try {
-                const favourites_data = await axios.get('/api/favourites/' + userId);
+                const favourites_data = await axios.get('/api/data/favourites/' + userId);
                 // console.log("Favourites: ", favourites_data.data);
                 const areas = (array, column) => array.map(obj => obj[column]);
                 if (componentIsMounted.current) {
@@ -50,7 +51,7 @@ export default function FavouritesTable({ userId, studentFavourites }) {
             try {
                 setLoadingAreas(true);
                 const pageFix = areasLimit === "50" ? 1 : areasPage;
-                const areas_data = await axios.get('/api/areas', {
+                const areas_data = await axios.get('/api/data/areas', {
                     params: {
                         page: pageFix,
                         limit: areasLimit
@@ -131,10 +132,10 @@ export default function FavouritesTable({ userId, studentFavourites }) {
             area_name: target.getAttribute("data-key")
         };
 
-        axios.post('/favourites', newFavourite)
+        axios.post('/api/favourites', newFavourite)
             .then(res => {
                 //   console.log("Area added to favourites successfully!");
-                axios.get('/api/favourites/' + userId)
+                axios.get('/api/data/favourites/' + userId)
                     .then(favourites => {
                         // console.log("Add Favourite: ", favourites.data);
                         studentFavourites(favourites.data);
@@ -153,7 +154,7 @@ export default function FavouritesTable({ userId, studentFavourites }) {
         const tempData = favouriteAreas.filter(id => { return id !== target.id });
         setFavouriteAreas(tempData);
 
-        axios.delete('/favourites/', {
+        axios.delete('/api/favourites/', {
             params: {
                 student: userId,
                 area_id: target.id
@@ -161,7 +162,7 @@ export default function FavouritesTable({ userId, studentFavourites }) {
         })
             .then((data) => {
                 //   console.log("Area deleted from favourites successfully!");
-                axios.get('/api/favourites/' + userId)
+                axios.get('/api/data/favourites/' + userId)
                     .then(favourites => {
                         // console.log("Remove Favourite: ", favourites.data);
                         studentFavourites(favourites.data);
