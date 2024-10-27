@@ -532,7 +532,7 @@ export default function AvailableThesesTable({ userId, group, email, thesesAppli
                       <button type="button" data-key={professor_id} id={_id} name={title} className="btn btn-success apply-thesis" onClick={(e) => handleApplyClicked(e.target, required_files[0])}>Apply</button>
                     </div>
                 : //if student already has a thesis assigned
-                  thesisAssigned.thesis._id===_id ? 
+                  thesisAssigned.thesis && thesisAssigned.thesis._id ===_id ? 
                     <p style={{fontSize: "1.5vw"}}><b style={{color: "green"}}>My Thesis</b></p>
                   : 
                     (index > -1) ? //if student has previously applied fot this thesis
