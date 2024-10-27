@@ -16,7 +16,7 @@ function StudentDashboard({userId, thesisData, setPage}) {
     useEffect(() => {
         const getEvents = async ()  => {
             setLoadingEvents(true)
-            await axios.get('/calendarEvents/'+userId)
+            await axios.get('/api/calendarEvents/'+userId)
             .then((res) => {
                 console.log(res.data)
                 sortByDate(res.data)

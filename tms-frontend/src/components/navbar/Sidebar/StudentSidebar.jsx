@@ -8,7 +8,7 @@ function StudentSidebar(props) {
 
   //for sockets
   const socketRef = useRef(null);  
-  const ENDPOINT = 'localhost:4002';
+  const ENDPOINT = 'http://localhost:8080';
 
   //we establish connection with endpoint
   useEffect(() => {   
@@ -20,8 +20,8 @@ function StudentSidebar(props) {
 
     //check if there are unread messages
     const checkUnread = async () => {
-      await axios.get('/privateConversation/'+props.userId)
-      .then((res) => {
+      await axios.get('/chat/privateConversation/'+props.userId)
+      .then((es) => {
         console.log(res.data)
 
         if(props.page !== "Chat"){
@@ -41,7 +41,7 @@ function StudentSidebar(props) {
 
     if(props.userId){
       if (socketRef.current == null) { //current will persist for the full lifetime of the component
-        socketRef.current = io('localhost:4002');
+        socketRef.current = io('http://localhost:8080');
       }
 
       checkUnread()

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import MyNotifications from '../../content/MyNotifications';
 import axios from 'axios';
@@ -7,7 +7,7 @@ export default function StudentTopbar(props) {
 
     const [notifications, setNotifications] = useState([]);
     const [badge, setBadge] = useState(0);
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     // const [windowHeight, setHeight] = useState(window.innerHeight);
     const [windowWidth, setWidth] = useState(window.innerWidth);
@@ -23,10 +23,10 @@ export default function StudentTopbar(props) {
         //clear all localstorage
         localStorage.clear();
         sessionStorage.clear();
-        axios.post('/auth/logout')
+        axios.post('/api/auth/logout')
             .then(data => {
                 // console.log("User should be logged out!");
-                history.push("/");
+                navigate("/");
             })
             .catch(err => {
                 console.log("An error occurred: User is not logged out")
@@ -76,10 +76,10 @@ export default function StudentTopbar(props) {
                 <li className="nav-item dropdown no-arrow mx-1" >
                     
                     
-                    <div className="nav-link dropdown-toggle" href="#/" id="alertsDropdown" role="button" onClick={() => resetBadge()} aria-haspopup="true" aria-expanded="false" >
+                    <a className="nav-link dropdown-toggle" href="#/" id="alertsDropdown" role="button" onClick={() => resetBadge()} aria-haspopup="true" aria-expanded="false" >
                         <i className="fas fa-bell fa-fw bell-icon"></i>
                         {badge > 0 && <span className="badge badge-danger badge-counter">{badge > 0 ? (badge > 9 ? "9+" : badge) : null}</span>}
-                    </div>
+                    </a>
                     <div id="myNotifications" className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" style={{display: "none"}}>
                         <MyNotifications userId={props.userId} notifications={notifications} setNotifications={setNotifications} badge={badge} setBadge={setBadge} />
                     </div>
@@ -92,24 +92,24 @@ export default function StudentTopbar(props) {
                         <span className="mr-2 d-lg-inline text-gray-600 medium profile-name">{props.email.length > 0 ? props.email : "Student"}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a className="dropdown-item" href={() => false} onClick={(e) => { props.onSelect("My Roles"); }}>
+                        <a className="dropdown-item" onClick={(e) => { props.onSelect("My Roles"); }}>
                             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" ></i>
                             My Roles
                         </a>
-                        <a className="dropdown-item" href={() => false} onClick={(e) => { props.onSelect("My Calendar"); }}>
+                        <a className="dropdown-item" onClick={(e) => { props.onSelect("My Calendar"); }}>
                             <i className="far fa-calendar-alt fa-fw mr-2 text-gray-400" ></i>
                             My Calendar
                         </a>
-                        <a className="dropdown-item" href={() => false}>
+                        <a className="dropdown-item">
                             <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Settings
                         </a>
-                        <a className="dropdown-item" href={() => false}>
+                        <a className="dropdown-item">
                             <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                             Activity Log
                         </a>
                         <div className="dropdown-divider"></div>
-                        <a className="dropdown-item" href={() => false} data-toggle="modal" data-target="#logoutModal" onClick={(e) => logout(e.target)}>
+                        <a className="dropdown-item" data-toggle="modal" data-target="#logoutModal" onClick={(e) => logout(e.target)}>
                             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
