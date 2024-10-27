@@ -49,7 +49,7 @@ function StudentPage() {
     
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         // console.log(auth_data.data);
         if (auth_data.data.auth) {
           if(
@@ -88,7 +88,7 @@ function StudentPage() {
 
     const authUser = async () => {
       try {
-        const auth_data = await axios.get('/auth/authorization');
+        const auth_data = await axios.get('/api/auth/authorization');
         console.log(auth_data.data);
         if (auth_data.data.auth) {
 
@@ -132,7 +132,7 @@ function StudentPage() {
   useEffect(() => {
 
     const fetchRequests = async () => {
-      const requests_data = await axios.get('/api/theses_requests');
+      const requests_data = await axios.get('/api/data/theses_requests');
       // console.log("All requests: ", requests_data.data.results);
       if (requests_data.data.results.length > 0) {
         const user_requests = requests_data.data.results.filter(request => request.student === user.userId);
@@ -142,21 +142,23 @@ function StudentPage() {
       }
 
       if (user.userId.length > 0) {
-        const thesis_data = await axios.get('/api/my_thesis/' + user.userId);
+        console.log("userId: ", user.userId);
+        const thesis_data = await axios.get('/api/data/my_thesis/' + user.userId);
 
-        //console.log("Thesis: ", thesis_data.data);
-        setThesisAssigned(thesis_data.data.thesis._id);
-        setThesisData(thesis_data.data);
-        
+        console.log("Thesis: ", thesis_data.data);
 
-        if (thesis_data.data.thesis.status === "completed")
-          setThesisCompleted(true);
+        if(thesis_data && thesis_data.data.thesis){ // NOTE: Check this piece of code
+          setThesisAssigned(thesis_data.data.thesis._id);
+          setThesisData(thesis_data.data);
+          if (thesis_data.data.thesis.status === "completed")
+            setThesisCompleted(true);
+        }
       }
     }
 
     const fetchFavourites = async () => {
       if (user.userId.length > 0) {
-        const favourites_data = await axios.get('/api/favourites/' + user.userId);
+        const favourites_data = await axios.get('/api/data/favourites/' + user.userId);
         // console.log("Favourites: ", favourites_data.data);
         if (favourites_data.data.length > 0) {
           setFavourites(favourites_data.data);
