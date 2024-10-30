@@ -914,8 +914,9 @@ export class DataHandlerController extends ResourceController<DataHandler> {
             // this.logger.debug("student: " + res.paginatedData!.results[index].student)
             // this.logger.debug("professor: " + res.paginatedData!.results[index].professor)
             // this.logger.debug(JSON.stringify(res.paginatedData!.results[index]))
+            this.logger.debug("res.paginatedData!.results[index]: " + res.paginatedData!.results[index]);
             const thesis = await ThesisModel.findById(
-              res.paginatedData!.results[index]._id,
+              res.paginatedData!.results[index].thesis,
               "title topic area group",
             );
 
@@ -946,6 +947,8 @@ export class DataHandlerController extends ResourceController<DataHandler> {
 
               supervisor.push(newSupervisor);
             }
+
+            this.logger.debug("convertAssignedThesesData(): " + thesis);
 
             let newObject = {
               _id: res.paginatedData!.results[index]._id,
