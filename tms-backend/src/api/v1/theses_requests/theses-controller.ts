@@ -18,6 +18,7 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
   public applyRoutes(): Router {
     const router = Router();
     router
+      .get("/", this.getThesesRequests)
       .get("/student/:userId", this.getThesesRequests)
       .post("/", this.postThesis)
       .patch("/:requestId", this.updateThesisReq)
@@ -35,8 +36,14 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
   getThesesRequests = async (req: Request, res: Response) => {
     // NOTE: Works
     this.logger.debug("getThesesRequests request");
-    const allThesesReq = await this.getAll(req, res);
-    return res.status(StatusCodes.OK).json(allThesesReq);
+    const student_requests = await this.modelSchema
+      .find({ student: req.params.userId })
+      .then((data) => {
+        res.status(StatusCodes.OK).json(data);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred!");
+      });
   };
 
   /**
@@ -58,10 +65,16 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
         );
       }
 
-      const thesis_request = await this.create(req, res);
-      return res
-        .status(StatusCodes.OK)
-        .json({ thesis_request: thesis_request._id });
+      const thesis_request = new ThesesReqModel({
+        thesis: req.body.thesis,
+        student: req.body.student,
+        professor: professor,
+        required_files: req.body.required_files,
+        date: Date.now(),
+      });
+
+      const saved_thesis_request = await thesis_request.save();
+      res.status(StatusCodes.OK).send({ thesis_request: thesis_request._id });
     } catch (err) {
       this.logger.error("" + err);
       res.status(StatusCodes.BAD_REQUEST).send(err);
@@ -76,13 +89,16 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
   updateThesisReq = async (req: Request, res: Response) => {
     // NOTE: Works
     this.logger.debug("updateThesisReq request");
-    const area = await this.update(
-      req.params.requestId,
-      req.body.blacklist,
-      req,
-      res,
-    );
-    return res.status(StatusCodes.OK).json(area);
+    const updated_request = await this.modelSchema.updateOne(
+      { _id: req.params.requestId },
+      { $set: { status: req.body.status } },
+    )
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred!");
+      });
   };
 
   /**
@@ -95,12 +111,15 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
     this.logger.debug("updateThesisReqFiles request");
     this.logger.debug("Id: ", req.params.requestId);
     this.logger.debug("Files: ", req.body.files);
-    const area = await this.update(
-      req.params.requestId,
-      req.body.blacklist,
-      req,
-      res,
-    );
-    return res.status(StatusCodes.OK).json(area);
+    const updated_request = await this.modelSchema.updateOne(
+      { _id: req.params.requestId },
+      { $set: { required_files: req.body.files } },
+    )
+      .then((data: any) => {
+        res.status(StatusCodes.OK).json(data);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred!");
+      });
   };
 }
