@@ -55,7 +55,7 @@ export default function GradingModal({ title, userId, completedData, onCompleted
         e.preventDefault();
         const updateData = async () => {
             // console.log(update);
-            await axios.patch('/assigned_theses/thesis/' + userId, {
+            await axios.patch('/api/assigned_theses/thesis/' + userId, {
                 title_greek: update.title_greek,
                 title_english: update.title_english,
                 grade: update.grade
@@ -63,7 +63,7 @@ export default function GradingModal({ title, userId, completedData, onCompleted
                 .then(res => {
                     notifyStudent();
                     // console.log("Thesis updated successfully!");
-                    axios.patch('/assigned_theses/' + userId, 
+                    axios.patch('/api/assigned_theses/' + userId, 
                     { 
                         attr: "status",
                         value: "graded" 
