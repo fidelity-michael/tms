@@ -4,7 +4,7 @@ import { ResourceController } from "../../shared";
 import { StatusCodes } from "http-status-codes";
 import { Logger } from "../../shared/utils/logger";
 import { IUser, UserModel } from "../users/user-model";
-import { Document, Model, Query } from "mongoose";
+import { Document, Model } from "mongoose";
 import { FavouritesModel } from "../favourites/favourites-model";
 import { AreaModel } from "../area/area-model";
 import { UniversityModel } from "../universities/university-model";
@@ -146,7 +146,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           folder === "chat"
         )
       ) {
-        res
+        return res
           .status(StatusCodes.NOT_FOUND)
           .send({ message: "Folder doesn't exist!" });
       }
@@ -162,7 +162,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
       });
     } catch (err: any) {
       this.logger.error(err);
-      res
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: "Server internal error occurred!" });
     }
@@ -174,8 +174,9 @@ export class DataHandlerController extends ResourceController<DataHandler> {
    * @param res
    */
   getAllUsers = async (req: Request, res: CustomResponse) => {
+    this.logger.debug("getAllUsers request");
     try {
-      res.json(res.paginatedData);
+      return res.json(res.paginatedData);
     } catch (err) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -222,7 +223,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
     this.logger.debug("getAllProfessors request");
     const users_data = await UserModel.find({ role: "professor" })
       .then((data) => {
-        res.json(data);
+        return res.json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
@@ -276,7 +277,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
    */
   getAllUniversities = async (req: Request, res: CustomResponse) => {
     try {
-      res.json(res.paginatedData);
+      return res.json(res.paginatedData);
     } catch (err) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -291,7 +292,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
    */
   getAllDepartments = async (req: Request, res: CustomResponse) => {
     try {
-      res.json(res.paginatedData);
+      return res.status(StatusCodes.OK).json(res.paginatedData);
     } catch (err) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -337,7 +338,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
   getUsersThesis = async (req: Request, res: CustomResponse) => {
     this.logger.debug("getUsersThesis request");
     try {
-      res.json(res.data);
+      return res.json(res.data);
     } catch (err) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -353,8 +354,10 @@ export class DataHandlerController extends ResourceController<DataHandler> {
    */
   private async returnResults(req: Request, res: CustomResponse) {
     try {
-      this.logger.debug(JSON.stringify(res.paginatedData))
-      res.json(res.paginatedData);
+      this.logger.debug(
+        "returnResults func: " + JSON.stringify(res.paginatedData),
+      );
+      return res.json(res.paginatedData);
     } catch (err) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -370,7 +373,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
   getFavouriteUser = async (req: Request, res: Response) => {
     await FavouritesModel.find({ student: req.params.userId })
       .then((data) => {
-        res.json(data);
+        return res.json(data);
       })
       .catch((err) => {
         this.logger.error("Server internal error occurred: " + err);
@@ -401,7 +404,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
             });
           return result;
         });
-        res.json(areas);
+        return res.json(areas);
       })
       .catch((err: any) => {
         this.logger.error("Server internal error occurred: " + err);
@@ -476,7 +479,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           if (err) {
             console.log(err);
             return res
-              .status(500)
+              .status(StatusCodes.INTERNAL_SERVER_ERROR)
               .send({ message: "Server internal error occurred!" });
           } else {
             console.log("Modified Name: ", filename_timestamp);
@@ -487,13 +490,13 @@ export class DataHandlerController extends ResourceController<DataHandler> {
 
       // console.log("Files uploaded successfully!");
       // console.log("Filenames: ", newFilenames);
-      res.send({
+      return res.send({
         files_list: newFilenames,
         message: "Files uploaded!",
       });
     } catch (err) {
-      console.log(err);
-      res.status(400).send(err);
+      this.logger.error(err);
+      return res.status(StatusCodes.BAD_REQUEST).send(err);
     }
   };
 
@@ -518,7 +521,9 @@ export class DataHandlerController extends ResourceController<DataHandler> {
       if (page <= 0 || limit <= 0) {
         results.results = {};
         res.paginatedData = results;
-        this.logger.debug("[noPageLimit]res.paginatedData: " + res.paginatedData);
+        this.logger.debug(
+          "[noPageLimit]res.paginatedData: " + res.paginatedData,
+        );
         next();
       }
 
@@ -559,10 +564,10 @@ export class DataHandlerController extends ResourceController<DataHandler> {
             results.results = filtered_data.slice(startIndex, endIndex);
             //console.log(results);
             res.paginatedData = results;
-            // this.logger.debug("res.paginatedData: " + res.paginatedData);
+            // this.logger.debug("return res.paginatedData: " + res.paginatedData);
             next();
           } catch (err: any) {
-            res
+            return res
               .status(StatusCodes.INTERNAL_SERVER_ERROR)
               .json({ message: err.message });
           }
@@ -585,9 +590,9 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           res.paginatedData = results;
           next();
 
-          // this.logger.debug("res.paginatedData: " + res.paginatedData);
+          // this.logger.debug("return res.paginatedData: " + res.paginatedData);
         } catch (err: any) {
-          res
+          return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .json({ message: err.message });
         }
@@ -637,7 +642,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
             index++;
           }
 
-          // console.log("Current Data : ", res.paginatedData.results);
+          // console.log("Current Data : ", return res.paginatedData.results);
           // console.log("Converted Data : ", converted_data);
           res.paginatedData!.results = converted_data;
         }
@@ -721,7 +726,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
         res.paginatedData = results;
         next();
       } catch (err: any) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: err.message });
       }
@@ -764,7 +769,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           results.endIndex = endIndex;
           results.total = filtered_data.length;
 
-          if (endIndex < (await filtered_data.length)) {
+          if (endIndex < filtered_data.length) {
             results.next = {
               page: page + 1,
               limit: limit,
@@ -786,19 +791,18 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           });
 
           try {
-            results.results = await filtered_data.slice(startIndex, endIndex);
+            results.results = filtered_data.slice(startIndex, endIndex);
             //console.log(results);
             res.paginatedData = results;
             next();
           } catch (err: any) {
-            res
+            return res
               .status(StatusCodes.INTERNAL_SERVER_ERROR)
               .json({ message: err.message });
           }
         }
       } else {
         try {
-
           const count = await model.countDocuments({});
 
           // console.log("Number of items:", count);
@@ -818,9 +822,8 @@ export class DataHandlerController extends ResourceController<DataHandler> {
 
           res.paginatedData = results;
           next();
-
         } catch (err: any) {
-          res
+          return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .json({ message: err.message });
         }
@@ -878,15 +881,15 @@ export class DataHandlerController extends ResourceController<DataHandler> {
             index++;
           }
 
-          // console.log("Current Data : ", res.paginatedData.results);
+          // console.log("Current Data : ", return res.paginatedData.results);
           // console.log("Converted Data : ", converted_data);
-          res.paginatedData!.results = converted_data;
+          return (res.paginatedData!.results = converted_data);
         }
 
         next();
       } catch (err: any) {
         this.logger.error(err);
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
       }
@@ -902,19 +905,21 @@ export class DataHandlerController extends ResourceController<DataHandler> {
         let converted_data = [];
 
         // this.logger.debug("GOES IN HERE?");
-        // this.logger.debug("isArray: " + Array.isArray(res.paginatedData!.results));
+        // this.logger.debug("isArray: " + Array.isArray(return res.paginatedData!.results));
         if (
           Array.isArray(res.paginatedData!.results) &&
           res.paginatedData!.results
         ) {
-
           let index = 0;
           while (res.paginatedData!.results[index]) {
-            // this.logger.debug("thesis: " + res.paginatedData!.results[index].thesis)
-            // this.logger.debug("student: " + res.paginatedData!.results[index].student)
-            // this.logger.debug("professor: " + res.paginatedData!.results[index].professor)
-            // this.logger.debug(JSON.stringify(res.paginatedData!.results[index]))
-            this.logger.debug("res.paginatedData!.results[index]: " + res.paginatedData!.results[index]);
+            // this.logger.debug("thesis: " + return res.paginatedData!.results[index].thesis)
+            // this.logger.debug("student: " + return res.paginatedData!.results[index].student)
+            // this.logger.debug("professor: " + return res.paginatedData!.results[index].professor)
+            // this.logger.debug(JSON.stringify(return res.paginatedData!.results[index]))
+            this.logger.debug(
+              "res.paginatedData!.results[index]: " +
+                res.paginatedData!.results[index],
+            );
             const thesis = await ThesisModel.findById(
               res.paginatedData!.results[index].thesis,
               "title topic area group",
@@ -933,7 +938,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
 
             /*
           const supervisor = await User.findById(
-            res.paginatedData.results[index].supervisor,
+            return res.paginatedData.results[index].supervisor,
             "email first_name last_name"
           );*/
 
@@ -994,7 +999,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
         next();
       } catch (err) {
         console.log(err);
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
       }
@@ -1038,10 +1043,12 @@ export class DataHandlerController extends ResourceController<DataHandler> {
         }
 
         res.data = converted_data;
-        this.logger.debug("[BACKEND]converted_data: " + JSON.stringify(res.data));
+        this.logger.debug(
+          "[BACKEND]converted_data: " + JSON.stringify(res.data),
+        );
         next();
       } catch (err) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
       }
@@ -1053,22 +1060,22 @@ export class DataHandlerController extends ResourceController<DataHandler> {
     try {
       let converted_data = [];
 
-      if (res.paginatedData!.results) {
+      if (return res.paginatedData!.results) {
         let index = 0;
-        while (res.paginatedData!.results[index]) {
+        while (return res.paginatedData!.results[index]) {
           const find_university = await UniversityModel.findById(
-            res.paginatedData!.results[index].university,
+            return res.paginatedData!.results[index].university,
             "name"
           );
 
-          res.paginatedData.results[index].university = find_university.name;
+          return res.paginatedData.results[index].university = find_university.name;
           index++;
         }
       }
 
       next();
     } catch (err) {
-      res.status(500).json({ message: "Server internal error occurred!" });
+      return res.status(500).json({ message: "Server internal error occurred!" });
     }
   };
 } */
