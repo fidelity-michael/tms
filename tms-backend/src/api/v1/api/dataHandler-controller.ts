@@ -494,7 +494,7 @@ export class DataHandlerController extends ResourceController<DataHandler> {
         files_list: newFilenames,
         message: "Files uploaded!",
       });
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error(err);
       return res.status(StatusCodes.BAD_REQUEST).send(err);
     }
