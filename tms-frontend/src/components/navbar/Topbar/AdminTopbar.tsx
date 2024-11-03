@@ -22,7 +22,7 @@ export default function AdminTopbar(props) {
         //clear all localstorage
         localStorage.clear();
         sessionStorage.clear();
-        axios.post('/auth/logout')
+        axios.post('/api/auth/logout')
             .then(() => {
                 // console.log("User should be logged out!");
                 navigate("/");
@@ -71,10 +71,10 @@ export default function AdminTopbar(props) {
             {windowWidth > 600 ? <h5 className='app-header'>Thesis Management System</h5> : <h5 className='app-header'>T M S</h5>}
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown no-arrow mx-1" >
-                    <div className="nav-link dropdown-toggle" href="#/" id="alertsDropdown" role="button" onClick={() => resetBadge()} aria-haspopup="true" aria-expanded="false">
+                    <a className="nav-link dropdown-toggle" href="#/" id="alertsDropdown" role="button" onClick={() => resetBadge()} aria-haspopup="true" aria-expanded="false">
                         <i className="fas fa-bell fa-fw bell-icon"></i>
                         {badge > 0 && <span className="badge badge-danger badge-counter">{badge > 0 ? (badge > 9 ? "9+" : badge) : null}</span>}
-                    </div>
+                    </a>
                     <div id="myNotifications" className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" style={{display: "none"}}>
                         <MyNotifications userId={props.userId} notifications={notifications} setNotifications={setNotifications} badge={badge} setBadge={setBadge} />
                     </div>
@@ -85,7 +85,7 @@ export default function AdminTopbar(props) {
                         {/* <span className="mr-2 d-lg-inline text-gray-600 medium profile-name">Administrator</span> */}
                         <span className="mr-2 d-lg-inline text-gray-600 medium profile-name">{props.email.length > 0 ? props.email : "Administrator"}</span>
                     </a>
-                    <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <div className="dropdown-menu dropdown-menu-right " aria-labelledby="userDropdown">
                         <a className="dropdown-item"  onClick={() => { props.onSelect("My Roles"); }}>
                             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             My Roles

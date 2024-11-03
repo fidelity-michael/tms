@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import MyNotifications from '../../content/MyNotifications';
 import axios from 'axios';
@@ -88,24 +88,24 @@ export default function ProfessorTopbar(props) {
                         <span className="mr-2 d-lg-inline text-gray-600 medium profile-name">{props.email.length > 0 ? props.email : "Professor"}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a className="dropdown-item" href={() => false} onClick={(e) => { props.onSelect("My Roles"); }}>
+                        <a className="dropdown-item" onClick={(e) => { props.onSelect("My Roles"); }}>
                             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" ></i>
                             My Roles
                         </a>
-                        <a className="dropdown-item" href={() => false} onClick={(e) => { props.onSelect("My Calendar"); }}>
+                        <a className="dropdown-item" onClick={(e) => { props.onSelect("My Calendar"); }}>
                             <i className="far fa-calendar-alt fa-fw mr-2 text-gray-400" ></i>
                             My Calendar
                         </a>
-                        <a className="dropdown-item" href={() => false}>
+                        <a className="dropdown-item">
                             <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Settings
                         </a>
-                        <a className="dropdown-item" href={() => false}>
+                        <a className="dropdown-item">
                             <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                             Activity Log
                         </a>
                         <div className="dropdown-divider"></div>
-                        <a className="dropdown-item" href={() => false} data-toggle="modal" data-target="#logoutModal" onClick={(e) => logout(e.target)}>
+                        <a className="dropdown-item" data-toggle="modal" data-target="#logoutModal" onClick={(e) => logout(e.target)}>
                             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
