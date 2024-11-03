@@ -1,5 +1,6 @@
 .upload-files {
-    padding: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
     padding-bottom: -1rem !important;
     color: #1d1a1a;
     border-radius: 0.25rem !important;
@@ -7,7 +8,12 @@
 }
 
 .file-input {
-    margin-bottom: -1rem;
+    margin-bottom: 0.3rem;
+    padding: 0.5rem;
+}
+
+file-form {
+    background-color: red;
 }
 
 .submit-progress-form {

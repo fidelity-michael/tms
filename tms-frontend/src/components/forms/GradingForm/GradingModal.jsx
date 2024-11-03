@@ -22,7 +22,8 @@ export default function GradingModal({ title, userId, completedData, onCompleted
     const componentIsMounted = useRef(true)
     useEffect(() => {
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
 
