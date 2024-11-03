@@ -22,7 +22,8 @@ export default function CompletedTheses({ userId }) {
   const componentIsMounted = useRef(true)
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -30,7 +31,7 @@ export default function CompletedTheses({ userId }) {
     const fetchTheses = async () => {
       try {
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/assigned_theses/', {
+        const theses_data = await axios.get('/api/data/assigned_theses/', {
           params: {
             page: thesesPage,
             limit: thesesLimit,
@@ -101,7 +102,7 @@ export default function CompletedTheses({ userId }) {
   }
 
   function handleArchiveClicked(target) {
-    axios.patch('/assigned_theses/' + target.getAttribute("data-key"),
+    axios.patch('/api/assigned_theses/' + target.getAttribute("data-key"),
       {
         attr: "status",
         value: "archived"

@@ -9,7 +9,7 @@ export default function ConfirmationModal({ show, setShow, path, setResponse, me
         setShow(false);
     }
 
-    function confirm() {
+    function confirm(e) {
         // console.log("Delete: " + path);
         axios.delete(path)
             .then((data) => {
@@ -37,7 +37,7 @@ export default function ConfirmationModal({ show, setShow, path, setResponse, me
                     message ?
                         <p>{message}</p>
                     :
-                        <p>Do you want to proceed with this action?</p>
+                        <p>This can't be undone</p>
                 }
                 
             </Modal.Body>
@@ -45,7 +45,7 @@ export default function ConfirmationModal({ show, setShow, path, setResponse, me
                 <Button className="cancel-modal" variant="light" onClick={(e) => cancel(e.target)}>
                     Cancel
           </Button>
-                <Button className="confirm-modal" variant="light" onClick={(e) => confirm(e.target)}>
+                <Button className="confirm-modal btn-danger" variant="light" onClick={(e) => confirm(e.target)}>
                     Delete
           </Button>
             </Modal.Footer>

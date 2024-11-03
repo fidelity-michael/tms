@@ -16,7 +16,8 @@ export default function ReportsArchive({ userId, email, user }) {
 
     useEffect(() => {
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
 
@@ -24,7 +25,7 @@ export default function ReportsArchive({ userId, email, user }) {
         const fetchReports = async () => {
             try {
                 setLoadingReports(true);
-                const reports_data = await axios.get('/api/reports/' + userId, {
+                const reports_data = await axios.get('/api/data/reports/' + userId, {
                     params: {
                         page: reportsPage,
                         limit: reportsLimit,
@@ -75,7 +76,7 @@ export default function ReportsArchive({ userId, email, user }) {
 
         const fetchData = async () => {
             console.log("File to download: ", target.name)
-            await axios.get('/api/downloads/reports/' + target.name,
+            await axios.get('/api/data/downloads/reports/' + target.name,
                 { responseType: 'blob' })
                 .then(res => {
                     // console.log("Response: ", res.data);
@@ -142,7 +143,7 @@ export default function ReportsArchive({ userId, email, user }) {
         }
 
         const addCommenttoDB = async () => {
-            await axios.patch('/theses_reports/addComment/' + reportId, {
+            await axios.patch('/api/theses_reports/addComment/' + reportId, {
                 attr: "comments",
                 value: email+": "+document.getElementById('comment_'+index).value,
               })

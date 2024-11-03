@@ -9,7 +9,8 @@ function StudentDashboard({userId, thesisData, setPage}) {
 
     useEffect(() => {
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
     

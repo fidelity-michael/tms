@@ -26,7 +26,8 @@ function StudentDashboard({userId, setPage}) {
 
         getCompletedTheses()
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
 

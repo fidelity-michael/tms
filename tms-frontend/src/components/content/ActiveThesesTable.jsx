@@ -20,7 +20,8 @@ export default function ActiveThesesTable({ userId, group, thesesApplied, applyT
   const componentIsMounted = useRef(true);
   useEffect(() => {
     return () => {
-      componentIsMounted.current = false
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     }
   }, []);
 
@@ -29,7 +30,7 @@ export default function ActiveThesesTable({ userId, group, thesesApplied, applyT
       try {
         // console.log("User Group: ", group);
         setLoadingTheses(true);
-        const theses_data = await axios.get('/api/theses', {
+        const theses_data = await axios.get('/api/data/theses', {
           params: {
             page: thesesPage,
             limit: thesesLimit,

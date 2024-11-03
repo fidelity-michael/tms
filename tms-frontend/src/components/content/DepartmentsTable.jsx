@@ -31,7 +31,8 @@ export default function DepartmentsArchive() {
     const componentIsMounted = useRef(true)
     useEffect(() => {
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = true
+            // componentIsMounted.current = false
         }
     }, []);
 
@@ -39,7 +40,7 @@ export default function DepartmentsArchive() {
         const fetchDepartments = async () => {
             try {
                 setLoadingDepartments(true);
-                const departments_data = await axios.get('/api/departments', {
+                const departments_data = await axios.get('/api/data/departments', {
                     params: {
                         page: departmentsPage,
                         limit: departmentsLimit
@@ -72,7 +73,7 @@ export default function DepartmentsArchive() {
         const fetchDepartments = async () => {
             try {
                 setLoadingDepartments(true);
-                const departments_data = await axios.get('/api/departments', {
+                const departments_data = await axios.get('/api/data/departments', {
                     params: {
                         page: departmentsPage,
                         limit: departmentsLimit
@@ -214,7 +215,7 @@ export default function DepartmentsArchive() {
             
 
                 //update
-                await axios.patch('/departments/'+id, {
+                await axios.patch('/api/departments/'+id, {
                     name: newName,
                     university: newUniversity,
                     email: newEmail,
@@ -237,7 +238,7 @@ export default function DepartmentsArchive() {
 
     async function deleteDepartment(departmentId){
         const index = departments.findIndex((department) => department._id===departmentId)
-        setPath('/departments/'+departmentId)
+        setPath('/api/departments/'+departmentId)
         setConfirmationMessage("Do you want to delete "+departments[index].name+" ?")
         setShowConfirmation(true)
     }

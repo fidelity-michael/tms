@@ -57,6 +57,7 @@ function AdminDashboard({ userId, setPage }) {
         .then((res) => {
           setUsers(res.data.total);
 
+          console.log("SEARCHES FOR USERS?");
           var studentsNumber = 0;
           var professorsNumber = 0;
           var adminsNumber = 0;
@@ -91,7 +92,8 @@ function AdminDashboard({ userId, setPage }) {
     }
 
     return () => {
-      componentIsMounted.current = false;
+      componentIsMounted.current = true
+      // componentIsMounted.current = false
     };
   }, []);
 

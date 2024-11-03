@@ -150,7 +150,7 @@ export default function UsersTable() {
 
     //update a users's attribute in db )patch)
     function updateUsersAttribute(id, attribute, value){
-        axios.patch('/users/' + id, {
+        axios.patch('/api/users/' + id, {
             attr: attribute,
             value: value
         })

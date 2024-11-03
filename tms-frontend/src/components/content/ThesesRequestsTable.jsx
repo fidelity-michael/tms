@@ -44,6 +44,8 @@ export default function ThesesRequestsTable({ userId, email, thesesRequest, requ
             filter: "active"
           }
         });
+        console.log("userId: " + userId)
+        console.log("{requests_data}: " + JSON.stringify(requests_data));
 
         if (componentIsMounted.current) {
           // console.log("Requests: ", requests_data.data.results);
@@ -226,7 +228,7 @@ export default function ThesesRequestsTable({ userId, email, thesesRequest, requ
   }
 
   function renderDownloads(files) {
-    if(files[0].length){
+    if(Array.isArray(files) && files.length > 0 && files[0].length){
       return(
         <ul>
           {
