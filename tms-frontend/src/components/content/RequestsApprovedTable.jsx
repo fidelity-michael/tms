@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Table, Form } from 'react-bootstrap';
 import axios from 'axios';
 import './content.css';
@@ -29,7 +29,7 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
     const fetchRequests = async () => {
       try {
         setLoadingRequests(true);
-        const requests_data = await axios.get('/api/theses_requests/' + userId, {
+        const requests_data = await axios.get('/api/data/theses_requests/' + userId, {
           params: {
             page: requestsPage,
             limit: requestsLimit,
@@ -39,9 +39,7 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
           }
         });
 
-        //console.log(requests_data.data);
         if (componentIsMounted.current) {
-          //console.log("Requests: ", requests_data.data);
           setPagination({
             startIndex: requests_data.data.startIndex,
             endIndex: requests_data.data.endIndex,
@@ -56,46 +54,48 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
       }
       catch (err) {
         console.log("Server internal error occurred!");
+        setLoadingRequests(false);
       }
     }
 
     fetchRequests();
-    // console.log(responseData);
   }, [requestsPage, requestsLimit, thesisAssigned, userId]);
 
   useEffect(() => {
-    axios.get('/assigned_theses/assigned_thesis/'+userId)
+    axios.get('/api/assigned_theses/assigned_thesis/'+userId)
     .then((res) => {
       console.log(res.data.supervisor)
       setMyThesis(res.data)
     })
     .catch(() => "Server internal error occured!")
+
   }, [userId])
 
   //if user has already a thesis assigned we fetch the supervisors, 
   //secretariats and admins because of a potential change of thesis
   useEffect(() => {
-    const getSupervisors = (Ids) => {
-      Ids.map((supervisorId) => {
-        axios.get('/api/users/'+supervisorId)
-        .then((res) => {
-          console.log('ggg', res.data)
-          setSupervisors(prev => [...prev, res.data])
-        })
-        .catch((err) => console.log("Server internal error occured!"))
-      })
+    const getSupervisors = async (Ids) => {
+      try {
+      const supervisorData = await Promise.all(
+        Ids.map((supervisorId) => axios.get("/api/data/users/" + supervisorId))
+      );
+      // console.log('gg', res.data)
+      setSupervisors(supervisorData.map(res => res.data));
+      } catch (err) {
+        console.log("Server internal error occured!");
+      }
     }
 
     const getSecretariats = () => {
-      axios.get("/api/users/secretariats")
+      axios.get("/api/data/users/secretariats")
       .then((res) => setSecretariats(res.data))
-      .catch((err) => console.log("Server internal error occured!"))
+      .catch(() => console.log("Server internal error occured!"))
     }
 
     const getAdmins = () => {
-      axios.get("/api/users/admins")
+      axios.get("/api/data/users/admins")
       .then((res) => setAdmins(res.data))
-      .catch((err) => console.log("Server internal error occured!"))
+      .catch(() => console.log("Server internal error occured!"))
     }
 
     if(myThesis && Object.keys(myThesis).length >0) {
@@ -105,7 +105,6 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
       getAdmins()
       
     }
-    
   }, [myThesis])
 
 
@@ -151,7 +150,7 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
   }
 
   function fetchThesisData() {
-    axios.get('/api/my_thesis/' + userId)
+    axios.get('/api/data/my_thesis/' + userId)
       .then(thesis_data => {
         // console.log(thesis_data.data);
         updateThesisData(thesis_data.data);
@@ -196,7 +195,7 @@ export default function RequestsApprovedTable({ userId, email, thesisAssigned, a
         student: find_request.student_id
       };
 
-      axios.post('/assigned_theses', newThesis)
+      axios.post('/api/assigned_theses', newThesis)
         .then(res => {
           assignThesis(find_request.thesis_id);
           fetchThesisData();
