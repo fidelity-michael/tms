@@ -47,11 +47,9 @@ interface CustomResponse extends Response {
   data?: Data;
 }
 
-export class DataHandlerController extends ResourceController<DataHandler> {
+export class DataHandlerController {
   private logger: Logger = Logger.getInstance();
-  constructor() {
-    super(DataHandlerModel);
-  }
+  constructor() {}
   /**
    * Apply all routes for api
    *
@@ -266,8 +264,13 @@ export class DataHandlerController extends ResourceController<DataHandler> {
    * @param res
    */
   getUserById = async (req: Request, res: Response) => {
-    const user = this.getOne(req.params.userId, req, res);
-    return res.status(StatusCodes.OK).json(user);
+    const users_data = await UserModel.findById({ _id: req.params.userId })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        this.logger.error("Server internal error occurred!");
+      });
   };
 
   /**
@@ -1029,26 +1032,23 @@ export class DataHandlerController extends ResourceController<DataHandler> {
           this.logger.debug("professor" + professor);
 
           //the supervisors
-          //console.log(thesis_assigned[0].supervisor)
-
+          converted_data.supervisor = [];
           converted_data.date = thesis_assigned[0].date;
           converted_data.thesis = thesis_data!;
           converted_data.thesis.status = thesis_assigned[0].status;
           converted_data.thesis.professor = professor!.email;
-          thesis_assigned[0].supervisor.map((sup) => {
-            converted_data.supervisor!.push(sup);
-          }); // ids of the supervisors
+          converted_data.supervisor.push(...thesis_assigned[0].supervisor); // ids of the supervisors
         } else {
           converted_data.thesis = thesis_data;
         }
 
-        res.data = converted_data;
         this.logger.debug(
-          "[BACKEND]converted_data: " + JSON.stringify(res.data),
+          "[BACKEND]converted_data: " + JSON.stringify(converted_data),
         );
+        res.data = converted_data;
         next();
       } catch (err) {
-        return res
+        res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: "Server internal error occurred!" });
       }
