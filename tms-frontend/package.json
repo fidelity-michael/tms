@@ -18,11 +18,13 @@
     "mdbreact": "^5.2.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
+    "react-bootstrap-pagination-control": "^1.0.5",
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.22.2",
     "react-select": "^5.8.0",
+    "react-table": "^7.8.0",
     "socket.io-client": "^4.7.4",
     "tippy.js": "^6.3.7"
   },

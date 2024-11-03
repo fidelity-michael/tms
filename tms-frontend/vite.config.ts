@@ -12,29 +12,50 @@ export default defineConfig({
     port: 4200,
     strictPort: false,
     proxy: {
-      '/api': {
-        target: 'http://backend:8080', // Your backend server
+      "/api": {
+        target: "http://backend:8080", // Your backend server
+        changeOrigin: true,
+        configure: (proxy, _options) => {
+          proxy.on("error", (err, req, res) => {
+            console.log("Proxy error:", err); // Logs proxy errors
+          });
+          // proxy.on("proxyReq", (proxyReq, req, res) => {
+          //   console.log("Proxying request:", req.url); // Logs each proxied request
+          // });
+          // proxy.on("proxyRes", (proxyRes, req, res) => {
+          //   console.log("Received response from target:", proxyRes.statusCode); // Logs the response status code
+          // });
+          // proxy.on("proxyReq", (proxyReq, req, _res) => {
+          //   console.log(
+          //     "Sending Request:",
+          //     req.method,
+          //     req.url,
+          //     " => TO THE TARGET =>  ",
+          //     proxyReq.method,
+          //     proxyReq.protocol,
+          //     proxyReq.host,
+          //     proxyReq.path,
+          //     JSON.stringify(proxyReq.getHeaders()),
+          //   );
+          // });
+          // proxy.on("proxyRes", (proxyRes, req, _res) => {
+          //   console.log(
+          //     "Received Response from the Target:",
+          //     proxyRes.statusCode,
+          //     req.url,
+          //     JSON.stringify(proxyRes.headers),
+          //   );
+          // });
+        },
+      },
+      "/notifications": {
+        target: "http://backend:8080", // Your backend server
         changeOrigin: true,
       },
-      '/notifications': {
-        target: 'http://backend:8080', // Your backend server
+      "/chat": {
+        target: "http://backend:8080", // Your backend server
         changeOrigin: true,
       },
-      '/chat': {
-        target: 'http://backend:8080', // Your backend server
-        changeOrigin: true,
-      },
-    },
-    configure: (proxy, options) => {
-      proxy.on('error', (err, req, res) => {
-        console.log('Proxy error:', err); // Logs proxy errors
-      });
-      proxy.on('proxyReq', (proxyReq, req, res) => {
-        console.log('Proxying request:', req.url); // Logs each proxied request
-      });
-      proxy.on('proxyRes', (proxyRes, req, res) => {
-        console.log('Received response from target:', proxyRes.statusCode); // Logs the response status code
-      });
     },
   },
 });
