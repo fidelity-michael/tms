@@ -27,7 +27,7 @@ export default function Chat({ userId, role }) {
   //for sockets
   //TODO: [Frontend] Check Port here, probably needs a change
   const socketRef = useRef(null);
-  const ENDPOINT = "http://localhost:8080";
+  const ENDPOINT = "http://localhost:8080/chat";
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -92,11 +92,11 @@ export default function Chat({ userId, role }) {
     //---professors---
     //get data of students we supervise
     const fetchStudents = async () => {
-      var studentsIds = [];
+      var studentsIds = [""];
 
       const getStudentsIds = async () => {
         await axios
-          .get("/assigned_theses/supervised/" + userId)
+          .get("/api/assigned_theses/supervised/" + userId)
           .then((res) => {
             console.log(res.data);
             studentsIds = res.data.map((elem) => {
@@ -104,7 +104,7 @@ export default function Chat({ userId, role }) {
             });
           })
           .catch(() => {
-            console.log("Errooor");
+            console.log("fetchStudents error");
           });
       };
 
@@ -296,7 +296,7 @@ export default function Chat({ userId, role }) {
     };
 
     await axios
-      .post("/message", newMessage)
+      .post("/chat/message", newMessage)
       .then(async (res) => {
         var messageData = res.data;
         messageData.text = text;
@@ -334,7 +334,7 @@ export default function Chat({ userId, role }) {
   //update lastmessage property of current chat
   async function updateLastMessage(chatId, message) {
     await axios
-      .patch("/privateConversation/updateLastMessage/" + chatId, {
+      .patch("/chat/privateConversation/updateLastMessage/" + chatId, {
         lastMessage: message,
       })
       .then(() => {
@@ -656,11 +656,11 @@ export default function Chat({ userId, role }) {
 
       try {
         console.log(message, " and ", userId);
-        const read = await axios.patch("/message/read/" + message._id, {
+        const read = await axios.patch("/chat/message/read/" + message._id, {
           userId: userId,
         });
         const readInChat = await axios.patch(
-          "/privateConversation/readLastMessage/" + currentChatId,
+          "/chat/privateConversation/readLastMessage/" + currentChatId,
           {
             userId: userId,
           },
@@ -698,7 +698,7 @@ export default function Chat({ userId, role }) {
       };
 
       const newConvo = await axios.post(
-        "/privateConversation",
+        "/chat/privateConversation",
         newConversation,
       );
 
@@ -789,7 +789,7 @@ export default function Chat({ userId, role }) {
 
     const upload = async () => {
       await axios
-        .patch("/message/addFiles/" + messageId, {
+        .patch("/chat/message/addFiles/" + messageId, {
           fileNames: fileNames,
         })
         .then((res) => {
