@@ -567,7 +567,7 @@ export class DataHandlerController {
             results.results = filtered_data.slice(startIndex, endIndex);
             //console.log(results);
             res.paginatedData = results;
-            // this.logger.debug("return res.paginatedData: " + res.paginatedData);
+            // this.logger.debug("res.paginatedData: " + res.paginatedData);
             next();
           } catch (err: any) {
             return res
@@ -662,8 +662,8 @@ export class DataHandlerController {
 
   private paginatedFilteredData<T extends Document>(model: Model<T>) {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
-      const page = parseInt(req.query.page as string);
-      const limit = parseInt(req.query.limit as string);
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
 
       const user: any = req.query.user;
       const userId: any = req.params.userId;
@@ -743,8 +743,8 @@ export class DataHandlerController {
    */
   private paginatedAreaData<T extends Document>(model: Model<T>) {
     return async (req: Request, res: CustomResponse, next: NextFunction) => {
-      const page = parseInt(req.query.page as string);
-      const limit = parseInt(req.query.limit as string);
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
 
       const attr: any = req.query.attr;
       const filter: any = req.query.filter;
@@ -886,7 +886,7 @@ export class DataHandlerController {
 
           // console.log("Current Data : ", return res.paginatedData.results);
           // console.log("Converted Data : ", converted_data);
-          return (res.paginatedData!.results = converted_data);
+          res.paginatedData!.results = converted_data;
         }
 
         next();
@@ -941,7 +941,7 @@ export class DataHandlerController {
 
             /*
           const supervisor = await User.findById(
-            return res.paginatedData.results[index].supervisor,
+            res.paginatedData.results[index].supervisor,
             "email first_name last_name"
           );*/
 
