@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from 'socket.io-client';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ function StudentSidebar(props) {
 
   //for sockets
   const socketRef = useRef(null);  
-  const ENDPOINT = 'http://localhost:8080';
+  const ENDPOINT = 'http://localhost:8080/chat';
 
   //we establish connection with endpoint
   useEffect(() => {   
@@ -21,7 +21,7 @@ function StudentSidebar(props) {
     //check if there are unread messages
     const checkUnread = async () => {
       await axios.get('/chat/privateConversation/'+props.userId)
-      .then((es) => {
+      .then((res) => {
         console.log(res.data)
 
         if(props.page !== "Chat"){
@@ -41,7 +41,7 @@ function StudentSidebar(props) {
 
     if(props.userId){
       if (socketRef.current == null) { //current will persist for the full lifetime of the component
-        socketRef.current = io('http://localhost:8080');
+        socketRef.current = io(ENDPOINT);
       }
 
       checkUnread()

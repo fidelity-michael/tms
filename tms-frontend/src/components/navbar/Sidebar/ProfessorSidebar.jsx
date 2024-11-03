@@ -9,7 +9,7 @@ function ProfessorSidebar(props) {
 
   //for sockets
   const socketRef = useRef(null);  
-  const ENDPOINT = 'http://localhost:8080';
+  const ENDPOINT = 'http://localhost:8080/chat';
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -43,7 +43,7 @@ function ProfessorSidebar(props) {
     if(props.userId){
 
       if (socketRef.current == null) { //current will persist for the full lifetime of the component
-        socketRef.current = io('localhost:4002');
+        socketRef.current = io(ENDPOINT);
       }
 
       checkUnread()
