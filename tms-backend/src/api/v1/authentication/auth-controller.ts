@@ -235,7 +235,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
    * @param res
    */
   loginWithoutLDAP = async (req: CustomRequest, res: CustomResponse) => {
-    this.logger.debug("loginWithoutLDAP request. ID: " + req.sessionID);
+    this.logger.debug("loginWithoutLDAP request");
     mongoose.connection.on("error", (err) => {
       this.logger.error("MongoDB failed to connect!");
       res.status(StatusCodes.SERVICE_UNAVAILABLE).send(err);
@@ -278,7 +278,6 @@ export class AuthenticationController extends ResourceController<IAuth> {
       return res.status(StatusCodes.BAD_REQUEST).send(server_res);
     }
 
-    this.logger.debug("" + user);
     // Create and assign token
     const accessToken = jwt.sign(
       { _id: user._id },
@@ -319,9 +318,9 @@ export class AuthenticationController extends ResourceController<IAuth> {
 
   logout = async (req: Request, res: Response) => {
     req.session.destroy(function (err) {
-      if (err) res.status(500).send("Server failed to delete session!");
+      if (err) res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server failed to delete session!");
       else {
-        res.send("Server deleted session successfully!");
+        res.status(StatusCodes.OK).send("Server deleted session successfully!");
       }
     });
   };
@@ -506,7 +505,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
         next();
       } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
-        res.status(500).json({ message: err.message });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
         next();
       }
     };

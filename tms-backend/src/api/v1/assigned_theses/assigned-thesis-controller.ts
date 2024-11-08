@@ -63,7 +63,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
   patchAssignedThesis = async (req: Request, res: Response) => {
     this.logger.debug("patchAssignedThesis request");
     const updated_assigned_thesis = await AssignedThesisModel.updateOne(
-      { student: req.params.userId }, // NOTE: userId is the name of the user. (If student have the same name, the first one found is updated)
+      { student: req.params.userId },
       { $set: { [req.body.attr]: req.body.value } },
     )
       .then((data: any) => {
@@ -91,7 +91,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
       },
     )
       .then((data) => {
-        res.json(data);
+        res.status(StatusCodes.OK).json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
@@ -105,7 +105,7 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
    */
   deleteThesis = async (req: Request, res: Response) => {
     this.logger.debug("deleteThesis request"); // NOTE: _id is used to delete a resource
-    const thesis = await this.delete( req.params.thesisId, req, res);
+    const thesis = await this.delete(req.params.thesisId, req, res);
     return res.status(StatusCodes.OK).json(thesis);
   };
 
@@ -116,7 +116,11 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
    */
   deleteAssignedThesis = async (req: Request, res: Response) => {
     this.logger.debug("deleteAssignedThesis request");
-    const assigned_thesis = await this.delete(req.params.assignedThesisId, req, res);
+    const assigned_thesis = await this.delete(
+      req.params.assignedThesisId,
+      req,
+      res,
+    );
     return res.status(StatusCodes.OK).json(assigned_thesis);
   };
 
@@ -127,11 +131,12 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
    */
   getUsersAssignedThesis = async (req: Request, res: Response) => {
     this.logger.debug("getUsersAssignedThesis request");
-    const assigned_thesis = await AssignedThesisModel.findOne({
-      student: req.params.userId,
-    })
+    const assigned_thesis = await AssignedThesisModel
+      .findOne({
+        student: req.params.userId,
+      })
       .then((data: any) => {
-        res.json(data);
+        return res.status(StatusCodes.OK).json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
@@ -145,11 +150,12 @@ export class AssignedThesisController extends ResourceController<IAssignedThesis
    */
   getProfessorsAssignedThesis = async (req: Request, res: Response) => {
     this.logger.debug("getProfessorsAssignedThesis request");
-    const assigned_thesis = await AssignedThesisModel.find({
-      supervisor: { $elemMatch: { $eq: req.params.userId } },
-    })
+    const assigned_thesis = await AssignedThesisModel
+      .find({
+        supervisor: { $elemMatch: { $eq: req.params.userId } },
+      })
       .then((data) => {
-        res.json(data);
+        res.status(StatusCodes.OK).json(data);
       })
       .catch(() => {
         this.logger.error("Server internal error occurred!");
