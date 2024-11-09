@@ -63,10 +63,11 @@ export class ThesisController extends ResourceController<IThesis> {
     this.logger.debug("getThesisById request");
     await ThesisModel.find({ _id: req.params.thesisId })
       .then((data) => {
-        res.json(data);
+        return res.json(data);
       })
-      .catch(() => {
-        this.logger.error("" + StatusCodes.INTERNAL_SERVER_ERROR);
+      .catch((err: any) => {
+        this.logger.error(err);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
       });
   };
 
