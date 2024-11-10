@@ -357,9 +357,6 @@ export class DataHandlerController {
    */
   private async returnResults(req: Request, res: CustomResponse) {
     try {
-      this.logger.debug(
-        "returnResults func: " + JSON.stringify(res.paginatedData),
-      );
       return res.json(res.paginatedData);
     } catch (err) {
       res
@@ -524,9 +521,6 @@ export class DataHandlerController {
       if (page <= 0 || limit <= 0) {
         results.results = {};
         res.paginatedData = results;
-        this.logger.debug(
-          "[noPageLimit]res.paginatedData: " + res.paginatedData,
-        );
         next();
       }
 
@@ -565,7 +559,6 @@ export class DataHandlerController {
 
           try {
             results.results = filtered_data.slice(startIndex, endIndex);
-            //console.log(results);
             res.paginatedData = results;
             // this.logger.debug("res.paginatedData: " + res.paginatedData);
             next();
@@ -749,7 +742,7 @@ export class DataHandlerController {
       const attr: any = req.query.attr;
       const filter: any = req.query.filter;
 
-      this.logger.debug("Pagination: ", page, limit);
+      // this.logger.debug("Pagination: ", page, limit);
       if (page <= 0 || limit <= 0) {
         const results: PaginatedData = {};
         results.results = {};
@@ -907,28 +900,16 @@ export class DataHandlerController {
       try {
         let converted_data = [];
 
-        // this.logger.debug("GOES IN HERE?");
-        // this.logger.debug("isArray: " + Array.isArray(return res.paginatedData!.results));
         if (
           Array.isArray(res.paginatedData!.results) &&
           res.paginatedData!.results
         ) {
           let index = 0;
           while (res.paginatedData!.results[index]) {
-            // this.logger.debug("thesis: " + return res.paginatedData!.results[index].thesis)
-            // this.logger.debug("student: " + return res.paginatedData!.results[index].student)
-            // this.logger.debug("professor: " + return res.paginatedData!.results[index].professor)
-            // this.logger.debug(JSON.stringify(return res.paginatedData!.results[index]))
-            this.logger.debug(
-              "res.paginatedData!.results[index]: " +
-                res.paginatedData!.results[index],
-            );
             const thesis = await ThesisModel.findById(
               res.paginatedData!.results[index].thesis,
               "title topic area group",
             );
-
-            // this.logger.debug("returned_thesis: " + thesis);
 
             const student = await UserModel.findById(
               res.paginatedData!.results[index].student,
@@ -955,8 +936,6 @@ export class DataHandlerController {
 
               supervisor.push(newSupervisor);
             }
-
-            this.logger.debug("convertAssignedThesesData(): " + thesis);
 
             let newObject = {
               _id: res.paginatedData!.results[index]._id,
@@ -1018,18 +997,14 @@ export class DataHandlerController {
           student: req.params.userId,
         });
 
-        this.logger.debug(JSON.stringify(thesis_assigned));
-
         let thesis_data;
         if (thesis_assigned[0]) {
           // we get extra thesis data (like title)
           thesis_data = await ThesisModel.findById(thesis_assigned[0].thesis);
-          this.logger.debug("thesis_data: " + thesis_data);
 
           const professor = await UserModel.findById(
             thesis_assigned[0].professor,
           );
-          this.logger.debug("professor" + professor);
 
           //the supervisors
           converted_data.supervisor = [];
@@ -1042,9 +1017,6 @@ export class DataHandlerController {
           converted_data.thesis = thesis_data;
         }
 
-        this.logger.debug(
-          "[BACKEND]converted_data: " + JSON.stringify(converted_data),
-        );
         res.data = converted_data;
         next();
       } catch (err) {
