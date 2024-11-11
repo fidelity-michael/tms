@@ -361,15 +361,15 @@ export class AuthenticationController extends ResourceController<IAuth> {
             next();
           });
 
-        // console.log("Search Data (sent): ", entries);
+        console.log("Search Data (sent): ", entries);
         res.data = entries as any;
         next();
       } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: err.message });
-        next();
+        // next();
       }
     };
   }
