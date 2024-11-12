@@ -78,34 +78,6 @@ export class App {
       .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } })) // 50MB file limit
       .use(bodyParser.json({ limit: "5MB" }))
       .use(bodyParser.urlencoded({ extended: true }));
-      // .use(
-      //   "/api",
-      //   createProxyMiddleware({
-      //     target: "http://localhost:8080",
-      //     changeOrigin: true,
-      //   }),
-      // );
-      // .use(
-      //   "/notifications",
-      //   createProxyMiddleware({
-      //     target: "http://localhost:8080/",
-      //     changeOrigin: true,
-      //   }),
-      // )
-      // .use(
-      //   "/privateConversation",
-      //   createProxyMiddleware({
-      //     target: "http://localhost:8080/",
-      //     changeOrigin: true,
-      //   }),
-      // )
-      // .use(
-      //   "/message",
-      //   createProxyMiddleware({
-      //     target: "http://localhost:8080/",
-      //     changeOrigin: true,
-      //   }),
-      // );
 
     // setup primary app routes.
     application.use(await Api.applyRoutes(application));
