@@ -27,7 +27,7 @@ export default function Chat({ userId, role }) {
   //for sockets
   //TODO: [Frontend] Check Port here, probably needs a change
   const socketRef = useRef(null);
-  const ENDPOINT = "http://localhost:8080/chat";
+  const ENDPOINT = "http://localhost:8080/chat"; // /chat for namespace
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -38,7 +38,8 @@ export default function Chat({ userId, role }) {
 
     socketRef.current.on("connect", () => {
       console.log("Connected to chat!");
-      socketRef.current.emit("map", userId);
+      socketRef.current.emit("chat:map", userId);
+      socketRef.current.on("chat:message", (socket) => {console.log(socket.message)})
     });
 
     socketRef.current.on("disconnect", () => {
@@ -46,13 +47,13 @@ export default function Chat({ userId, role }) {
     });
 
     //cleanup (disconnect from chat server)
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current.close();
-        componentIsMounted.current = false;
-      }
-    };
+    // return () => {
+    //   if (socketRef.current) {
+    //     socketRef.current.disconnect();
+    //     socketRef.current.close();
+    //     componentIsMounted.current = false;
+    //   }
+    // };
   }, [ENDPOINT, userId]);
 
   //setting title of contacts depending on our role
@@ -98,7 +99,7 @@ export default function Chat({ userId, role }) {
         await axios
           .get("/api/assigned_theses/supervised/" + userId)
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             studentsIds = res.data.map((elem) => {
               return elem.student;
             });
@@ -139,15 +140,15 @@ export default function Chat({ userId, role }) {
 
   //socket events and basic fetching
   useEffect(() => {
-    console.log("new current contact:", currentContact);
+    // console.log("new current contact:", currentContact);
 
     //receiving message event
-    socketRef.current.on("privateMessage", (data) => {
+    socketRef.current.on("chat:privateMessage", (data) => {
       receiveMessage(data);
     });
 
     //display my message event
-    socketRef.current.on("myMessage", (data) => {
+    socketRef.current.on("chat:myMessage", (data) => {
       if (currentContact._id === data.receiverId) {
         var date = new Date(data.date);
         displayMyMessage(data, date);
@@ -155,10 +156,10 @@ export default function Chat({ userId, role }) {
     });
 
     //cleanup events
-    return () => {
-      console.log("clean");
-      socketRef.current.off("privateMessage");
-    };
+    // return () => {
+    //   // console.log("clean");
+    //   // socketRef.current.off("privateMessage");
+    // };
   }, [currentContact]);
 
   //loadMessages of currentchat
@@ -208,11 +209,11 @@ export default function Chat({ userId, role }) {
     try {
       const res = await axios.get("/chat/privateConversation/" + userId);
       if (res.data.length > 0) {
-        console.log("OOK", res.data);
-        console.log("Conversations SETing");
+        // console.log("OOK", res.data);
+        // console.log("Conversations SETing");
 
         setConversations(res.data);
-        console.log("Conversations SET");
+        // console.log("Conversations SET");
         setTimeout(function () {
           setLoadingConversations(false);
         }, 800); //lathos alla exw kollhsei kai douleuei
@@ -315,7 +316,7 @@ export default function Chat({ userId, role }) {
         updateLastMessage(chatId, messageData);
 
         //emit new message event
-        socketRef.current.emit("privateMessage", {
+        socketRef.current.emit("chat:privateMessage", {
           _id: messageData._id,
           receiverId: currentContact._id,
           senderId: messageData.sender,
