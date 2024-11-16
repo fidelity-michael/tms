@@ -11,25 +11,20 @@ import { ObjectId } from "mongoose";
 import config from "config";
 import nodemailer from "nodemailer";
 import { UserModel } from "../users/user-model";
-import { DIContainer, SocketServer, SocketsService } from "../../../services";
-import io from "socket.io";
-import { ObjectType } from "typescript";
-import { UserSockets } from "../users/user-controller";
-
-// TODO: Add socket event (from routes/notifications.js) in services folder
+import {
+  DIContainer,
+  SocketServer,
+  SocketsService,
+  UserSocketStore,
+} from "../../../services";
+import { UserSockets } from "../../../services";
 
 export class NotificationController extends ResourceController<INotification> {
   private logger: Logger = Logger.getInstance();
-  private socketServer: SocketServer;
-  private users: UserSockets; // TODO: Check if correct
+  private users: UserSockets = UserSocketStore.getInstance().getUserSockets();
+  private socketService: SocketsService = DIContainer.get(SocketsService);
   constructor() {
     super(NotificationModel);
-    this.socketServer = DIContainer.get(SocketsService).socketServer;
-
-    if (this.socketServer)
-      // NOTE: Check this piece of code. users logic maybe incorrect
-      this.users = this.socketServer.users;
-    else this.users = {};
   }
   /**
    * Apply all routes for notifications
@@ -96,36 +91,38 @@ export class NotificationController extends ResourceController<INotification> {
       let receiverSocketIds: { [index: string]: any } = [];
       // let receiverSocketIds: string[] = [];
 
+      this.logger.debug("Do users exist?" + JSON.stringify(this.users));
       //we get all the current socketIds of the receiver and the sender
       Object.keys(this.users).forEach((key: string) => {
         //key is the socket.id of the receiver
 
         //for receiver
+        this.logger.debug(
+          "this.users[key]: " +
+            this.users[key] +
+            " notification.receiver: " +
+            notification.receiver,
+        );
         if (this.users[key] === notification.receiver) {
           receiverSocketIds.push(key);
         }
       });
 
-      this.logger.debug(
-        "receivers: ",
-        receiverSocketIds,
-        "users: ",
-        this.users,
-      );
-
       //emit to all of the receiver sockets
-      // TODO: Check socket usability
       if (receiverSocketIds.length > 0) {
         receiverSocketIds.forEach((socketId: string) => {
-          const socket = this.socketServer.io;
-          socket.to(socketId).emit("newNotification");
+          this.socketService.publishTo(
+            "notification",
+            socketId,
+            "notification:newNotification",
+          );
         });
       }
 
       this.sendEmail(req.body.receiver, req.body.title, req.body.message);
     } catch (err) {
       console.log(err);
-      res.status(400).send(err);
+      res.status(StatusCodes.BAD_REQUEST).send(err);
     }
   };
 
