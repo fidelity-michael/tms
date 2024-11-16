@@ -25,34 +25,33 @@ export default function MyNotifications({ userId, notifications, setNotification
 
         if(userId) {
             if (socketRef.current == null) { //current will persist for the full lifetime of the component
-                socketRef.current = io('http://localhost:8080/notification');
-                
+                socketRef.current = io('http://localhost:8080/notification'); // notification namespace
             }
             
             socketRef.current.on("connect", () => {
                 console.log('Connected to notifications!', userId)
-                socketRef.current.emit('map', userId);
+                socketRef.current.emit('notification:map', userId);
+
+                //Register on new notification event
+                socketRef.current.on("notification:newNotification", () => {
+                    console.log('new notification event')
+                    fetchNotifications()
+                    setBadge(++badge)
+                })
             })
             
-            //on new notification event 
-            socketRef.current.on("newNotification", () => {
-                console.log('new notiiii')
-                fetchNotifications()
-                setBadge(++badge)
-            })
     
             socketRef.current.on("disconnect", () => {
                 console.log('Disonnected from notifications!')
             })       
     
-            //cleanup (disconnect from chat server)
-            return () => { 
-                if(socketRef.current){
-                    socketRef.current.disconnect()
-                    socketRef.current.close()
-                }
-                    
-            };
+            // cleanup (disconnect from chat server)
+            // return () => { 
+            //     if(socketRef.current){
+            //         socketRef.current.disconnect()
+            //         socketRef.current.close()
+            //     }
+            // };
 
         }
         
