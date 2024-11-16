@@ -7,14 +7,14 @@ export default function Contacts({
   checkLastMessageRead,
 }) {
   function renderContacts() {
-    console.log("Rendering CONTACTS", conversations);
-
-    console.log(myContacts.length);
+    // console.log("Rendering CONTACTS", conversations);
+    // console.log(myContacts.length);
+    
     if (myContacts.length > 0) {
       var contactsIds = myContacts.map((contact) => {
         return contact._id;
       });
-      console.log("contactsIds", contactsIds, myContacts);
+      // console.log("contactsIds", contactsIds, myContacts);
 
       conversations.forEach((conversation, index) => {
         if (
