@@ -3,16 +3,19 @@ import http, { Server } from "http";
 import io from "socket.io";
 import { Logger } from "../../../api/shared/utils/logger";
 import { config, getHostDomain } from "../../../config/environment";
-import { UserSockets } from "../../../api/v1/users/user-controller";
 import { RateLimiterMemory } from "rate-limiter-flexible";
+import { UserSocketStore } from "./user-sockets";
+import { UserSockets } from "./user-sockets";
 
 export class SocketServer {
   private logger: Logger = Logger.getInstance();
+  private userSocketsStore: UserSocketStore;
+  private users: UserSockets;
   public io!: io.Server;
-  public users: UserSockets; // For notifications
 
   constructor() {
-    this.users = {};
+    this.userSocketsStore = UserSocketStore.getInstance();
+    this.users = this.userSocketsStore.getUserSockets();
   }
 
   /**
@@ -44,8 +47,7 @@ export class SocketServer {
   private onConnect() {
     this.io.on("connection", (socket) => {
       // same as: `.of("/")`
-      this.logger.debug("Connection event triggered");
-      this.logger.debug("New client has connected");
+      this.logger.debug("Connection of STANDARD namespace");
       //emit welcome message from server to user handshake verify function
       socket.emit("welcome", {
         message: "connection was successful",
@@ -57,9 +59,9 @@ export class SocketServer {
     });
 
     this.io.of("/notification").on("connection", (socket) => {
-      this.logger.debug("Connection event (notification) triggered");
       socket.emit("welcome", {
-        message: "connection to notification socket was successful",
+        message:
+          "From backend connection, to notification socket was successful",
       });
 
       this.onMap(socket);
@@ -68,9 +70,9 @@ export class SocketServer {
     });
 
     this.io.of("/chat").on("connection", (socket) => {
-      this.logger.debug("Connection event (chat) triggered");
+      // this.logger.debug("Connection event (chat) triggered");
       socket.emit("welcome", {
-        message: "connection to chat was successful",
+        message: "From backend connection to chat was successful",
       });
 
       //for ddos attack prevention
@@ -116,6 +118,9 @@ export class SocketServer {
     socket.on("disconnect", (reason: any) => {
       this.removeUser(socket);
     });
+    socket.on("notification:disconnect", (reason: any) => {
+      this.removeUser(socket);
+    });
   }
 
   /**
@@ -145,38 +150,21 @@ export class SocketServer {
   }
 
   /**
-   * On UpdateWall event to a channel.
-   *
-   * @param {io.Socket} socket
-   */
-  private onUpdateWall(socket: io.Socket): void {
-    socket.on("updateWall", (data: any) => {
-      this.logger.debug("On updateWall event");
-      this.io.emit("updateWall", data);
-    });
-  }
-
-  /**
-   * On UpdateWall event to a channel.
-   *
-   * @param {io.Socket} socket
-   */
-  private onUpdateTable(socket: io.Socket): void {
-    socket.on("updateTable", (data: any) => {
-      this.logger.debug("On updateTable event");
-      this.io.emit("updateTable", data);
-    });
-  }
-
-  /**
    * On Map event to a channel for notification/chat use
    *
    * @param {io.Socket} socket
    */
   private onMap(socket: io.Socket): void {
-    socket.on("map", (userId: string) => {
-      this.logger.debug("On map event");
-      this.users[socket.id] = userId;
+    socket.on("notification:map", (userId: string) => {
+      this.logger.debug("On notification map event");
+      // this.users[socket.id] = userId;
+      this.userSocketsStore.addUserSocket(socket.id, userId);
+      this.logger.debug(userId, " connected");
+    });
+    socket.on("chat:map", (userId: string) => {
+      this.logger.debug("On chat map event");
+      // this.users[socket.id] = userId;
+      this.userSocketsStore.addUserSocket(socket.id, userId);
       this.logger.debug(userId, " connected");
     });
   }
@@ -191,7 +179,7 @@ export class SocketServer {
     socket: io.Socket,
     msgRateLimiter: RateLimiterMemory,
   ): void {
-    socket.on("privateMessage", (data) => {
+    socket.on("chat:privateMessage", (data) => {
       msgRateLimiter
         .consume(socket.id) // consume 1 point per event
         .then(() => {
@@ -216,14 +204,14 @@ export class SocketServer {
           //emit to all of the receiver sockets
           if (receiverSocketIds.length > 0) {
             receiverSocketIds.forEach((socketId) => {
-              socket.to(socketId).emit("privateMessage", data);
+              socket.to(socketId).emit("chat:privateMessage", data);
             });
           }
 
           //emit to the other sockets of the sender (px. open multiple tabs)
           if (senderOtherSocketIds.length > 0) {
             senderOtherSocketIds.forEach((socketId) => {
-              socket.to(socketId).emit("myMessage", data);
+              socket.to(socketId).emit("chat:myMessage", data);
             });
           }
         })
@@ -236,7 +224,7 @@ export class SocketServer {
   private removeUser(socket: io.Socket) {
     const user = this.users[socket.id];
     this.logger.debug(user + " disconnected");
-    delete this.users[socket.id]; // remove from mapping
+    this.userSocketsStore.removeUserSocket(socket.id);
   }
   // #endregion Helper methods
   // --------------------------------
