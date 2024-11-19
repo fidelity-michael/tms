@@ -57,10 +57,6 @@ export default function LoginForm() {
           // console.log("User role: ", res.data.role);
           const redirection_page = "/" + res.data.role;
           navigate(redirection_page, { state: "login" });
-          // history.push({
-          //   pathname: redirection_page,
-          //   state: "login",
-          // });
         })
         .catch(() => {
           setLoading(false);
@@ -105,7 +101,7 @@ export default function LoginForm() {
       <div className="md-form md-outline input-with-pre-icon">
         <i
           className="fas fa-envelope input-prefix"
-          style={{ color: "#648dffd2" }}
+          style={{ color: "#6A89A7" }}
         ></i>
         <input
           type="text"
@@ -122,7 +118,7 @@ export default function LoginForm() {
       <div className="md-form md-outline input-with-pre-icon">
         <i
           className="fas fa-lock input-prefix"
-          style={{ color: "#648dffd2" }}
+          style={{ color: "#6A89A7" }}
         ></i>
         <input
           type="password"
@@ -149,11 +145,11 @@ export default function LoginForm() {
         </label>
       </div>
 
-      <div className="form-group">
+      <div className="tw-flex tw-flex-col tw-mb-8">
         <button
           type="submit"
           id="login"
-          className="btn btn-primary"
+          className="tw-font-bold tw-text-2xl hover:tw-bg-dark-sky-blue tw-bg-mid-pale-blue tw-text-light-pale-blue-white tw-rounded-full tw-py-2 tw-px-4"
           disabled={loading}
         >
           Login
