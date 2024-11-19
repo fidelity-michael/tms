@@ -64,7 +64,6 @@ function ProfessorSidebar(props) {
       // };
     }
   }, [ENDPOINT, props.userId]);
-  // TODO: Fix emits and on events
   useEffect(() => {
     function notifyChatIcon() {
       if (selected !== "Chat")

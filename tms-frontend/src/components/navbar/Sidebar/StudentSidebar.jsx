@@ -78,9 +78,9 @@ function StudentSidebar(props) {
       });
 
     //cleanup events
-    return () => {
-      // socketRef.current.off("chat:privateMessage")
-    };
+    // return () => {
+    //   // socketRef.current.off("chat:privateMessage")
+    // };
   }, [selected, socketRef.current]);
 
   function hideNotifyChatIcon() {
