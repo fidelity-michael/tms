@@ -39,12 +39,12 @@
 .thesis-form {
   overflow: auto;
   padding: 2rem;
-  background-color: #438af3;
+  background-color: #384959;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.2);
 }
 .thesis-form .thesis-header {
   text-align: left;
-  color: #ffffff;
+  color: #F5FBFF;
 }
 .thesis-header {
   margin-top: 2rem;
@@ -71,17 +71,17 @@
   font-size: 2rem;
   font-weight: 700;
   text-align: left;
-  color: #488cf3;
+  color: #6A89A7;
 }
 .login-container form {
   padding-left: 2rem;
   padding-right: 2rem;
 }
 
-.login-form .btn-primary {
-  width: 98%;
-  background-color: #4489f1 !important;
-}
+/* .login-form .btn-primary { */
+/*   width: 98%; */
+/*   background-color: #4489f1 !important; */
+/* } */
 
 .btn-primary {
   border-radius: 1rem !important;
