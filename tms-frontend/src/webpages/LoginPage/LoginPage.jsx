@@ -10,7 +10,7 @@ function LoginPage() {
           <div className="tw-flex tw-justify-center lg:tw-mt-8">
             <img
               className="tw-object-scale-down tw-h-32 tw-w-78"
-              src="/public/logo.svg"
+              src="/logo.svg"
               alt="logo"
             />
           </div>
