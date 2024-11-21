@@ -45,7 +45,7 @@ export const AdminSidebarLinks = [
   },
   {
     key: "archived_theses",
-    label: "Archived Theses",
+    label: "Theses Archive",
     icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
 ];

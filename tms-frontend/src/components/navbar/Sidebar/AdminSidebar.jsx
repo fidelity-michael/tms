@@ -1,13 +1,14 @@
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import { Icon } from "@mui/material";
 import { AdminSidebarLinks } from "./options";
 
 export default function AdminSidebar(props) {
   return (
-    <div className="tw-min-h-dvh tw-flex tw-flex-col tw-pl-1 tw-py-5 tw-w-72 tw-gap-6">
-      {AdminSidebarLinks.map((item) => (
-        <SidebarLink key={item.key} item={item} props={props} />
-      ))}
+    <div className="tw-flex-col tw-min-h-dvh tw-py-5 tw-w-80">
+      <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6">
+        {AdminSidebarLinks.map((item) => (
+          <SidebarLink key={item.key} item={item} props={props} />
+        ))}
+      </div>
+      <BottonSidebar />
     </div>
   );
 }
@@ -21,8 +22,30 @@ function SidebarLink({ item, props }) {
       className="tw-border-solid tw-border-l-4 tw-pl-4 tw-border-light-sky-blue tw-flex tw-cursor-pointer "
     >
       <div className="tw-mt-1 tw-inline-block">{item.icon}</div>
-      <div className="tw-font-bold tw-text-xl tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue hover:tw-bg-light-pale-blue-white hover:tw-no-underline tw-rounded-full ">
+      <div className="tw-font-bold tw-text-xl tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue hover:tw-bg-light-pale-blue-white hover:tw-no-underline tw-rounded-full">
         {item.label}
+      </div>
+    </div>
+  );
+}
+
+function BottonSidebar() {
+  return (
+    <div className="tw-flex tw-flex-auto tw-justify-end tw-items-stretch tw-gap-2 tw-border-t-teal-600 tw-border tw-pt-4">
+      <div className="tw-flex">
+        <img
+          className="tw-object-scale-down tw-h-12 tw-w-22"
+          src="/logo.svg"
+          alt="logo"
+        />
+        <span className="tw-text-dark-sky-blue tw-font-black tw-text-xs tw-leading-tight">
+          <span className="tw-block">THESIS</span>
+          <span className="tw-block">MANAGEMENT</span>
+          <span className="tw-block">SYSTEM</span>
+        </span>
+      </div>
+      <div className="tw-flex tw-flex-grow tw-items-end tw-justify-end tw-text-gray-300 tw-text-xs tw-font-black tw-pr-2">
+        Version 1.0.3
       </div>
     </div>
   );
