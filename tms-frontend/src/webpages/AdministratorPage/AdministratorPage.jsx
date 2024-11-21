@@ -29,6 +29,7 @@ export default function AdministratorPage() {
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [auth, setAuth] = useState(false);
+  const [fullName, setFullName] = useState("");
 
   const [newArea, toggleNewArea] = useState(false);
   const [newUser, toggleNewUser] = useState(false);
@@ -49,6 +50,8 @@ export default function AdministratorPage() {
           ){
 
             console.log(location.state);
+            const user_data = await axios.get("/api/users/" + auth_data.data.id);
+            setFullName(user_data.data.first_name + " " + user_data.data.last_name);
 
             setAuth(true);
             setEmail(auth_data.data.email);
@@ -122,8 +125,8 @@ export default function AdministratorPage() {
 
   const userAuthorized = () => {
     return (
-      <div id="wrapper">
-        <Sidebar onSelect={page => setPage(page)} />
+      <div id="wrapper" className='tw-flex tw-h-full'>
+        <Sidebar role={"Admin"} name={fullName} onSelect={page => setPage(page)} />
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
             <Topbar userId={userId} email={email} onSelect={page => setPage(page)}/>
