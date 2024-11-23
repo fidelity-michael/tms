@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { AdminSidebarLinks } from "./options";
 
 export default function AdminSidebar(props) {
+
+  const [selectedItem, setSelectedItem] = useState(null)
+
+  const handleSelect = (label) => {
+    setSelectedItem(label)
+    props.onSelect(label);
+  }
+
   return (
     <div className="tw-flex tw-flex-col tw-h-screen tw-py-5 tw-w-80">
       <TopSidebar props={props} />
-      <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6">
+      <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6 tw-pt-8 tw-border-t-4 tw-border-light-pale-blue-white">
         {AdminSidebarLinks.map((item) => (
-          <SidebarLink key={item.key} item={item} props={props} />
+          <SidebarLink key={item.key} item={item} props={{onSelect: handleSelect, isSelected: selectedItem === item.label}} />
         ))}
       </div>
       <BottonSidebar />
@@ -20,10 +29,10 @@ function SidebarLink({ item, props }) {
       onClick={(e) => {
         props.onSelect(item.label);
       }}
-      className="tw-border-solid tw-border-l-4 tw-pl-4 tw-border-light-sky-blue tw-flex tw-cursor-pointer "
+      className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
       <div className="tw-mt-1 tw-inline-block">{item.icon}</div>
-      <div className="tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue hover:tw-bg-light-pale-blue-white hover:tw-no-underline tw-rounded-full xl:tw-text-xl">
+      <div className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl` }>
         {item.label}
       </div>
     </div>
@@ -32,7 +41,7 @@ function SidebarLink({ item, props }) {
 
 function TopSidebar({ props }) {
   return (
-    <div className="tw-flex tw-pb-10 tw-pl-10 tw-pr-5">
+    <div className="tw-flex tw-pb-8 tw-pl-10 tw-pr-5">
       {
         //  <div id="photo"></div>
       }
@@ -50,9 +59,12 @@ function TopSidebar({ props }) {
 
 function BottonSidebar() {
   return (
-    <div className="tw-flex tw-flex-auto tw-border-t-teal-600 tw-pt-4">
-      <div id="logoAndVersion" className="tw-flex tw-flex-1 tw-items-end tw-justify-between tw-pr-2">
-        <div className="tw-flex tw-items-end">
+    <div className="tw-flex tw-flex-1 tw-pt-4">
+      <div
+        id="logoAndVersion"
+        className="tw-flex-1 tw-inline-flex tw-items-end tw-justify-between tw-pr-2 tw-border-solid tw-border-t-4 tw-border-t-light-pale-blue-white"
+      >
+        <div className="tw-inline-flex tw-items-end">
           <img
             className="tw-object-scale-down tw-h-12 tw-w-22"
             src="/logoNoBg.svg"
