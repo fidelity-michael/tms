@@ -46,7 +46,7 @@ function TopSidebar({ props }) {
         className="tw-object-cover tw-h-20 tw-w-20 tw-rounded-full tw-mr-2"
         src="/profile.jpg"
       ></img>
-      <div className="">
+      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center">
         <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
         <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
       </div>
