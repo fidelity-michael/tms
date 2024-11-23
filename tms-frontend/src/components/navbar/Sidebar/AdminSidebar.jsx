@@ -32,7 +32,7 @@ function SidebarLink({ item, props }) {
       className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
       <div className="tw-mt-1 tw-inline-block">{item.icon}</div>
-      <div className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl` }>
+      <div className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl`}>
         {item.label}
       </div>
     </div>
@@ -42,9 +42,6 @@ function SidebarLink({ item, props }) {
 function TopSidebar({ props }) {
   return (
     <div className="tw-flex tw-pb-8 tw-pl-10 tw-pr-5">
-      {
-        //  <div id="photo"></div>
-      }
       <img
         className="tw-object-cover tw-h-20 tw-w-20 tw-rounded-full tw-mr-2"
         src="/profile.jpg"
@@ -59,10 +56,11 @@ function TopSidebar({ props }) {
 
 function BottonSidebar() {
   return (
-    <div className="tw-flex tw-flex-1 tw-pt-4">
+    <div className="tw-flex tw-flex-1 tw-flex-col tw-pt-4">
+      <div className="tw-flex-1 tw-border-light-pale-blue-white tw-border-b-4 tw-border-solid tw-mb-4"></div>
       <div
         id="logoAndVersion"
-        className="tw-flex-1 tw-inline-flex tw-items-end tw-justify-between tw-pr-2 tw-border-solid tw-border-t-4 tw-border-t-light-pale-blue-white"
+        className="tw-inline-flex tw-items-end tw-justify-between tw-pr-2"
       >
         <div className="tw-inline-flex tw-items-end">
           <img
