@@ -3,7 +3,7 @@ import { AdminSidebarLinks } from "./options";
 
 export default function AdminSidebar(props) {
 
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [selectedItem, setSelectedItem] = useState("Dashboard")
 
   const handleSelect = (label) => {
     setSelectedItem(label)
