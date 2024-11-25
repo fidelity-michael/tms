@@ -41,12 +41,12 @@ function SidebarLink({ item, props }) {
 
 function TopSidebar({ props }) {
   return (
-    <div className="tw-flex tw-pb-8 tw-pl-10 tw-pr-5">
+    <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
       <img
-        className="tw-object-cover tw-h-20 tw-w-20 tw-rounded-full tw-mr-2"
+        className="tw-flex tw-flex-1 tw-object-cover tw-h-16 tw-w-16 tw-rounded-full"
         src="/profile.jpg"
       ></img>
-      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center">
+      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2">
         <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
         <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
       </div>
