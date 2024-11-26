@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Fragment } from "react";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  MenuSeparator,
+} from "@headlessui/react";
 import MyNotifications from "../../content/MyNotifications";
 import axios from "axios";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ListIcon from "@mui/icons-material/List";
+import LogoutIcon from "@mui/icons-material/Logout";
 import clsx from "clsx";
 
 export default function AdminTopbar(props) {
@@ -17,7 +26,6 @@ export default function AdminTopbar(props) {
 
   // const [windowHeight, setHeight] = useState(window.innerHeight);
   const [windowWidth, setWidth] = useState(window.innerWidth);
-
 
   window.addEventListener("resize", function () {
     // viewport and full window dimensions will change
@@ -32,7 +40,6 @@ export default function AdminTopbar(props) {
     axios
       .post("/api/auth/logout")
       .then(() => {
-        // console.log("User should be logged out!");
         navigate("/");
       })
       .catch(() => {
@@ -162,6 +169,29 @@ export default function AdminTopbar(props) {
                 >
                   <CalendarMonthIcon />
                   Calendar
+                </button>
+              </MenuItem>
+              <MenuItem>
+                <button className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
+                  <ListIcon />
+                  Activity Log
+                </button>
+              </MenuItem>
+              <MenuItem>
+                <button className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
+                  <SettingsIcon />
+                  Settings
+                </button>
+              </MenuItem>
+
+              <MenuSeparator className="my-1 h-px bg-black" />
+
+              <MenuItem>
+                <button 
+                  onClick={(e) => logout(e.target)}
+                  className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
+                  <LogoutIcon />
+                  Sign out
                 </button>
               </MenuItem>
             </MenuItems>
