@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MyNotifications from "../../content/MyNotifications";
 import axios from "axios";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 export default function AdminTopbar(props) {
   const [notifications, setNotifications] = useState([]);
@@ -67,42 +68,71 @@ export default function AdminTopbar(props) {
 
   return (
     <div className="tw-p-6 tw-bg-light-pale-blue-white">
-      <div className="tw-flex tw-flex-row tw-bg-white tw-rounded-full tw-px-6 tw-py-2 ">
-        <div className="tw-flex-1  tw-text-dark-sky-blue tw-font-extrabold tw-text-3xl ">
+      <div className="tw-flex tw-flex-row tw-bg-white tw-rounded-full tw-px-6 tw-py-3 ">
+        <div className="tw-flex-1 tw-text-dark-sky-blue tw-font-extrabold tw-text-3xl">
           Academic Year: 2024-2025 | Semester: Fall
         </div>
-        <div className="tw-relative tw-inline-block tw-text-left tw-items-center tw-cursor-pointer"> {/*Notifications Bell*/}
-          <a
-            className=""
-            href="#/"
-            id="alertsDropdown"
-            role="button"
-            onClick={() => resetBadge()}
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <NotificationsIcon
-              dropdown-toggle="alertsDropdown"
-              className="tw-text-dark-sky-blue"
-            />
-            {badge > 0 && (
-              <span className="badge badge-danger badge-counter">
-                {badge > 0 ? (badge > 9 ? "9+" : badge) : null}
-              </span>
-            )}
-          </a>
-          <div
-            id="myNotifications"
-            className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-            style={{ display: "none" }}
-          >
-            <MyNotifications
-              userId={props.userId}
-              notifications={notifications}
-              setNotifications={setNotifications}
-              badge={badge}
-              setBadge={setBadge}
-            />
+        <div id="bellEmail" className="tw-flex tw-items-center">
+          {/*Notifications Bell*/}
+          <div className="tw-relative tw-inline-block tw-text-left tw-items-center tw-cursor-pointer">
+            <a
+              className=""
+              href="#/"
+              id="alertsDropdown"
+              role="button"
+              onClick={() => resetBadge()}
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <NotificationsIcon
+                dropdown-toggle="alertsDropdown"
+                className="tw-text-dark-sky-blue"
+              />
+              {badge > 0 && (
+                <span className="badge badge-danger badge-counter">
+                  {badge > 0 ? (badge > 9 ? "9+" : badge) : null}
+                </span>
+              )}
+            </a>
+            <div
+              id="myNotifications"
+              className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              style={{ display: "none" }}
+            >
+              <MyNotifications
+                userId={props.userId}
+                notifications={notifications}
+                setNotifications={setNotifications}
+                badge={badge}
+                setBadge={setBadge}
+              />
+            </div>
+          </div>
+
+          {/*Email portion*/}
+          <div className="tw-relative tw-inline-block tw-text-left">
+            <div
+              className="tw-inline-flex tw-w-full"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby=""
+              tabIndex={-1}
+            >
+              <div
+                className="tw-flex tw-justify-end tw-right-0 tw-ml-1 tw-z-10 tw-origin-right tw-rounded-md focus:tw-outline-none tw-cursor-pointer"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="arrowIcon"
+                tabIndex={-1}
+              >
+                <span className="tw-text-dark-sky-blue">
+                  {props.email.length > 0 ? props.email : "Administrator"}
+                </span>
+                <a id="arrowIcon">
+                  <KeyboardArrowRightIcon className="tw-text-dark-sky-blue" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
