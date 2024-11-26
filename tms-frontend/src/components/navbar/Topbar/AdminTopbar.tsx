@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import MyNotifications from "../../content/MyNotifications";
 import axios from "axios";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 export default function AdminTopbar(props) {
   const [notifications, setNotifications] = useState([]);
@@ -110,30 +113,50 @@ export default function AdminTopbar(props) {
           </div>
 
           {/*Email portion*/}
-          <div className="tw-relative tw-inline-block tw-text-left">
-            <div
-              className="tw-inline-flex tw-w-full"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby=""
-              tabIndex={-1}
+
+          <Menu>
+            <MenuButton
+              className={
+                "tw-text-dark-sky-blue tw-inline-flex tw-items-center tw-gap-2 tw-py-1.5 tw-px-3 tw-rounded-md tw-text-sm/6 tw-font-semibold  tw-shadow-white/10 focus:tw-outline-none data-[hover]:tw-bg-light-pale-blue-white data-[open]:tw-bg-light-pale-blue-white data-[focus]:tw-outline-1 data-[focus]:tw-outline-white"
+              }
             >
-              <div
-                className="tw-flex tw-justify-end tw-right-0 tw-ml-1 tw-z-10 tw-origin-right tw-rounded-md focus:tw-outline-none tw-cursor-pointer"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="arrowIcon"
-                tabIndex={-1}
-              >
-                <span className="tw-text-dark-sky-blue">
-                  {props.email.length > 0 ? props.email : "Administrator"}
-                </span>
-                <a id="arrowIcon">
-                  <KeyboardArrowRightIcon className="tw-text-dark-sky-blue" />
-                </a>
-              </div>
-            </div>
-          </div>
+              {props.email.length > 0 ? props.email : "Administrator"}
+              <a id="arrowIcon">
+                <KeyboardArrowRightIcon className="tw-text-dark-sky-blue" />
+              </a>
+            </MenuButton>
+            <MenuItems
+              transition
+              anchor="bottom end"
+              className={
+                "tw-text-dark-sky-blue tw-w-52 tw-origin-top-right tw-rounded-xl tw-border tw-border-white/5 tw-bg-white/5 tw-p-1 tw-text-sm/6  tw-transition tw-duration-100 tw-ease-out [--anchor-gap:var(--spacing-1)] focus:tw-outline-none data-[open]:tw-bg-white data-[closed]:tw-scale-95 data-[closed]:tw-opacity-0"
+              }
+            >
+              <MenuItem>
+                <button
+                  onClick={() => {
+                    props.onSelect("My Roles");
+                  }}
+                  className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 hover:tw-bg-light-pale-blue-white data-[focus]:tw-bg-light-pale-blue-white"
+                >
+                  <AccountCircleIcon />
+                  My Roles
+                </button>
+              </MenuItem>
+
+              <MenuItem>
+                <button
+                  onClick={() => {
+                    props.onSelect("My Calendar");
+                  }}
+                  className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white"
+                >
+                  <CalendarMonthIcon />
+                  Calendar
+                </button>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
         </div>
       </div>
     </div>
