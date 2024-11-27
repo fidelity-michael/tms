@@ -6,7 +6,7 @@ import './content.css';
 export default function MyRoles({userId, currentRole}) {;
     
     const [roles, setRoles] = useState([]);
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     //fetch user's data
     useEffect(() => {
@@ -29,11 +29,7 @@ export default function MyRoles({userId, currentRole}) {;
     }
 
     function changeRolePage(role){
-        
-        history.push({
-            pathname: '/'+role,
-            state: "changeRole",
-        });
+        navigate('/'+role, { state: "changeRole" });
     }
 
     return (

@@ -7,7 +7,7 @@ export default function ProfessorTopbar(props) {
 
     const [notifications, setNotifications] = useState([]);
     const [badge, setBadge] = useState(0);
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     // const [windowHeight, setHeight] = useState(window.innerHeight);
     const [windowWidth, setWidth] = useState(window.innerWidth);
@@ -25,7 +25,7 @@ export default function ProfessorTopbar(props) {
         axios.post('/api/auth/logout')
             .then(data => {
                 // console.log("User should be logged out!");
-                history.push("/");
+                navigate("/");
             })
             .catch(err => {
                 console.log("An error occurred: User is not logged out")
