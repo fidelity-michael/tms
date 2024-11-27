@@ -83,9 +83,9 @@ export default function AdminTopbar(props) {
   return (
     <div className="tw-p-6 tw-bg-light-pale-blue-white">
       <div className="tw-flex tw-flex-row tw-bg-white tw-rounded-full tw-px-6 tw-py-3 ">
-        <div className="tw-flex-1 tw-text-dark-sky-blue tw-font-extrabold tw-text-md md:tw-text-xl xl:tw-text-3xl">
-          <AcademicYear />
-        </div>
+
+        <AcademicYear />
+
         <div id="bellEmail" className="tw-flex tw-items-center">
           {/*Notifications Bell*/}
           <div className="tw-relative tw-inline-block tw-text-left tw-items-center tw-cursor-pointer">
@@ -188,9 +188,10 @@ export default function AdminTopbar(props) {
               <MenuSeparator className="my-1 h-px bg-black" />
 
               <MenuItem>
-                <button 
+                <button
                   onClick={(e) => logout(e.target)}
-                  className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
+                  className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white"
+                >
                   <LogoutIcon />
                   Sign out
                 </button>

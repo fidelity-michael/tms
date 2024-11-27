@@ -16,7 +16,7 @@ const AcademicYear: React.FC = () => {
   const semester = currentMonth <= 5 ? "Spring" : "Fall";
 
   return (
-    <div>
+    <div className="tw-flex tw-flex-1 tw-items-center tw-text-dark-sky-blue tw-font-extrabold tw-text-md md:tw-text-xl xl:tw-text-3xl">
       <p>
         Academic Year: {academicYear} | Semester: {semester}
       </p>
