@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import SmallTable from "./SmallTable";
 
 function AdminDashboard({ userId, setPage }) {
   const [events, setEvents] = useState([]);
@@ -18,6 +19,10 @@ function AdminDashboard({ userId, setPage }) {
   const [secretariats, setSecretariats] = useState("");
 
   const componentIsMounted = useRef(true);
+
+  const userHeaders = ["Role", "First Name", "Last Name", "Active"];
+  const [userTableData, setUserTableData] = useState([])
+  const thesisHeaders = ["Thesis Title", "Date", "Assigned To", "Active"];
 
   useEffect(() => {
     const getActiveTheses = async () => {
@@ -56,8 +61,15 @@ function AdminDashboard({ userId, setPage }) {
         .get("/api/data/users")
         .then((res) => {
           setUsers(res.data.total);
+          const final_data = res.data.results.map((el) => ({
+            role: el.role,
+            first_name: el.first_name,
+            last_name: el.last_name,
+            active: el.status,
+          }));
 
-          console.log("SEARCHES FOR USERS?");
+          setUserTableData(final_data)
+
           var studentsNumber = 0;
           var professorsNumber = 0;
           var adminsNumber = 0;
@@ -92,7 +104,7 @@ function AdminDashboard({ userId, setPage }) {
     }
 
     return () => {
-      componentIsMounted.current = true
+      componentIsMounted.current = true;
       // componentIsMounted.current = false
     };
   }, []);
@@ -179,126 +191,140 @@ function AdminDashboard({ userId, setPage }) {
   }
 
   return (
-    <div>
-      <div style={{ display: "inline-block" }}>
-        <div
-          className="dashboardAdminDiv z-depth-2"
-          type="button"
-          style={{ float: "left" }}
-        >
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Users");
-            }}
-          >
-            <b>Users</b>: {users}
-          </h3>
-          <h5>Roles:</h5>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Users");
-            }}
-          >
-            Students: {students}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Users");
-            }}
-          >
-            Professors: {professors}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Users");
-            }}
-          >
-            Secretariats: {secretariats}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Users");
-            }}
-          >
-            Administrators: {admins}
-          </h3>
-        </div>
-
-        <div
-          className="dashboardAdminDiv z-depth-2"
-          type="button"
-          style={{ float: "left" }}
-        >
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Assigned Theses");
-            }}
-          >
-            <b>Theses: </b>
-            {theses}
-          </h3>
-          <h5>Status:</h5>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Assigned Theses");
-            }}
-          >
-            Active: {activeTheses}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Assigned Theses");
-            }}
-          >
-            Completed: {completedTheses}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Assigned Theses");
-            }}
-          >
-            Graded: {gradedTheses}
-          </h3>
-          <h3
-            className="adminDashboardInfo"
-            onClick={() => {
-              setPage("Assigned Theses");
-            }}
-          >
-            Archived: {archivedTheses}
-          </h3>
-        </div>
-      </div>
-
-      <div
-        className="dashboardEventsDiv z-depth-2"
-        type="button"
-        onClick={() => {
-          setPage("My Calendar");
-        }}
-      >
-        <h3>
-          <b>Upcoming Events: </b>
-        </h3>
-        {loadingEvents ? (
-          loading()
-        ) : events.length ? (
-          renderUpcomingEvents()
-        ) : (
-          <p>No upcoming events</p>
-        )}
-      </div>
+    <div className="tw-flex tw-mt-6">
+      {
+        <SmallTable
+          caption={{ name: "Users", amount: users }}
+          headerTitles={userHeaders}
+          data={userTableData}
+        />
+      }
     </div>
   );
+
+  {
+    // return (
+    //   <div>
+    //     <div style={{ display: "inline-block" }}>
+    //       <div
+    //         className="dashboardAdminDiv z-depth-2"
+    //         type="button"
+    //         style={{ float: "left" }}
+    //       >
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Users");
+    //           }}
+    //         >
+    //           <b>Users</b>: {users}
+    //         </h3>
+    //         <h5>Roles:</h5>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Users");
+    //           }}
+    //         >
+    //           Students: {students}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Users");
+    //           }}
+    //         >
+    //           Professors: {professors}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Users");
+    //           }}
+    //         >
+    //           Secretariats: {secretariats}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Users");
+    //           }}
+    //         >
+    //           Administrators: {admins}
+    //         </h3>
+    //       </div>
+    //
+    //       <div
+    //         className="dashboardAdminDiv z-depth-2"
+    //         type="button"
+    //         style={{ float: "left" }}
+    //       >
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Assigned Theses");
+    //           }}
+    //         >
+    //           <b>Theses: </b>
+    //           {theses}
+    //         </h3>
+    //         <h5>Status:</h5>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Assigned Theses");
+    //           }}
+    //         >
+    //           Active: {activeTheses}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Assigned Theses");
+    //           }}
+    //         >
+    //           Completed: {completedTheses}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Assigned Theses");
+    //           }}
+    //         >
+    //           Graded: {gradedTheses}
+    //         </h3>
+    //         <h3
+    //           className="adminDashboardInfo"
+    //           onClick={() => {
+    //             setPage("Assigned Theses");
+    //           }}
+    //         >
+    //           Archived: {archivedTheses}
+    //         </h3>
+    //       </div>
+    //     </div>
+    //
+    //     <div
+    //       className="dashboardEventsDiv z-depth-2"
+    //       type="button"
+    //       onClick={() => {
+    //         setPage("My Calendar");
+    //       }}
+    //     >
+    //       <h3>
+    //         <b>Upcoming Events: </b>
+    //       </h3>
+    //       {loadingEvents ? (
+    //         loading()
+    //       ) : events.length ? (
+    //           renderUpcomingEvents()
+    //         ) : (
+    //             <p>No upcoming events</p>
+    //           )}
+    //     </div>
+    //   </div>
+    // );
+  }
 }
 
 export default AdminDashboard;
