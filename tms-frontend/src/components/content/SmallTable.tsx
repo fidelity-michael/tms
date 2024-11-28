@@ -6,10 +6,10 @@ interface Caption {
 }
 
 interface UserData {
-  role?: string[];
-  first_name?: string;
-  last_name?: string;
-  active?: string;
+  first?: string[];
+  second?: string;
+  third?: string;
+  fourth?: string;
 }
 
 interface smallTableProps {
@@ -59,23 +59,23 @@ export default function SmallTable({
                   scope="row"
                   className="tw-text-center tw-px-6 tw-py-4 tw-font-medium tw-text-gray-900 tw-whitespace-nowrap tw-capitalize"
                 >
-                  {e.role}
+                  {e.first}
                 </th>
                 <td className="tw-px-4 tw-py-2 tw-text-center">
-                  {e.first_name}
+                  {e.second}
                 </td>
                 <td className="tw-px-4 tw-py-2 tw-text-center">
-                  {e.last_name}
+                  {e.third}
                 </td>
                 <td className="tw-px-4 tw-py-2 tw-flex tw-text-center tw-items-center tw-justify-center tw-align-middle">
                   <div
                     className={`tw-flex tw-w-10 tw-h-10 tw-rounded-full tw-items-center tw-justify-center  ${
-                      e.active === "active"
+                      e.fourth === "active"
                         ? "tw-bg-green-correct"
                         : "tw-bg-red-incorrect"
                     }`}
                   >
-                    {e.active === "active" ? "Yes" : "No"}
+                    {e.fourth === "active" ? "Yes" : "No"}
                   </div>
                 </td>
               </tr>
