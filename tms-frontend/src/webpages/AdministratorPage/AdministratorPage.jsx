@@ -127,12 +127,11 @@ export default function AdministratorPage() {
     return (
       <div id="wrapper" className='tw-flex tw-h-full'>
         <Sidebar role={"Admin"} name={fullName} onSelect={page => setPage(page)} />
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
+        <div id="content-wrapper" className="tw-flex tw-flex-col">
+          <div id="content" className='tw-bg-light-pale-blue-white'>
             <Topbar userId={userId} email={email} onSelect={page => setPage(page)}/>
-            <div className="container-fluid">
-              {/* <span>{userId}</span> <hr /> */}
-              <b><p className="text-gray-800">{page}</p></b>
+            <div className="tw-flex tw-flex-col tw-m-10">
+              <p className="tw-flex tw-text-dark-sky-blue tw-font-bold tw-text-2xl xl:tw-text-3xl">{(page === "Dashboard") ? "Overview" : ""}</p>
               {(page === "Dashboard") ? <AdminDashboard userId={userId} setPage={setPage}/> : null}
               {(page === "Users") ?
                 <div>
