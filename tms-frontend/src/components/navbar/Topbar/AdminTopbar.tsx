@@ -91,7 +91,6 @@ export default function AdminTopbar(props) {
           <div className="tw-relative tw-inline-block tw-text-left tw-items-center tw-cursor-pointer">
             <a
               className=""
-              href="#/"
               id="alertsDropdown"
               role="button"
               onClick={() => resetBadge()}
@@ -137,7 +136,7 @@ export default function AdminTopbar(props) {
                   <KeyboardArrowRightIcon
                     className={clsx(
                       active && "tw-rotate-90",
-                      "tw-transition-all tw-ease-in-out tw-delay-300 tw-text-dark-sky-blue",
+                      "tw-transition-all tw-ease-in-out tw-duration-500 tw-delay-300 tw-text-dark-sky-blue",
                     )}
                   />
                 </a>
