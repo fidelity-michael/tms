@@ -23,8 +23,6 @@ export default function SmallTable({
   headerTitles,
   data,
 }: smallTableProps) {
-  console.log("Are data OK?: ", data);
-
   return (
     <div className="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
       <table className="tw-w-full tw-text-sm tw-text-dark-sky-blue">
@@ -52,7 +50,7 @@ export default function SmallTable({
         </thead>
         {
           <tbody>
-            {data.slice(0,3).map((e, index) => (
+            {data.slice(0, 3).map((e, index) => (
               <tr
                 key={index}
                 className="tw-bg-white tw-border-b tw-border-light-sky-blue"
@@ -63,14 +61,22 @@ export default function SmallTable({
                 >
                   {e.role}
                 </th>
-                <td className="tw-px-4 tw-py-2 tw-text-center">{e.first_name}</td>
-                <td className="tw-px-4 tw-py-2 tw-text-center">{e.last_name}</td>
+                <td className="tw-px-4 tw-py-2 tw-text-center">
+                  {e.first_name}
+                </td>
+                <td className="tw-px-4 tw-py-2 tw-text-center">
+                  {e.last_name}
+                </td>
                 <td className="tw-px-4 tw-py-2 tw-flex tw-text-center tw-items-center tw-justify-center tw-align-middle">
                   <div
                     className={`tw-flex tw-w-10 tw-h-10 tw-rounded-full tw-items-center tw-justify-center  ${
-                      (e.active === "active") ? "tw-bg-green-correct" : "tw-bg-red-incorrect"
+                      e.active === "active"
+                        ? "tw-bg-green-correct"
+                        : "tw-bg-red-incorrect"
                     }`}
-                  >{(e.active === "active" ) ? "Yes" : "No"}</div>
+                  >
+                    {e.active === "active" ? "Yes" : "No"}
+                  </div>
                 </td>
               </tr>
             ))}
