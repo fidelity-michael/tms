@@ -18,21 +18,43 @@ function AdminDashboard({ userId, setPage }) {
   const [admins, setAdmins] = useState("");
   const [secretariats, setSecretariats] = useState("");
 
+  const [userTableData, setUserTableData] = useState([]);
+  const [thesesTableData, setThesesTableData] = useState([]);
+
   const componentIsMounted = useRef(true);
 
   const userHeaders = ["Role", "First Name", "Last Name", "Active"];
-  const [userTableData, setUserTableData] = useState([])
   const thesisHeaders = ["Thesis Title", "Date", "Assigned To", "Active"];
 
   useEffect(() => {
     const getActiveTheses = async () => {
       axios
         .get("/api/assigned_theses")
-        .then((res) => {
+        .then(async (res) => {
           var activeTheses = 0;
           var archivedTheses = 0;
           var completedTheses = 0;
           var gradedTheses = 0;
+
+          const final_data = await Promise.all(
+            res.data.map(async (el) => {
+              let thesis = await axios.get("/api/theses/" + el.thesis);
+              let student = await axios.get("/api/users/" + el.student);
+              let student_full_name =
+                student.data.first_name + " " + student.data.last_name;
+
+              let date = convertToGreekDate(thesis.data[0].date);
+
+              return {
+                first: thesis.data[0].title,
+                second: date,
+                third: student_full_name,
+                fourth: thesis.data[0].status,
+              };
+            }),
+          );
+
+          setThesesTableData(final_data);
 
           Array.isArray(res.data) &&
             res.data.map((thesis) => {
@@ -62,13 +84,13 @@ function AdminDashboard({ userId, setPage }) {
         .then((res) => {
           setUsers(res.data.total);
           const final_data = res.data.results.map((el) => ({
-            role: el.role,
-            first_name: el.first_name,
-            last_name: el.last_name,
-            active: el.status,
+            first: el.role,
+            second: el.first_name,
+            third: el.last_name,
+            fourth: el.status,
           }));
 
-          setUserTableData(final_data)
+          setUserTableData(final_data);
 
           var studentsNumber = 0;
           var professorsNumber = 0;
@@ -179,6 +201,15 @@ function AdminDashboard({ userId, setPage }) {
     }
   }
 
+  /**
+   * Convert from database date format to greek style format (DD/MM/YYYY)
+    * @param {string} dateString 
+    **/
+  function convertToGreekDate(dateString){
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB'); // "30/10/2024"
+  }
+
   function loading() {
     return (
       <p
@@ -191,14 +222,28 @@ function AdminDashboard({ userId, setPage }) {
   }
 
   return (
-    <div className="tw-flex tw-mt-6">
-      {
-        <SmallTable
-          caption={{ name: "Users", amount: users }}
-          headerTitles={userHeaders}
-          data={userTableData}
-        />
-      }
+    <div className="tw-flex">
+      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8 tw-mt-6">
+        {
+          <div>
+            <SmallTable
+              caption={{ name: "Users", amount: users }}
+              headerTitles={userHeaders}
+              data={userTableData}
+            />
+          </div>
+        }
+        {
+          <div>
+            <SmallTable
+              caption={{ name: "Assigned Theses", amount: theses }}
+              headerTitles={thesisHeaders}
+              data={thesesTableData}
+            />
+          </div>
+        }
+      </div>
+      <div className="">Calendar</div>
     </div>
   );
 
