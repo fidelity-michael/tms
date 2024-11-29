@@ -258,7 +258,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue">
+        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-py-2 tw-px-4">
           <Calendar bordered />
         </div>
       }
