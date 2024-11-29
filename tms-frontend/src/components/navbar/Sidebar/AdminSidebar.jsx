@@ -1,21 +1,28 @@
 import { useState } from "react";
 import { AdminSidebarLinks } from "./options";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function AdminSidebar(props) {
-
-  const [selectedItem, setSelectedItem] = useState("Dashboard")
+  const [selectedItem, setSelectedItem] = useState("Dashboard");
 
   const handleSelect = (label) => {
-    setSelectedItem(label)
+    setSelectedItem(label);
     props.onSelect(label);
-  }
+  };
 
   return (
     <div className="tw-sticky tw-top-0 tw-flex tw-flex-col tw-h-screen tw-py-5 tw-w-80">
       <TopSidebar props={props} />
       <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6 tw-pt-8 tw-border-t-4 tw-border-light-pale-blue-white">
         {AdminSidebarLinks.map((item) => (
-          <SidebarLink key={item.key} item={item} props={{onSelect: handleSelect, isSelected: selectedItem === item.label}} />
+          <SidebarLink
+            key={item.key}
+            item={item}
+            props={{
+              onSelect: handleSelect,
+              isSelected: selectedItem === item.label,
+            }}
+          />
         ))}
       </div>
       <BottonSidebar />
@@ -32,7 +39,9 @@ function SidebarLink({ item, props }) {
       className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
       <div className="tw-mt-1 tw-inline-block">{item.icon}</div>
-      <div className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl`}>
+      <div
+        className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl`}
+      >
         {item.label}
       </div>
     </div>
@@ -42,10 +51,9 @@ function SidebarLink({ item, props }) {
 function TopSidebar({ props }) {
   return (
     <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
-      <img
-        className="tw-flex tw-flex-1 tw-object-cover tw-h-16 tw-w-16 tw-rounded-full"
-        src="/profile.jpg"
-      ></img>
+      <div className="tw-flex tw-flex-1 tw-items-center">
+        <AccountCircleIcon style={{height: "4rem", width: "4rem"}} className="tw-flex tw-flex-1 tw-text-dark-sky-blue"/>
+      </div>
       <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2">
         <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
         <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
