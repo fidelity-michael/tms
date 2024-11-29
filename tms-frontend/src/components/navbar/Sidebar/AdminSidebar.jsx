@@ -50,9 +50,9 @@ function TopSidebar({ props }) {
   return (
     <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
       <div className="tw-flex tw-flex-1 tw-items-center">
-        <AccountCircleIcon style={{height: "4rem", width: "4rem"}} className="tw-flex tw-flex-1 tw-text-dark-sky-blue"/>
+        <AccountCircleIcon style={{height: "5rem", width: "5rem"}} className="tw-flex tw-flex-1 tw-text-dark-sky-blue"/>
       </div>
-      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2">
+      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
         <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
         <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
       </div>
