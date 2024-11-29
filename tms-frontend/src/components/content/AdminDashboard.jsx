@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
+import { Calendar } from 'rsuite';
 
 function AdminDashboard({ userId, setPage , setSelectedItem}) {
   const [events, setEvents] = useState([]);
@@ -256,7 +257,10 @@ function AdminDashboard({ userId, setPage , setSelectedItem}) {
           </div>
         }
       </div>
-      <div className="">Calendar</div>
+
+      {
+        <div className="tw-flex tw-flex-1"><Calendar bordered /></div>
+      }
     </div>
   );
 
