@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
 
-function AdminDashboard({ userId, setPage }) {
+function AdminDashboard({ userId, setPage , setSelectedItem}) {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
@@ -203,11 +203,11 @@ function AdminDashboard({ userId, setPage }) {
 
   /**
    * Convert from database date format to greek style format (DD/MM/YYYY)
-    * @param {string} dateString 
-    **/
-  function convertToGreekDate(dateString){
+   * @param {string} dateString
+   **/
+  function convertToGreekDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB'); // "30/10/2024"
+    return date.toLocaleDateString("en-GB"); // "30/10/2024"
   }
 
   function loading() {
@@ -225,7 +225,14 @@ function AdminDashboard({ userId, setPage }) {
     <div className="tw-flex">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8 tw-mt-6">
         {
-          <div>
+          <div
+            onClick={() => {
+              setPage("Users");
+              setSelectedItem("Users");
+            }}
+            className="tw-cursor-pointer"
+
+          >
             <SmallTable
               caption={{ name: "Users", amount: users }}
               headerTitles={userHeaders}
@@ -234,7 +241,13 @@ function AdminDashboard({ userId, setPage }) {
           </div>
         }
         {
-          <div>
+          <div 
+            onClick={() => {
+              setPage("Assigned Theses");
+              setSelectedItem("Assigned Theses");
+            }}
+            className="tw-cursor-pointer"
+          >
             <SmallTable
               caption={{ name: "Assigned Theses", amount: theses }}
               headerTitles={thesisHeaders}

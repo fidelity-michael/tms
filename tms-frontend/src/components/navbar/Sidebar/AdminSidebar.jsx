@@ -3,10 +3,8 @@ import { AdminSidebarLinks } from "./options";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function AdminSidebar(props) {
-  const [selectedItem, setSelectedItem] = useState("Dashboard");
 
   const handleSelect = (label) => {
-    setSelectedItem(label);
     props.onSelect(label);
   };
 
@@ -20,7 +18,7 @@ export default function AdminSidebar(props) {
             item={item}
             props={{
               onSelect: handleSelect,
-              isSelected: selectedItem === item.label,
+              isSelected: props.selectedItem === item.label,
             }}
           />
         ))}
