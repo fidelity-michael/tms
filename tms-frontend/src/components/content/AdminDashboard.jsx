@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
-import { Calendar } from 'rsuite';
+import { Calendar } from "rsuite";
 
-function AdminDashboard({ userId, setPage , setSelectedItem}) {
+function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
@@ -223,7 +223,7 @@ function AdminDashboard({ userId, setPage , setSelectedItem}) {
   }
 
   return (
-    <div className="tw-flex">
+    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 ">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8 tw-mt-6">
         {
           <div
@@ -232,7 +232,6 @@ function AdminDashboard({ userId, setPage , setSelectedItem}) {
               setSelectedItem("Users");
             }}
             className="tw-cursor-pointer"
-
           >
             <SmallTable
               caption={{ name: "Users", amount: users }}
@@ -242,7 +241,7 @@ function AdminDashboard({ userId, setPage , setSelectedItem}) {
           </div>
         }
         {
-          <div 
+          <div
             onClick={() => {
               setPage("Assigned Theses");
               setSelectedItem("Assigned Theses");
@@ -259,7 +258,9 @@ function AdminDashboard({ userId, setPage , setSelectedItem}) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1"><Calendar bordered /></div>
+        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue">
+          <Calendar bordered />
+        </div>
       }
     </div>
   );
