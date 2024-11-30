@@ -53,7 +53,7 @@ export default function SmallTable({
             {data.slice(0, 3).map((e, index) => (
               <tr
                 key={index}
-                className="tw-bg-white tw-border-b tw-border-light-sky-blue"
+                className="tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white"
               >
                 <th
                   scope="row"
