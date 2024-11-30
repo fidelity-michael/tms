@@ -22,7 +22,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
 
   const [userTableData, setUserTableData] = useState([]);
   const [thesesTableData, setThesesTableData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const componentIsMounted = useRef(true);
 
@@ -285,39 +285,6 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
     );
   };
 
-  /**
-   * TODO: Fix this
-   */
-  function getEventsDates() {
-    let currentDate = Date.now();
-    let colorDays = [];
-    Array.isArray(events) &&
-      events.map((ev) => {
-        var date = new Date(ev.date);
-
-        var formattedDate = date.toLocaleDateString();
-
-        colorDays.push(date.getDate());
-        var minutes = date.getMinutes();
-        var hours = date.getHours();
-
-        if (hours < 10) hours = "0" + hours;
-        if (minutes < 10) minutes = "0" + minutes;
-
-        // return (
-        //   <li key={ev._id} className="liEvents">
-        //     <b> {ev.title} </b> at{" "}
-        //     <b>
-        //       {" "}
-        //       {hours}:{minutes} {formattedDate}
-        //     </b>
-        //   </li>
-        // );
-      });
-
-    return colorDays;
-  }
-
   function loading() {
     return (
       <p
@@ -378,21 +345,6 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
             />
             <TodoList date={selectedDate} />
           </VStack>
-          {
-            // <Calendar
-            //   bordered
-            //   cellClassName={(date) =>
-            //     getEventsDates().includes(date.getDate())
-            //       ? "tw-bg-light-sky-blue"
-            //       : undefined
-            //   }
-            //   renderCell={(date) => {
-            //     // console.log("Rendering cell for date:", date);
-            //     renderCells(date);
-            //   }}
-            //   onSelect={handleSelectedDate}
-            // />
-          }
         </div>
       }
     </div>
