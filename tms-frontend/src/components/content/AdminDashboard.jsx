@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
-import { Calendar } from "rsuite";
+import { Badge, Calendar, HStack, List } from "rsuite";
 
 function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
@@ -21,6 +21,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
 
   const [userTableData, setUserTableData] = useState([]);
   const [thesesTableData, setThesesTableData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const componentIsMounted = useRef(true);
 
@@ -138,7 +139,6 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
       await axios
         .get("/api/calendarEvents/" + userId)
         .then((res) => {
-          console.log(res.data);
           sortByDate(res.data);
           setEvents(res.data);
           setLoadingEvents(false);
@@ -211,6 +211,107 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
     return date.toLocaleDateString("en-GB"); // "30/10/2024"
   }
 
+  const handleSelectedDate = (date) => {
+    setSelectedDate(date);
+  };
+
+  function getEventsDays(date) {
+    if (!date) return [];
+
+    let formattedDate = date.toLocaleDateString();
+
+    // Filter the events that match the input date
+    const matchingEvents = events.filter((event) => {
+      const eventDate = new Date(event.date).toLocaleDateString();
+      return eventDate === formattedDate;
+    });
+
+    // Map the matching events to extract their titles and times
+    return matchingEvents.map((event) => ({
+      title: event.title,
+      time: formatTime(event.date),
+    }));
+  }
+
+  /**
+   * Formats time from a date object in this form: (2024-11-29T22:00:00.000Z) and returns
+   * the {hour minute and am/pm format}
+   * @returns the hour, minutes and am/pm from date object
+   */
+  function formatTime(dateString) {
+    const date = new Date(dateString);
+    let hours = date.getHours(); // Get hours (0-23)
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // Get minutes (pad single digits)
+
+    // Determine AM or PM and adjust hours for 12-hour format
+    const amPm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+
+    return `${hours}:${minutes} ${amPm}`;
+  }
+
+  function renderCells(date) {
+    const list = getEventsDays(date);
+
+    if (list.length) {
+      return <Badge className="calendar-todo-item-badge" color="orange" />;
+    }
+
+    return null;
+  }
+
+  const TodoList = ({ date }) => {
+    const list = getEventsDays(date);
+
+    if (!list.length) {
+      return null;
+    }
+
+    return (
+      <List style={{ flex: 1 }} bordered>
+        {list.map((item, index) => (
+          <List.Item key={index} index={index}>
+            <div>{item.time}</div>
+            <div>{item.title}</div>
+          </List.Item>
+        ))}
+      </List>
+    );
+  };
+
+  /**
+   * TODO: Fix this
+   */
+  function getEventsDates() {
+    let currentDate = Date.now();
+    let colorDays = [];
+    Array.isArray(events) &&
+      events.map((ev) => {
+        var date = new Date(ev.date);
+
+        var formattedDate = date.toLocaleDateString();
+
+        colorDays.push(date.getDate());
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        if (hours < 10) hours = "0" + hours;
+        if (minutes < 10) minutes = "0" + minutes;
+
+        // return (
+        //   <li key={ev._id} className="liEvents">
+        //     <b> {ev.title} </b> at{" "}
+        //     <b>
+        //       {" "}
+        //       {hours}:{minutes} {formattedDate}
+        //     </b>
+        //   </li>
+        // );
+      });
+
+    return colorDays;
+  }
+
   function loading() {
     return (
       <p
@@ -259,7 +360,34 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
 
       {
         <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-py-2 tw-px-4">
-          <Calendar bordered />
+          <HStack
+            spacing={10}
+            style={{ height: 320 }}
+            alignItems="flex-start"
+            wrap
+          >
+            <Calendar
+              compact
+              renderCell={renderCells}
+              onSelect={handleSelectedDate}
+            />
+            <TodoList date={selectedDate} />
+          </HStack>
+          {
+            // <Calendar
+            //   bordered
+            //   cellClassName={(date) =>
+            //     getEventsDates().includes(date.getDate())
+            //       ? "tw-bg-light-sky-blue"
+            //       : undefined
+            //   }
+            //   renderCell={(date) => {
+            //     // console.log("Rendering cell for date:", date);
+            //     renderCells(date);
+            //   }}
+            //   onSelect={handleSelectedDate}
+            // />
+          }
         </div>
       }
     </div>
