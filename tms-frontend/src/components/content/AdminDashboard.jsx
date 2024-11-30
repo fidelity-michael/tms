@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
 import { Badge, Calendar, HStack, List, Stack, VStack } from "rsuite";
+import InfoIcon from '@mui/icons-material/Info';
 
 function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
@@ -265,15 +266,18 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
     const list = getEventsDays(date);
 
     if (!list.length) {
-      return null;
+      return <div className="tw-text-dark-sky-blue tw-flex tw-flex-1 tw-items-center tw-p-4 tw-ml-2 tw-gap-2">
+        <InfoIcon />
+        <p>No events scheduled</p>
+      </div>
     }
 
     return (
       <List bordered>
         {list.map((item, index) => (
           <List.Item key={index} index={index}>
-            <div>{item.time}</div>
-            <div>{item.title}</div>
+            <div className="tw-text-light-sky-blue">{item.time}</div>
+            <div className="tw-text-dark-sky-blue">{item.title}</div>
           </List.Item>
         ))}
       </List>
