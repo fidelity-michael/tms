@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
-import { Badge, Calendar, HStack, List } from "rsuite";
+import { Badge, Calendar, HStack, List, Stack, VStack } from "rsuite";
 
 function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
@@ -212,6 +212,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   }
 
   const handleSelectedDate = (date) => {
+    console.log("date", date);
     setSelectedDate(date);
   };
 
@@ -268,7 +269,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
     }
 
     return (
-      <List style={{ flex: 1 }} bordered>
+      <List bordered>
         {list.map((item, index) => (
           <List.Item key={index} index={index}>
             <div>{item.time}</div>
@@ -276,6 +277,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
           </List.Item>
         ))}
       </List>
+
     );
   };
 
@@ -359,12 +361,11 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-py-2 tw-px-4">
-          <HStack
+        <div className="tw-flex tw-flex-1 tw-items-start tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6  tw-px-4">
+          <VStack
             spacing={10}
-            style={{ height: 320 }}
-            alignItems="flex-start"
-            wrap
+            alignItems="stretch"
+            justifyContent="center"
           >
             <Calendar
               compact
@@ -372,7 +373,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
               onSelect={handleSelectedDate}
             />
             <TodoList date={selectedDate} />
-          </HStack>
+          </VStack>
           {
             // <Calendar
             //   bordered
