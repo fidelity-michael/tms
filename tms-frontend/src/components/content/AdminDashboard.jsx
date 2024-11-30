@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SmallTable from "./SmallTable";
 import { Badge, Calendar, HStack, List, Stack, VStack } from "rsuite";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 
 function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
@@ -236,8 +236,8 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   }
 
   /**
-   * Formats time from a date object in this form: (2024-11-29T22:00:00.000Z) and returns
-   * the {hour minute and am/pm format}
+   * Formats time from a date object in this form: (2024-09-29T22:00:00.000Z) and returns
+   * the {hour minutes and am/pm format}
    * @returns the hour, minutes and am/pm from date object
    */
   function formatTime(dateString) {
@@ -266,10 +266,12 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
     const list = getEventsDays(date);
 
     if (!list.length) {
-      return <div className="tw-text-dark-sky-blue tw-flex tw-flex-1 tw-items-center tw-p-4 tw-ml-2 tw-gap-2">
-        <InfoIcon />
-        <p>No events scheduled</p>
-      </div>
+      return (
+        <div className="tw-text-dark-sky-blue tw-flex tw-flex-1 tw-items-center tw-p-4 tw-ml-2 tw-gap-2">
+          <InfoIcon />
+          <p>No events scheduled</p>
+        </div>
+      );
     }
 
     return (
@@ -281,7 +283,6 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
           </List.Item>
         ))}
       </List>
-
     );
   };
 
@@ -332,12 +333,8 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1 tw-items-start tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6  tw-px-4">
-          <VStack
-            spacing={10}
-            alignItems="stretch"
-            justifyContent="center"
-          >
+        <div className="tw-flex tw-flex-1 tw-items-start tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
+          <VStack spacing={10} alignItems="stretch" justifyContent="center">
             <Calendar
               compact
               renderCell={renderCells}
