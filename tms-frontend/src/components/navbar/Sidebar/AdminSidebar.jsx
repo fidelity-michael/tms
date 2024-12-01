@@ -49,7 +49,7 @@ function SidebarLink({ item, props }) {
 function TopSidebar({ props }) {
   return (
     <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
-      <div className="tw-flex tw-flex-1 tw-items-center">
+      <div className="tw-flex tw-items-center">
         <AccountCircleIcon style={{height: "5rem", width: "5rem"}} className="tw-flex tw-flex-1 tw-text-dark-sky-blue"/>
       </div>
       <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
