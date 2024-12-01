@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
+import SearchIcon from "@mui/icons-material/Search";
 import "./content.css";
 
 export default function UsersTable() {
@@ -316,8 +317,7 @@ export default function UsersTable() {
     if (filtered_users.length) {
       orderUsersData();
       return filtered_users.map((user, index) => {
-        const { _id, first_name, last_name, email, role, /*group,*/ status } =
-          user;
+        const { _id, first_name, last_name, email, role, status } = user;
 
         //for checkboxes
         const isProfessor = role.includes("professor");
@@ -329,6 +329,8 @@ export default function UsersTable() {
           <tr key={_id}>
             <td className="table-data">{pagination.startIndex + index + 1}</td>
             <td className="table-data">
+              {" "}
+              {/* First Name */}
               <input
                 type="text"
                 name="first_name"
@@ -341,6 +343,8 @@ export default function UsersTable() {
               />
             </td>
             <td className="table-data">
+              {" "}
+              {/* Last Name */}
               <input
                 type="text"
                 name="last_name"
@@ -352,8 +356,10 @@ export default function UsersTable() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data">{email}</td>
+            <td className="table-data">{email}</td> {/* Email */}
             <td className="table-data">
+              {" "}
+              {/* Role(s) */}
               {role.map((role) => {
                 return (
                   <div className="rolesWrapper" key={role + _id}>
@@ -362,7 +368,6 @@ export default function UsersTable() {
                   </div>
                 );
               })}
-
               <div id={_id + "roleList"} className="dropdown-check-list">
                 <span
                   className="anchor"
@@ -419,6 +424,8 @@ export default function UsersTable() {
               </div>
             </td>
             <td className="table-data">
+              {" "}
+              {/* Status */}
               {/* <input type="text" name="status" data-key={_id} className="editable-data" placeholder={status} size={status.length} autoComplete="off" onChange={(e) => handleInputChange(e.target)} /> */}
               <select
                 className="editable-data"
@@ -432,6 +439,8 @@ export default function UsersTable() {
               </select>
             </td>
             <td className="table-data">
+              {" "}
+              {/* Actions */}
               <div
                 className="btn-group"
                 role="group"
@@ -572,30 +581,31 @@ export default function UsersTable() {
         >
           {message}
         </Alert>
+
         <div className="filter-content">
-          <div className="md-form md-outline input-with-pre-icon">
-            <i
-              className="fa fa-search input-prefix"
-              style={{ color: "#31b1e4" }}
-            ></i>
-            <input
-              type="text"
-              id="search-users"
-              className="form-control"
-              placeholder="Search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+          {" "}
+          {/* Search Functionality */}
+          <div className="">
+            <label htmlFor={"table-search"} className="tw-sr-only">
+              Search
+            </label>
+            <div className="tw-relative tw-mt-1 tw-text-gray-300">
+              <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
+                <SearchIcon />
+              </div>
+              <input
+                type="text"
+                id="table-search"
+                className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
+                placeholder="Search for people"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
           </div>
         </div>
-        <Table
-          className="users-table"
-          striped
-          bordered
-          hover
-          size="md"
-          responsive
-        >
+
+        <Table className="users-table" hover size="md" responsive>
           <thead>
             <tr>
               <th>#</th>
@@ -642,7 +652,8 @@ export default function UsersTable() {
           </tbody>
         </Table>
         {renderPageButtons("user")}
-        <div className="dropdown-limit"> {/* --- User limit section --- */}
+        {/* --- User limit section --- */}
+        <div className="dropdown-limit">
           <Form.Group controlId="selectControl">
             <Form.Label className="page-limit-lbl">Users per page</Form.Label>
             <Form.Control
