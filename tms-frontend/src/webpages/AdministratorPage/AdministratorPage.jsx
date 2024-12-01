@@ -122,7 +122,7 @@ export default function AdministratorPage() {
 
   const handleUsersSelection = (toggle) => {
     setNewUser(toggle);
-  }
+  };
 
   const userAuthorized = () => {
     return (
@@ -157,13 +157,19 @@ export default function AdministratorPage() {
               {page === "Users" ? (
                 <div>
                   <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
-                    {newUser === false ? <h5 className="tw-text-dark-sky-blue">Users Table</h5> : <h5>New User</h5>}
+                    <h5 className="tw-text-dark-sky-blue">{newUser === false ? "Users Table" : "New User"}</h5>
                     <hr />
                     <div className="tw-flex tw-gap-1">
-                      <button onClick={() => setNewUser(false)} className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded">
+                      <button
+                        onClick={() => setNewUser(false)}
+                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+                      >
                         Show Users
                       </button>
-                      <button onClick={() => setNewUser(true)} className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95  hover:tw-border-dark-sky-blue tw-rounded">
+                      <button
+                        onClick={() => setNewUser(true)}
+                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95  hover:tw-border-dark-sky-blue tw-rounded"
+                      >
                         New User
                       </button>
                     </div>
