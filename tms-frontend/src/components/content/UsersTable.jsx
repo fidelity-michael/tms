@@ -3,6 +3,7 @@ import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
 import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from '@mui/icons-material/Edit';
 import "./content.css";
 
 export default function UsersTable() {
@@ -608,13 +609,14 @@ export default function UsersTable() {
                 <span id="first_name" onClick={(e) => toggleOrder(e.target.id)}>
                   First Name
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{height: "1rem", width: "1rem"}}/>
+
               </th>
               <th className="table-header">
                 <span id="last_name" onClick={(e) => toggleOrder(e.target.id)}>
                   Last Name
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{height: "1rem", width: "1rem"}}/>
               </th>
               <th className="table-header">
                 <span id="email" onClick={(e) => toggleOrder(e.target.id)}>
@@ -625,13 +627,13 @@ export default function UsersTable() {
                 <span id="role" onClick={(e) => toggleOrder(e.target.id)}>
                   Role
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{height: "1rem", width: "1rem"}}/>
               </th>
               <th className="table-header">
                 <span id="status" onClick={(e) => toggleOrder(e.target.id)}>
                   Status
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{height: "1rem", width: "1rem"}}/>
               </th>
               <th className="table-header" style={{ textAlign: "center" }}>
                 <span>Action</span>
