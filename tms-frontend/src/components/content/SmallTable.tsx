@@ -32,7 +32,7 @@ export default function SmallTable({
               {caption.name} ({caption.amount})
             </div>
             <div className="tw-flex tw-items-center tw-cursor-pointer">
-              <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center">
+              <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center hover:tw-underline hover:tw-decoration-mid-pale-blue">
                 Show All
               </div>
               <KeyboardArrowRight className="tw-text-mid-pale-blue" />
