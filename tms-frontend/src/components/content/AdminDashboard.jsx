@@ -157,7 +157,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
           return c - d;
         });
 
-      console.log(myEvents);
+      /* console.log(myEvents); */
     };
 
     if (componentIsMounted.current && userId) {
@@ -213,7 +213,6 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   }
 
   const handleSelectedDate = (date) => {
-    console.log("date", date);
     setSelectedDate(date);
   };
 
