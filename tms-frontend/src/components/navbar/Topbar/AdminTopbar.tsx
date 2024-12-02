@@ -184,7 +184,7 @@ export default function AdminTopbar(props) {
                 </button>
               </MenuItem>
 
-              <MenuSeparator className="my-1 h-px bg-black" />
+              <MenuSeparator className="tw-my-1 tw-mx-2 tw-h-px tw-bg-dark-sky-blue" />
 
               <MenuItem>
                 <button
