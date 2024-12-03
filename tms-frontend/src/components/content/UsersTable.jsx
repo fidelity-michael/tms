@@ -385,11 +385,11 @@ export default function UsersTable() {
             </td>
             <td className="table-data">{email}</td>
             <td className="table-data">
-              <div className="tw-flex tw-gap-2 tw-items-center">
-                <div className="tw-flex  tw-items-center">
+              <div className="tw-flex tw-gap-11 tw-items-center">
+                <div className="tw-flex tw-flex-col tw-justify-start tw-items-center">
                   {role.map((role) => {
                     return (
-                      <div className="rolesWrapper" key={role + _id}>
+                      <div className="tw-flex tw-items-start tw-justify-start tw-w-20" key={role + _id}>
                         <ArrowRight />
                         <p className="roleP">{role}</p>
                       </div>
@@ -404,7 +404,7 @@ export default function UsersTable() {
                     Edit
                   </span>
                   <ul className="roles" data-key={_id}>
-                    <li className="tw-flex tw-gap-1">
+                    <li className="tw-flex">
                       <input
                         className="tw-text-dark-sky-blue tw-ring-mid-pale-blue checked:tw-ring-mid-pale-blue"
                         type="checkbox"
@@ -737,7 +737,7 @@ export default function UsersTable() {
           </div>
         </div>
 
-        <Table className="users-table" size="md" responsive>
+        <Table className="users-table" size="sm" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
