@@ -466,7 +466,6 @@ span .fa-paperclip {
 }
 
 
-
 .dropdown-check-list {
   display: inline-block;
 }
@@ -475,8 +474,10 @@ span .fa-paperclip {
   position: relative;
   cursor: pointer;
   display: inline-block;
-  padding: 5px 50px 5px 10px;
-  border: 1px solid #ccc;
+  /* padding: 5px 50px 5px 10px; */
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border: 1px solid #384959;
+  border-radius: 0.5rem;
 }
 
 .dropdown-check-list .anchor:after {
@@ -500,11 +501,14 @@ span .fa-paperclip {
 }
 
 .dropdown-check-list ul.roles {
-  padding: 2px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
   display: none;
   margin: 0;
   border: 1px solid #ccc;
   border-top: none;
+  border-radius: 0.5rem;
 }
 
 .dropdown-check-list ul.roles li {
@@ -512,7 +516,7 @@ span .fa-paperclip {
 }
 
 .dropdown-check-list.visible .anchor {
-  color: #0094ff;
+  color: #6A89A7;
 }
 
 .dropdown-check-list.visible .roles {
@@ -525,7 +529,8 @@ input[type=checkbox] {
 }
 
 .rolesWrapper{
-  display: table;
+  display: flex;
+  align-items: start;
 }
 
 .rolesArrow{
@@ -535,7 +540,7 @@ input[type=checkbox] {
 
 .roleP{
   display: table-cell;
-  vertical-align: middle;
+  vertical-align: top;
 }
 
 .infoUpdateUser{
