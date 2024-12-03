@@ -297,8 +297,8 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   }
 
   return (
-    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 ">
-      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8 tw-mt-6">
+    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 tw-mt-6">
+      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
         {
           <div
             onClick={() => {
