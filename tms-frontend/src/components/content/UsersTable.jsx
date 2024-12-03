@@ -8,6 +8,7 @@ import { Dropdown, Label, Select } from "flowbite-react";
 import "./content.css";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import {
   Checkbox,
   Field,
@@ -17,6 +18,7 @@ import {
   MenuItems,
   MenuSeparator,
 } from "@headlessui/react";
+import ArrowRight from "@mui/icons-material/ArrowRight";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -209,9 +211,11 @@ export default function UsersTable() {
   };
 
   async function updateUser(id) {
-    var newRolesArray = []; //new roles
+    /* var newRolesArray = Object.keys(roles).filter((role) => roles[role]); //new roles */
+    var newRolesArray = [];
     var flag = 0; //indicates if something changed
 
+    /* console.log("Selected roles:", roles); */
     //names
     const firstName = document.getElementById(id + "first_name").value;
     const lastName = document.getElementById(id + "last_name").value;
@@ -221,8 +225,7 @@ export default function UsersTable() {
     const isStudent = document.getElementById(id + "student").checked;
     const isSecretariat = document.getElementById(id + "secretariat").checked;
     const isAdmin = document.getElementById(id + "administrator").checked;
-
-    console.log("prof", isProfessor);
+    /* console.log("prof", isProfessor); */
 
     //status
     const status = document.getElementById(id + "status").value;
@@ -383,126 +386,67 @@ export default function UsersTable() {
             <td className="table-data">{email}</td>
             <td className="table-data">
               <div className="tw-flex tw-gap-2 tw-items-center">
-                <div className="tw-flex tw-flex-col">
+                <div className="tw-flex  tw-items-center">
                   {role.map((role) => {
                     return (
                       <div className="rolesWrapper" key={role + _id}>
-                        <i className="fas fa-caret-right rolesArrow"></i>
+                        <ArrowRight />
                         <p className="roleP">{role}</p>
                       </div>
                     );
                   })}
                 </div>
-                <div
-                  id={_id + "roleList"}
-                  className="tw-flex tw-flex-row tw-justify-start"
-                  /* onClick={() => dropDownRoles(_id, role)} */
-                >
-                  <Dropdown
-                    label="Edit"
-                    dismissOnClick={false}
-                    inline
-                    renderTrigger={() => (
-                      <div className="tw-flex tw-items-center tw-cursor-pointer tw-border tw-border-dark-sky-blue tw-rounded-md tw-py-1 tw-px-2">
-                        Edit
-                        <KeyboardArrowDown />
-                      </div>
-                    )}
+                <div id={_id + "roleList"} className="dropdown-check-list">
+                  <span
+                    className="anchor"
+                    onClick={() => dropDownRoles(_id, role)}
                   >
-                    <div>
-                      <Dropdown.Item>
-                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
-                          <input
-                            id={_id + "administrator"}
-                            defaultChecked={isAdmin}
-                            type="checkbox"
-                            className="tw-text-dark-sky-blue"
-                          />
-                          <Label
-                            htmlFor={_id + "administrator"}
-                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
-                          >
-                            Administrator
-                          </Label>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
-                          <input
-                            id={_id + "professor"}
-                            defaultChecked={isProfessor}
-                            type="checkbox"
-                            className="tw-text-dark-sky-blue"
-                          />
-                          <Label
-                            htmlFor={_id + "professor"}
-                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
-                          >
-                            Professor
-                          </Label>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
-                          <input
-                            id={_id + "student"}
-                            defaultChecked={isStudent}
-                            type="checkbox"
-                            className="tw-text-dark-sky-blue"
-                          />
-                          <Label
-                            htmlFor={_id + "student"}
-                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
-                          >
-                            Student
-                          </Label>
-                        </div>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
-                          <input
-                            id={_id + "secretariat"}
-                            defaultChecked={isSecretariat}
-                            type="checkbox"
-                            className="tw-text-dark-sky-blue"
-                          />
-                          <Label
-                            htmlFor={_id + "secretariat"}
-                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
-                          >
-                            Secretariat
-                          </Label>
-                        </div>
-                      </Dropdown.Item>
-                    </div>
-                  </Dropdown>
-                  {/* Hidden inputs to keep them always in the DOM */}
-                  <div className="tw-hidden" id={_id + "hiddenRoleInputs"}>
-                    <input
-                      id={_id + "administrator"}
-                      defaultChecked={isAdmin}
-                      type="checkbox"
-                      className="tw-text-dark-sky-blue"
-                    />
-                    <input
-                      id={_id + "professor"}
-                      defaultChecked={isProfessor}
-                      type="checkbox"
-                      className="tw-text-dark-sky-blue"
-                    />
-                    <input
-                      id={_id + "student"}
-                      defaultChecked={isStudent}
-                      type="checkbox"
-                      className="tw-text-dark-sky-blue"
-                    />
-                    <input
-                      id={_id + "secretariat"}
-                      defaultChecked={isSecretariat}
-                      type="checkbox"
-                      className="tw-text-dark-sky-blue"
-                    />
-                  </div>
+                    Edit
+                  </span>
+                  <ul className="roles" data-key={_id}>
+                    <li className="tw-flex tw-gap-1">
+                      <input
+                        className="tw-text-dark-sky-blue tw-ring-mid-pale-blue checked:tw-ring-mid-pale-blue"
+                        type="checkbox"
+                        id={_id + "professor"}
+                        defaultChecked={isProfessor}
+                        onChange={() => { /*for warning*/ }}
+                      />
+                      <label htmlFor={_id + "professor"} className="tw-select-none">Professor</label>
+                    </li>
+                    <li className="tw-flex tw-gap-1">
+                      <input
+                        className="tw-text-dark-sky-blue"
+                        type="checkbox"
+                        id={_id + "administrator"}
+                        defaultChecked={isAdmin}
+                        onChange={() => { /*for warning*/ }}
+                      />
+                      <label htmlFor={_id + "administrator"} className="tw-select-none">
+                        Administrator
+                      </label>
+                    </li>
+                    <li className="tw-flex tw-gap-1">
+                      <input
+                        className="tw-text-dark-sky-blue"
+                        type="checkbox"
+                        id={_id + "student"}
+                        defaultChecked={isStudent}
+                        onChange={() => { /*for warning*/ }}
+                      />
+                      <label htmlFor={_id + "student"} className="tw-select-none">Student</label>
+                    </li>
+                    <li className="tw-flex tw-gap-1">
+                      <input
+                        className="tw-text-dark-sky-blue"
+                        type="checkbox"
+                        id={_id + "secretariat"}
+                        defaultChecked={isSecretariat}
+                        onChange={() => { /*for warning*/ }}
+                      />
+                      <label htmlFor={_id + "secretariat"} className="tw-select-none">Secretariat</label>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </td>
@@ -643,6 +587,117 @@ export default function UsersTable() {
       </tr>
     );
   }
+
+  const RoleDropdown = ({ _id, initialRoles, onRolesChange }) => {
+    // State to manage roles
+    const [roles, setRoles] = useState({
+      administrator: initialRoles.includes("administrator"),
+      professor: initialRoles.includes("professor"),
+      student: initialRoles.includes("student"),
+      secretariat: initialRoles.includes("secretariat"),
+    });
+
+    // Handle checkbox changes
+    const handleCheckboxChange = (role) => {
+      setRoles((prevRoles) => {
+        const updatedRoles = {
+          ...prevRoles,
+          [role]: !prevRoles[role],
+        };
+        onRolesChange(updatedRoles); // Notify parent about the change
+        return updatedRoles;
+      });
+    };
+
+    return (
+      <div
+        id={_id + "roleList"}
+        className="tw-flex tw-flex-row tw-justify-start"
+      >
+        <Dropdown
+          label="Edit"
+          dismissOnClick={false}
+          inline
+          renderTrigger={() => (
+            <div className="tw-flex tw-items-center tw-cursor-pointer tw-border tw-border-dark-sky-blue tw-rounded-md tw-py-1 tw-px-2">
+              Edit
+              <KeyboardArrowDown />
+            </div>
+          )}
+        >
+          {/* Dropdown content */}
+          <Dropdown.Item>
+            <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+              <input
+                id={_id + "administrator"}
+                type="checkbox"
+                checked={roles.administrator}
+                onChange={() => handleCheckboxChange("administrator")}
+                className="tw-text-dark-sky-blue"
+              />
+              <Label
+                htmlFor={_id + "administrator"}
+                className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+              >
+                Administrator
+              </Label>
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+              <input
+                id={_id + "professor"}
+                type="checkbox"
+                checked={roles.professor}
+                onChange={() => handleCheckboxChange("professor")}
+                className="tw-text-dark-sky-blue"
+              />
+              <Label
+                htmlFor={_id + "professor"}
+                className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+              >
+                Professor
+              </Label>
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+              <input
+                id={_id + "student"}
+                type="checkbox"
+                checked={roles.student}
+                onChange={() => handleCheckboxChange("student")}
+                className="tw-text-dark-sky-blue"
+              />
+              <Label
+                htmlFor={_id + "student"}
+                className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+              >
+                Student
+              </Label>
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+              <input
+                id={_id + "secretariat"}
+                type="checkbox"
+                checked={roles.secretariat}
+                onChange={() => handleCheckboxChange("secretariat")}
+                className="tw-text-dark-sky-blue"
+              />
+              <Label
+                htmlFor={_id + "secretariat"}
+                className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+              >
+                Secretariat
+              </Label>
+            </div>
+          </Dropdown.Item>
+        </Dropdown>
+      </div>
+    );
+  };
 
   return (
     <div className="tables-data tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl">
