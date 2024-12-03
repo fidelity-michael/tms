@@ -102,7 +102,7 @@ export default function AdminTopbar(props) {
                 className="tw-text-dark-sky-blue"
               />
               {badge > 0 && (
-                <span className="badge badge-danger badge-counter">
+                <span className="badge badge-danger badge-counter tw-absolute tw-left-2/3 tw-bottom-3">
                   {badge > 0 ? (badge > 9 ? "9+" : badge) : null}
                 </span>
               )}
