@@ -524,8 +524,9 @@ export default function UsersTable() {
     const prev = "prev_" + name;
     const next = "next_" + name;
 
+    /* TODO: Check this condititional flex*/
     return (
-      <div className="page-select">
+      <div className={`tw-mb-3 tw-flex ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}  tw-bg-light-pale-blue-white tw-py-1 tw-px-2`}>
         {pagination.startIndex > 0 && (
           <span
             className={prev}
@@ -546,7 +547,7 @@ export default function UsersTable() {
             Next Page
           </span>
         )}
-        <span className="page-number">
+        <span className="tw-float-right">
           Results{" "}
           {pagination.endIndex > pagination.total
             ? pagination.total
