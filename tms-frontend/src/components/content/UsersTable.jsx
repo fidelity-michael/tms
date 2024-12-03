@@ -526,7 +526,9 @@ export default function UsersTable() {
 
     /* TODO: Check this condititional flex*/
     return (
-      <div className={`tw-mb-3 tw-flex ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}  tw-bg-light-pale-blue-white tw-py-1 tw-px-2`}>
+      <div
+        className={`tw-flex tw-flex-1 ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}  tw-bg-light-pale-blue-white tw-py-2 tw-px-4`}
+      >
         {pagination.startIndex > 0 && (
           <span
             className={prev}
@@ -803,23 +805,31 @@ export default function UsersTable() {
                 : emptyTable()}
           </tbody>
         </Table>
-        {renderPageButtons("user")}
-        {/* --- User limit section --- */}
-        <div className="dropdown-limit">
-          <Form.Group controlId="selectControl">
-            <Form.Label className="page-limit-lbl">Users per page</Form.Label>
-            <Form.Control
-              className="page-limit"
-              as="select"
-              onChange={(e) => {
-                setUsersLimit(e.target.value);
-              }}
+        <div className="tw-flex tw-gap-6 tw-items-center">
+          {/* --- User limit section --- */}
+          <div>
+            <Form.Group
+              controlId="selectControl"
+              className="tw-flex tw-justify-start tw-gap-2"
             >
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
-            </Form.Control>
-          </Form.Group>
+              <Form.Label className="tw-flex tw-fill-1 tw-items-center tw-mb-0">
+                Users per page
+              </Form.Label>
+              <Form.Control
+                className="tw-w-28"
+                as="select"
+                onChange={(e) => {
+                  setUsersLimit(e.target.value);
+                }}
+              >
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </Form.Control>
+            </Form.Group>
+          </div>
+
+          {renderPageButtons("user")}
         </div>
       </div>
     </div>
