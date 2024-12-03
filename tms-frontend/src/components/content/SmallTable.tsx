@@ -59,7 +59,7 @@ export default function SmallTable({
                   scope="row"
                   className="tw-text-center tw-px-6 tw-py-4 tw-font-medium tw-text-gray-900 tw-whitespace-nowrap tw-capitalize"
                 >
-                  {e.first}
+                  {(Array.isArray(e.first) ? e.first[0] : e.first)}
                 </th>
                 <td className="tw-px-4 tw-py-2 tw-text-center">{e.second}</td>
                 <td className="tw-px-4 tw-py-2 tw-text-center">{e.third}</td>
