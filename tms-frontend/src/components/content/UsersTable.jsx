@@ -4,13 +4,13 @@ import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
+import { Dropdown, Label, Select } from "flowbite-react";
 import "./content.css";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import {
   Checkbox,
   Field,
-  Label,
   Menu,
   MenuButton,
   MenuItem,
@@ -41,11 +41,11 @@ export default function UsersTable() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isAdminChecked, setIsAdmin] = useState(false);
-
-  const handleAdmin = (isAdmin) => {
-    setIsAdmin(!isAdmin);
+  const updateCheckboxState = (role, value) => {
+    setRoles((prev) => ({ ...prev, [role]: value }));
   };
+
+  const [isAdminChecked, setIsAdmin] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -222,6 +222,8 @@ export default function UsersTable() {
     const isSecretariat = document.getElementById(id + "secretariat").checked;
     const isAdmin = document.getElementById(id + "administrator").checked;
 
+    console.log("prof", isProfessor);
+
     //status
     const status = document.getElementById(id + "status").value;
 
@@ -337,8 +339,6 @@ export default function UsersTable() {
         user.status.toLowerCase().includes(query.toLowerCase()),
     );
 
-    console.log("filtered, ", filtered_users);
-
     if (filtered_users.length) {
       orderUsersData();
       return filtered_users.map((user, index) => {
@@ -357,7 +357,6 @@ export default function UsersTable() {
           >
             <td className="table-data">{pagination.startIndex + index + 1}</td>
             <td className="table-data">
-              {/* First Name */}
               <input
                 type="text"
                 name="first_name"
@@ -370,8 +369,6 @@ export default function UsersTable() {
               />
             </td>
             <td className="table-data">
-              {" "}
-              {/* Last Name */}
               <input
                 type="text"
                 name="last_name"
@@ -383,9 +380,8 @@ export default function UsersTable() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data">{email}</td> {/* Email */}
+            <td className="table-data">{email}</td>
             <td className="table-data">
-              {/* Role(s) */}
               <div className="tw-flex tw-gap-2 tw-items-center">
                 <div className="tw-flex tw-flex-col">
                   {role.map((role) => {
@@ -397,141 +393,123 @@ export default function UsersTable() {
                     );
                   })}
                 </div>
-                <div id={_id + "roleList"} className="tw-flex tw-justify-start">
-                  <Menu>
-                    {({ open }) => (
-                      <>
-                        <MenuButton
-                          className={
-                            "tw-text-dark-sky-blue tw-inline-flex tw-justify-start tw-items-center tw-py-1.5 tw-px-2 tw-rounded-md tw-text-sm/6 tw-font-semibold  tw-shadow-white/10 focus:tw-outline-none data-[hover]:tw-bg-light-pale-blue-white data-[open]:tw-bg-light-pale-blue-white data-[focus]:tw-outline-1 data-[focus]:tw-outline-white"
-                          }
-                        >
-                          Edit
-                          <KeyboardArrowDown />
-                        </MenuButton>
-                        <MenuItems
-                          transition
-                          anchor="bottom end"
-                          className={
-                            "tw-text-dark-sky-blue tw-w-52 tw-origin-top-right tw-rounded-xl tw-border tw-border-white/5 tw-bg-white/5 tw-p-1 tw-text-sm/6  tw-transition tw-duration-100 tw-ease-out [--anchor-gap:var(--spacing-1)] focus:tw-outline-none data-[open]:tw-bg-white data-[closed]:tw-scale-95 data-[closed]:tw-opacity-0"
-                          }
-                        >
-                          <MenuItem>
-                            <Field className="tw-flex tw-items-center tw-gap-2">
-                              <Checkbox
-                                id={_id + "administrator"}
-                                defaultChecked={isAdmin}
-                                className="group tw-block tw-size-4 tw-rounded tw-border tw-bg-white data-[checked]:tw-bg-light-sky-blue"
-                              >
-                                <svg
-                                  className="tw-stroke-red-500 tw-opacity-0 group-data-[checked]:tw-opacity-100"
-                                  viewBox="0 0 14 14"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M3 8L6 11L11 3.5"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </Checkbox>
-                              <Label
-                                id={_id + "administrator"}
-                                className={"tw-mb-0 tw-select-none"}
-                              >
-                                Administrator
-                              </Label>
-                            </Field>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => {}}
-                              className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white"
-                            >
-                              Calendar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
-                              Activity Log
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
-                              Settings
-                            </button>
-                          </MenuItem>
-
-                          <MenuItem>
-                            <button className="group tw-flex tw-w-full tw-items-center tw-gap-2 tw-rounded-lg tw-py-1.5 tw-px-3 data-[focus]:tw-bg-light-pale-blue-white">
-                              Sign out
-                            </button>
-                          </MenuItem>
-                        </MenuItems>
-                      </>
+                <div
+                  id={_id + "roleList"}
+                  className="tw-flex tw-flex-row tw-justify-start"
+                  /* onClick={() => dropDownRoles(_id, role)} */
+                >
+                  <Dropdown
+                    label="Edit"
+                    dismissOnClick={false}
+                    inline
+                    renderTrigger={() => (
+                      <div className="tw-flex tw-items-center tw-cursor-pointer tw-border tw-border-dark-sky-blue tw-rounded-md tw-py-1 tw-px-2">
+                        Edit
+                        <KeyboardArrowDown />
+                      </div>
                     )}
-                  </Menu>
-                </div>
-                {/* <div id={_id + "roleList"} className="dropdown-check-list">
-                  <span
-                    className="tw-flex tw-items-center tw-z-10"
-                    onClick={() => dropDownRoles(_id, role)}
                   >
-                    Edit
-                    <KeyboardArrowDown />
-                  </span>
-                  <ul className="roles" data-key={_id}>
-                    <li className="roleListOption">
-                      <label htmlFor="professor">Professor</label>
-                      <input
-                        type="checkbox"
-                        id={_id + "professor"}
-                        defaultChecked={isProfessor}
-                        onChange={() => {
-                        }}
-                      />
-                    </li>
-                    <li className="roleListOption">
-                      <label htmlFor="administrator">Administrator</label>
-                      <input
-                        type="checkbox"
-                        id={_id + "administrator"}
-                        defaultChecked={isAdmin}
-                        onChange={() => {
-                        }}
-                      />
-                    </li>
-                    <li className="roleListOption">
-                      <label htmlFor="student">Student</label>
-                      <input
-                        type="checkbox"
-                        id={_id + "student"}
-                        defaultChecked={isStudent}
-                        onChange={() => {
-                        }}
-                      />
-                    </li>
-                    <li className="roleListOption">
-                      <label htmlFor="secratariat">Secretariat</label>
-                      <input
-                        type="checkbox"
-                        id={_id + "secretariat"}
-                        defaultChecked={isSecretariat}
-                        onChange={() => {
-                        }}
-                      />
-                    </li>
-                  </ul>
-                </div> */}
+                    <div>
+                      <Dropdown.Item>
+                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+                          <input
+                            id={_id + "administrator"}
+                            defaultChecked={isAdmin}
+                            type="checkbox"
+                            className="tw-text-dark-sky-blue"
+                          />
+                          <Label
+                            htmlFor={_id + "administrator"}
+                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+                          >
+                            Administrator
+                          </Label>
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+                          <input
+                            id={_id + "professor"}
+                            defaultChecked={isProfessor}
+                            type="checkbox"
+                            className="tw-text-dark-sky-blue"
+                          />
+                          <Label
+                            htmlFor={_id + "professor"}
+                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+                          >
+                            Professor
+                          </Label>
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+                          <input
+                            id={_id + "student"}
+                            defaultChecked={isStudent}
+                            type="checkbox"
+                            className="tw-text-dark-sky-blue"
+                          />
+                          <Label
+                            htmlFor={_id + "student"}
+                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+                          >
+                            Student
+                          </Label>
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <div className="tw-flex tw-w-full tw-gap-2 tw-items-center">
+                          <input
+                            id={_id + "secretariat"}
+                            defaultChecked={isSecretariat}
+                            type="checkbox"
+                            className="tw-text-dark-sky-blue"
+                          />
+                          <Label
+                            htmlFor={_id + "secretariat"}
+                            className="tw-text-center tw-mb-0 tw-text-dark-sky-blue"
+                          >
+                            Secretariat
+                          </Label>
+                        </div>
+                      </Dropdown.Item>
+                    </div>
+                  </Dropdown>
+                  {/* Hidden inputs to keep them always in the DOM */}
+                  <div className="tw-hidden" id={_id + "hiddenRoleInputs"}>
+                    <input
+                      id={_id + "administrator"}
+                      defaultChecked={isAdmin}
+                      type="checkbox"
+                      className="tw-text-dark-sky-blue"
+                    />
+                    <input
+                      id={_id + "professor"}
+                      defaultChecked={isProfessor}
+                      type="checkbox"
+                      className="tw-text-dark-sky-blue"
+                    />
+                    <input
+                      id={_id + "student"}
+                      defaultChecked={isStudent}
+                      type="checkbox"
+                      className="tw-text-dark-sky-blue"
+                    />
+                    <input
+                      id={_id + "secretariat"}
+                      defaultChecked={isSecretariat}
+                      type="checkbox"
+                      className="tw-text-dark-sky-blue"
+                    />
+                  </div>
+                </div>
               </div>
             </td>
             <td className="table-data">
-              {" "}
-              {/* Status */}
               {/* <input type="text" name="status" data-key={_id} className="editable-data" placeholder={status} size={status.length} autoComplete="off" onChange={(e) => handleInputChange(e.target)} /> */}
-              <select
-                className="editable-data"
+              <Select
+                className="tw-text-dark-sky-blue"
                 name="status"
                 data-key={_id}
                 id={_id + "status"}
@@ -539,11 +517,9 @@ export default function UsersTable() {
               >
                 <option value="active">active</option>
                 <option value="inactive">inactive</option>
-              </select>
+              </Select>
             </td>
             <td className="table-data">
-              {" "}
-              {/* Actions */}
               <div
                 className="btn-group"
                 role="group"
@@ -553,7 +529,7 @@ export default function UsersTable() {
                   type="button"
                   data-key={_id}
                   className="btn btn-info accept-request"
-                  onClick={(e) => updateUser(_id)}
+                  onClick={() => updateUser(_id)}
                 >
                   Update
                 </button>
@@ -658,7 +634,10 @@ export default function UsersTable() {
   function emptyTable(e) {
     return (
       <tr>
-        <td className="empty-data" colSpan="100%">
+        <td
+          className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan="100%"
+        >
           No Data Found
         </td>
       </tr>
