@@ -356,9 +356,11 @@ export default function UsersTable() {
         return (
           <tr
             key={_id}
-            className="hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+            className="hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
           >
-            <td className="table-data">{pagination.startIndex + index + 1}</td>
+            <td className="table-data">
+              <div>{pagination.startIndex + index + 1}</div>
+            </td>
             <td className="table-data">
               <input
                 type="text"
@@ -527,7 +529,7 @@ export default function UsersTable() {
     /* TODO: Check this condititional flex*/
     return (
       <div
-        className={`tw-flex tw-flex-1 ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}  tw-bg-light-pale-blue-white tw-py-2 tw-px-4`}
+        className={`tw-flex tw-flex-1 ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}`}
       >
         {pagination.startIndex > 0 && (
           <span
@@ -742,7 +744,6 @@ export default function UsersTable() {
         </Alert>
 
         <div className="tw-flex filter-content tw-justify-start">
-          {" "}
           {/* Search Functionality */}
           <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
             <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
@@ -759,40 +760,43 @@ export default function UsersTable() {
           </div>
         </div>
 
-        <Table className="users-table" size="sm" responsive>
+        <Table className="users-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="first_name" onClick={(e) => toggleOrder(e.target.id)}>
                   First Name
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="last_name" onClick={(e) => toggleOrder(e.target.id)}>
                   Last Name
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="email" onClick={(e) => toggleOrder(e.target.id)}>
                   Email
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="role" onClick={(e) => toggleOrder(e.target.id)}>
                   Role
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="status" onClick={(e) => toggleOrder(e.target.id)}>
                   Status
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header" style={{ textAlign: "center" }}>
+              <th
+                className="table-header tw-text-center"
+                style={{ textAlign: "center" }}
+              >
                 <span>Action</span>
               </th>
             </tr>
@@ -805,7 +809,7 @@ export default function UsersTable() {
                 : emptyTable()}
           </tbody>
         </Table>
-        <div className="tw-flex tw-gap-6 tw-items-center">
+        <div className="tw-flex tw-gap-6 tw-items-center tw-bg-light-pale-blue-white tw-py-2 tw-px-4 tw-rounded-md">
           {/* --- User limit section --- */}
           <div>
             <Form.Group
