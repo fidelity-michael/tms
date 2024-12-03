@@ -389,7 +389,10 @@ export default function UsersTable() {
                 <div className="tw-flex tw-flex-col tw-justify-start tw-items-center">
                   {role.map((role) => {
                     return (
-                      <div className="tw-flex tw-items-start tw-justify-start tw-w-20" key={role + _id}>
+                      <div
+                        className="tw-flex tw-items-start tw-justify-start tw-w-20"
+                        key={role + _id}
+                      >
                         <ArrowRight />
                         <p className="roleP">{role}</p>
                       </div>
@@ -410,9 +413,16 @@ export default function UsersTable() {
                         type="checkbox"
                         id={_id + "professor"}
                         defaultChecked={isProfessor}
-                        onChange={() => { /*for warning*/ }}
+                        onChange={() => {
+                          /*for warning*/
+                        }}
                       />
-                      <label htmlFor={_id + "professor"} className="tw-select-none">Professor</label>
+                      <label
+                        htmlFor={_id + "professor"}
+                        className="tw-select-none"
+                      >
+                        Professor
+                      </label>
                     </li>
                     <li className="tw-flex tw-gap-1">
                       <input
@@ -420,9 +430,14 @@ export default function UsersTable() {
                         type="checkbox"
                         id={_id + "administrator"}
                         defaultChecked={isAdmin}
-                        onChange={() => { /*for warning*/ }}
+                        onChange={() => {
+                          /*for warning*/
+                        }}
                       />
-                      <label htmlFor={_id + "administrator"} className="tw-select-none">
+                      <label
+                        htmlFor={_id + "administrator"}
+                        className="tw-select-none"
+                      >
                         Administrator
                       </label>
                     </li>
@@ -432,9 +447,16 @@ export default function UsersTable() {
                         type="checkbox"
                         id={_id + "student"}
                         defaultChecked={isStudent}
-                        onChange={() => { /*for warning*/ }}
+                        onChange={() => {
+                          /*for warning*/
+                        }}
                       />
-                      <label htmlFor={_id + "student"} className="tw-select-none">Student</label>
+                      <label
+                        htmlFor={_id + "student"}
+                        className="tw-select-none"
+                      >
+                        Student
+                      </label>
                     </li>
                     <li className="tw-flex tw-gap-1">
                       <input
@@ -442,9 +464,16 @@ export default function UsersTable() {
                         type="checkbox"
                         id={_id + "secretariat"}
                         defaultChecked={isSecretariat}
-                        onChange={() => { /*for warning*/ }}
+                        onChange={() => {
+                          /*for warning*/
+                        }}
                       />
-                      <label htmlFor={_id + "secretariat"} className="tw-select-none">Secretariat</label>
+                      <label
+                        htmlFor={_id + "secretariat"}
+                        className="tw-select-none"
+                      >
+                        Secretariat
+                      </label>
                     </li>
                   </ul>
                 </div>
@@ -453,7 +482,6 @@ export default function UsersTable() {
             <td className="table-data">
               {/* <input type="text" name="status" data-key={_id} className="editable-data" placeholder={status} size={status.length} autoComplete="off" onChange={(e) => handleInputChange(e.target)} /> */}
               <Select
-                className="tw-text-dark-sky-blue"
                 name="status"
                 data-key={_id}
                 id={_id + "status"}
@@ -464,25 +492,16 @@ export default function UsersTable() {
               </Select>
             </td>
             <td className="table-data">
-              <div
-                className="btn-group"
-                role="group"
-                aria-label="Button group with nested dropdown"
-              >
+              <div className="tw-flex tw-gap-1">
                 <button
-                  type="button"
-                  data-key={_id}
-                  className="btn btn-info accept-request"
-                  onClick={() => updateUser(_id)}
+                  onClick={() => updateUser(false)}
+                  className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
                 >
                   Update
                 </button>
                 <button
-                  type="button"
-                  name={email}
-                  data-key={_id}
-                  className="btn btn-danger decline-request"
                   onClick={(e) => handleCellDelete(e.target)}
+                  className="tw-font-semibold tw-text-white tw-bg-red-incorrect tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95 hover:tw-text-dark-sky-blue hover:tw-border-dark-sky-blue tw-rounded"
                 >
                   Delete
                 </button>
