@@ -61,12 +61,8 @@ export default function SmallTable({
                 >
                   {e.first}
                 </th>
-                <td className="tw-px-4 tw-py-2 tw-text-center">
-                  {e.second}
-                </td>
-                <td className="tw-px-4 tw-py-2 tw-text-center">
-                  {e.third}
-                </td>
+                <td className="tw-px-4 tw-py-2 tw-text-center">{e.second}</td>
+                <td className="tw-px-4 tw-py-2 tw-text-center">{e.third}</td>
                 <td className="tw-px-4 tw-py-2 tw-flex tw-text-center tw-items-center tw-justify-center tw-align-middle">
                   <div
                     className={`tw-flex tw-w-10 tw-h-10 tw-rounded-full tw-items-center tw-justify-center  ${
