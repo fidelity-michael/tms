@@ -520,46 +520,6 @@ export default function UsersTable() {
     }
   }
 
-  function renderPageButtons(name) {
-    const prev = "prev_" + name;
-    const next = "next_" + name;
-
-    /* TODO: Check this condititional flex*/
-    return (
-      <div
-        className={`tw-flex tw-flex-1 ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}`}
-      >
-        {pagination.startIndex > 0 && (
-          <span
-            className={prev}
-            onClick={(e) => {
-              handlePrevPage(e.target.className);
-            }}
-          >
-            Previous Page
-          </span>
-        )}
-        {pagination.endIndex < pagination.total && (
-          <span
-            className={next}
-            onClick={(e) => {
-              handleNextPage(e.target.className);
-            }}
-          >
-            Next Page
-          </span>
-        )}
-        <span className="tw-float-right">
-          Results{" "}
-          {pagination.endIndex > pagination.total
-            ? pagination.total
-            : pagination.endIndex}{" "}
-          out of {pagination.total}
-        </span>
-      </div>
-    );
-  }
-
   function handlePrevPage(name) {
     if (name === "prev_user") {
       setUsersPage(usersPage - 1);
