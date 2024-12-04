@@ -168,7 +168,7 @@ export default function AdministratorPage() {
                       </button>
                       <button
                         onClick={() => setNewUser(true)}
-                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95  hover:tw-border-dark-sky-blue tw-rounded"
+                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
                       >
                         New User
                       </button>
