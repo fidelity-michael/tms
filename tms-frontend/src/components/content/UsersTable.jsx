@@ -409,7 +409,7 @@ export default function UsersTable() {
                     Edit
                   </span>
                   <ul className="roles" data-key={_id}>
-                    <li className="tw-flex">
+                    <li className="tw-flex tw-gap-1">
                       <input
                         className="tw-text-dark-sky-blue tw-ring-mid-pale-blue checked:tw-ring-mid-pale-blue"
                         type="checkbox"
