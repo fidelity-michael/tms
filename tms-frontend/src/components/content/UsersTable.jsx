@@ -19,6 +19,7 @@ import {
   MenuSeparator,
 } from "@headlessui/react";
 import ArrowRight from "@mui/icons-material/ArrowRight";
+import { PaginationTab } from "./TableComponents";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -800,32 +801,13 @@ export default function UsersTable() {
                 : emptyTable()}
           </tbody>
         </Table>
-        <div className="tw-flex tw-gap-6 tw-items-center tw-bg-light-pale-blue-white tw-py-2 tw-px-4 tw-rounded-md">
-          {/* --- User limit section --- */}
-          <div>
-            <Form.Group
-              controlId="selectControl"
-              className="tw-flex tw-justify-start tw-gap-2"
-            >
-              <Form.Label className="tw-flex tw-fill-1 tw-items-center tw-mb-0">
-                Users per page
-              </Form.Label>
-              <Form.Control
-                className="tw-w-28"
-                as="select"
-                onChange={(e) => {
-                  setUsersLimit(e.target.value);
-                }}
-              >
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-              </Form.Control>
-            </Form.Group>
-          </div>
-
-          {renderPageButtons("user")}
-        </div>
+        <PaginationTab
+          setLimit={(e) => {
+            setUsersLimit(e.target.value);
+          }}
+          renderPageButtonsName="user"
+          pagination={pagination}
+        />
       </div>
     </div>
   );
