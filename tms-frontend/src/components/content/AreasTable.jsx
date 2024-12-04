@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
-import { PaginationTab } from "./TableComponents";
+import ActionButtons, { PaginationTab } from "./TableComponents";
 
 export default function AreasTable() {
   const [areas, setAreas] = useState([]);
@@ -151,6 +153,7 @@ export default function AreasTable() {
     }
   }
 
+  /*TODO: Check this target parameter and function usage*/
   function handleInputChange(target) {
     // console.log("Target: ", target.name, " value: ", target.value);
     // console.log("Data Key: ", target.getAttribute("data-key"));
@@ -178,11 +181,9 @@ export default function AreasTable() {
     }
   }
 
-  function handleCellUpdate(target) {
+  function handleCellUpdate(id) {
     // console.log("Update id: ", target.getAttribute("data-key"));
-    const index = updateArea.findIndex(
-      (update) => update.areaId === target.getAttribute("data-key"),
-    );
+    const index = updateArea.findIndex((update) => update.areaId === id);
     // console.log("Found Index: ", index);
     if (index > -1) {
       const fetchAreas = async () => {
@@ -213,12 +214,14 @@ export default function AreasTable() {
         areaKeys.map((key) => {
           // console.log(key);
           axios
-            .patch("/api/areas/" + target.getAttribute("data-key"), {
+            .patch("/api/areas/" + id, {
               attr: key,
               value: updateArea[index][key],
             })
             .then((data) => {
               fetchAreas();
+              setMessage("Updated successfully");
+              showShortAlert();
             })
             .catch((err) => {
               console.log(err);
@@ -230,7 +233,6 @@ export default function AreasTable() {
         console.log("Area failed to update!");
       }
     } else {
-      // alert("Please fill desired cells before you proceed");
       setVariant("info");
       setMessage("Info! Please fill desired cells before you proceed.");
       setShowAlert(true);
@@ -239,10 +241,15 @@ export default function AreasTable() {
     }
   }
 
-  function handleCellDelete(target) {
-    const area = target.getAttribute("data-key");
+  function handleCellDelete(id) {
+    const area = id;
     setPath("/api/areas/" + area);
     setShowConfirmation(true);
+  }
+
+  function showShortAlert() {
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
   }
 
   function renderAreasData() {
@@ -257,7 +264,10 @@ export default function AreasTable() {
       return filtered_areas.map((area, index) => {
         const { _id, name, description } = area;
         return (
-          <tr key={_id}>
+          <tr
+            key={_id}
+            className="hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          >
             <td className="table-data">{pagination.startIndex + index + 1}</td>
             <td className="table-data">
               <input
@@ -284,28 +294,10 @@ export default function AreasTable() {
               />
             </td>
             <td className="table-data" align="center">
-              <div
-                className="btn-group"
-                role="group"
-                aria-label="Button group with nested dropdown"
-              >
-                <button
-                  type="button"
-                  data-key={_id}
-                  className="btn btn-info accept-request"
-                  onClick={(e) => handleCellUpdate(e.target)}
-                >
-                  Update
-                </button>
-                <button
-                  type="button"
-                  data-key={_id}
-                  className="btn btn-danger decline-request"
-                  onClick={(e) => handleCellDelete(e.target)}
-                >
-                  Delete
-                </button>
-              </div>
+              <ActionButtons
+                updateFunction={() => handleCellUpdate(_id)}
+                deleteFunction={() => handleCellDelete(_id)}
+              />
             </td>
           </tr>
         );
@@ -400,8 +392,7 @@ export default function AreasTable() {
   }
 
   return (
-    <div className="tables-data">
-      <h5>Areas Table</h5> <hr />
+    <div className="tables-data tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl">
       <div className="areas-container">
         <ConfirmationModal
           show={showConfirmation}
@@ -419,47 +410,40 @@ export default function AreasTable() {
         >
           {message}
         </Alert>
-        <div className="filter-content">
-          <div className="md-form md-outline input-with-pre-icon">
-            <i
-              className="fa fa-search input-prefix"
-              style={{ color: "#31b1e4" }}
-            ></i>
+        <div className="tw-flex filter-content tw-justify-start">
+          {/* Search Functionality */}
+          <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
+            <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
+              <SearchIcon />
+            </div>
             <input
               type="text"
-              id="search-areas"
-              className="form-control"
-              placeholder="Search"
+              id="table-search"
+              className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
+              placeholder="Search for categories"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
         </div>
-        <Table
-          className="areas-table"
-          striped
-          bordered
-          hover
-          size="md"
-          responsive
-        >
-          <thead>
+        <Table className="areas-table" size="md" responsive>
+          <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
-              <th className="table-header">
+              <th className="table-header text-center">
                 <span id="name" onClick={(e) => toggleOrder(e.target.id)}>
                   Area Name
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header">
+              <th className="table-header text-center">
                 <span
                   id="description"
                   onClick={(e) => toggleOrder(e.target.id)}
                 >
                   Description
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
               <th className="table-header" style={{ textAlign: "center" }}>
                 <span>Action</span>
