@@ -72,8 +72,6 @@ export default function UsersTable() {
           },
         });
 
-        console.log("[Table]Users: ", users_data.data.results);
-        console.log("mounted: " + componentIsMounted.current);
         if (componentIsMounted.current) {
           setPagination({
             startIndex: users_data.data.startIndex,
@@ -167,9 +165,9 @@ export default function UsersTable() {
     }
   }
 
-  function handleCellDelete(target) {
-    const user = target.getAttribute("data-key");
-    setPath("/users/" + user);
+  function handleCellDelete(id) {
+    const user = id;
+    setPath("/api/users/" + user);
     setShowConfirmation(true);
   }
 
@@ -495,13 +493,13 @@ export default function UsersTable() {
             <td className="table-data">
               <div className="tw-flex tw-gap-1">
                 <button
-                  onClick={() => updateUser(false)}
+                  onClick={() => updateUser(_id)}
                   className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
                 >
                   Update
                 </button>
                 <button
-                  onClick={(e) => handleCellDelete(e.target)}
+                  onClick={() => handleCellDelete(_id)}
                   className="tw-font-semibold tw-text-white tw-bg-red-incorrect tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95 hover:tw-text-dark-sky-blue hover:tw-border-dark-sky-blue tw-rounded"
                 >
                   Delete
@@ -781,9 +779,7 @@ export default function UsersTable() {
                 </span>
               </th>
               <th className="table-header tw-text-center tw-cursor-default">
-                <span id="role">
-                  Role
-                </span>
+                <span id="role">Role</span>
               </th>
               <th className="table-header tw-text-center">
                 <span id="status" onClick={(e) => toggleOrder(e.target.id)}>
@@ -791,9 +787,7 @@ export default function UsersTable() {
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th
-                className="table-header tw-text-center"
-              >
+              <th className="table-header tw-text-center">
                 <span>Action</span>
               </th>
             </tr>
