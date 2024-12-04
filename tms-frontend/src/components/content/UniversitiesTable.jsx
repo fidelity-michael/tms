@@ -293,28 +293,6 @@ export default function UniversitiesArchive() {
     }
   }
 
-  function handlePrevPage(name) {
-    if (name === "prev_university") {
-      setUniversitiesPage(universitiesPage - 1);
-      //console.log("University: Previous Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
-  function handleNextPage(name) {
-    if (name === "next_university") {
-      setUniversitiesPage(universitiesPage + 1);
-      //console.log("University: Next Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
   function loadingTable(e) {
     return (
       <tr>
@@ -412,6 +390,7 @@ export default function UniversitiesArchive() {
           setLimit={(e) => setUniversitiesLimit(e.target.value)}
           renderPageButtonsName={"university"}
           pagination={pagination}
+          setPageState={setUniversities}
         />
       </div>
     </div>

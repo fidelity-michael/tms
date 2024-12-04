@@ -520,28 +520,6 @@ export default function UsersTable() {
     }
   }
 
-  function handlePrevPage(name) {
-    if (name === "prev_user") {
-      setUsersPage(usersPage - 1);
-      //console.log("User: Previous Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
-  function handleNextPage(name) {
-    if (name === "next_user") {
-      setUsersPage(usersPage + 1);
-      //console.log("User: Next Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
   function loadingTable(e) {
     return (
       <tr>
@@ -767,6 +745,7 @@ export default function UsersTable() {
           }}
           renderPageButtonsName="user"
           pagination={pagination}
+          setPageState={setUsers}
         />
       </div>
     </div>
