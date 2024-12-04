@@ -36,9 +36,9 @@ function SidebarLink({ item, props }) {
       }}
       className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
-      <div className="tw-mt-1 tw-inline-block">{item.icon}</div>
+      <div className="tw-mt-1 tw-inline-block 2xl:tw-text-xl">{item.icon}</div>
       <div
-        className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full xl:tw-text-xl`}
+        className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-flex tw-items-end  tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full 2xl:tw-text-xl`}
       >
         {item.label}
       </div>
