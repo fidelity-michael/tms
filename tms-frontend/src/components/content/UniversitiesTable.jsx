@@ -5,7 +5,7 @@ import ConfirmationModal from "../content/ConfirmationModal";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
-import ActionButtons from "./TableComponents";
+import ActionButtons, { PaginationTab } from "./TableComponents";
 
 export default function UniversitiesArchive() {
   const [universities, setUniversities] = useState([]);
@@ -271,7 +271,10 @@ export default function UniversitiesArchive() {
               />
             </td>
             <td className="table-data" style={{ width: "4vw" }}>
-              <ActionButtons updateFunction={() => updateUniversity(_id)} deleteFunction={() => deleteUniversity(_id)}/>
+              <ActionButtons
+                updateFunction={() => updateUniversity(_id)}
+                deleteFunction={() => deleteUniversity(_id)}
+              />
               <div style={{ display: "block" }}>
                 <b>
                   <small
@@ -288,43 +291,6 @@ export default function UniversitiesArchive() {
     } else {
       return emptyTable();
     }
-  }
-
-  function renderPageButtons(name) {
-    const prev = "prev_" + name;
-    const next = "next_" + name;
-
-    return (
-      <div className="page-select">
-        {pagination.startIndex > 0 && (
-          <span
-            className={prev}
-            onClick={(e) => {
-              handlePrevPage(e.target.className);
-            }}
-          >
-            Previous Page
-          </span>
-        )}
-        {pagination.endIndex < pagination.total && (
-          <span
-            className={next}
-            onClick={(e) => {
-              handleNextPage(e.target.className);
-            }}
-          >
-            Next Page
-          </span>
-        )}
-        <span className="page-number">
-          Results{" "}
-          {pagination.endIndex > pagination.total
-            ? pagination.total
-            : pagination.endIndex}{" "}
-          out of {pagination.total}
-        </span>
-      </div>
-    );
   }
 
   function handlePrevPage(name) {
@@ -367,7 +333,10 @@ export default function UniversitiesArchive() {
   function emptyTable(e) {
     return (
       <tr>
-        <td className="empty-data" colSpan="100%">
+        <td
+          className="empty-data hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan="100%"
+        >
           No Data Found
         </td>
       </tr>
@@ -439,25 +408,11 @@ export default function UniversitiesArchive() {
                 : emptyTable()}
           </tbody>
         </Table>
-        {renderPageButtons("university")}
-        <div className="dropdown-limit">
-          <Form.Group controlId="selectControl">
-            <Form.Label className="page-limit-lbl">
-              Universities per page
-            </Form.Label>
-            <Form.Control
-              className="page-limit"
-              as="select"
-              onChange={(e) => {
-                setUniversitiesLimit(e.target.value);
-              }}
-            >
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
+        <PaginationTab
+          setLimit={(e) => setUniversitiesLimit(e.target.value)}
+          renderPageButtonsName={"university"}
+          pagination={pagination}
+        />
       </div>
     </div>
   );
