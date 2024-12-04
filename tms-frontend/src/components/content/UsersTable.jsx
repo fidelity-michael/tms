@@ -482,7 +482,6 @@ export default function UsersTable() {
               </div>
             </td>
             <td className="table-data">
-              {/* <input type="text" name="status" data-key={_id} className="editable-data" placeholder={status} size={status.length} autoComplete="off" onChange={(e) => handleInputChange(e.target)} /> */}
               <Select
                 name="status"
                 data-key={_id}
@@ -781,11 +780,10 @@ export default function UsersTable() {
                   Email
                 </span>
               </th>
-              <th className="table-header tw-text-center">
-                <span id="role" onClick={(e) => toggleOrder(e.target.id)}>
+              <th className="table-header tw-text-center tw-cursor-default">
+                <span id="role">
                   Role
                 </span>
-                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
               <th className="table-header tw-text-center">
                 <span id="status" onClick={(e) => toggleOrder(e.target.id)}>
@@ -795,7 +793,6 @@ export default function UsersTable() {
               </th>
               <th
                 className="table-header tw-text-center"
-                style={{ textAlign: "center" }}
               >
                 <span>Action</span>
               </th>
