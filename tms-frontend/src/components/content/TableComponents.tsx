@@ -10,6 +10,7 @@ type PaginationProps = {
   setLimit: () => void;
   renderPageButtonsName: string;
   pagination: any;
+  setPageState: React.Dispatch<React.SetStateAction<never[]>>
 };
 
 export default function ActionButtons({
@@ -38,6 +39,7 @@ export function PaginationTab({
   setLimit,
   renderPageButtonsName,
   pagination,
+  setPageState
 }: PaginationProps) {
   return (
     <div className="tw-flex tw-gap-6 tw-items-center tw-bg-light-pale-blue-white tw-py-2 tw-px-4 tw-rounded-md">
@@ -56,7 +58,7 @@ export function PaginationTab({
           </Form.Control>
         </Form.Group>
       </div>
-      {renderPageButtons(renderPageButtonsName, pagination)}
+      {renderPageButtons(renderPageButtonsName, pagination, setPageState)}
     </div>
   );
 }
@@ -70,7 +72,7 @@ function getPageName(name: string): string {
   }
 }
 
-function renderPageButtons(name: string, pagination: any) {
+function renderPageButtons(name: string, pagination: any, setPageState) {
   const prev = "prev_" + name;
   const next = "next_" + name;
 
@@ -82,7 +84,7 @@ function renderPageButtons(name: string, pagination: any) {
         <span
           className={prev}
           onClick={(e) => {
-            handlePrevPage(e.target.className);
+            handlePrevPage(setPageState);
           }}
         >
           Previous Page
@@ -92,7 +94,7 @@ function renderPageButtons(name: string, pagination: any) {
         <span
           className={next}
           onClick={(e) => {
-            handleNextPage(e.target.className);
+            handleNextPage(setPageState);
           }}
         >
           Next Page
@@ -107,4 +109,12 @@ function renderPageButtons(name: string, pagination: any) {
       </span>
     </div>
   );
+}
+
+function handlePrevPage(setPageState: any) {
+  setPageState((prev: any) => prev - 1);
+}
+
+function handleNextPage(setPageState: any) {
+  setPageState((prev: any) => prev + 1);
 }
