@@ -745,7 +745,7 @@ export default function UsersTable() {
           }}
           renderPageButtonsName="user"
           pagination={pagination}
-          setPageState={setUsers}
+          setPageState={setUsersPage}
         />
       </div>
     </div>

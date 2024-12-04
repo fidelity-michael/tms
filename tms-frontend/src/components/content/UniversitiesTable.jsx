@@ -390,7 +390,7 @@ export default function UniversitiesArchive() {
           setLimit={(e) => setUniversitiesLimit(e.target.value)}
           renderPageButtonsName={"university"}
           pagination={pagination}
-          setPageState={setUniversities}
+          setPageState={setUniversitiesPage}
         />
       </div>
     </div>
