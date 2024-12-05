@@ -53,7 +53,7 @@ function NewUniversityForm() {
           </Alert>
         ) : null}
         <Form.Group controlId="formName" className="tw-mb-4">
-          <Form.Label className="tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline">
+          <Form.Label className="tw-w-full tw-text-dark-sky-blue tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline">
             Name<span className="tw-text-red-incorrect tw-ml-1">*</span>
           </Form.Label>
           <Form.Control
@@ -66,7 +66,7 @@ function NewUniversityForm() {
         </Form.Group>
 
         <Form.Group controlId="formCountry" className="tw-mb-4">
-          <Form.Label className="tw-w-full tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline">
+          <Form.Label className="tw-w-full tw-text-dark-sky-blue tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline">
             Country<span className="tw-text-red-incorrect tw-ml-1">*</span>
           </Form.Label>
           <br></br>
