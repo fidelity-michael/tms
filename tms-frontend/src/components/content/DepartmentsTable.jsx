@@ -3,6 +3,7 @@ import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
 import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
 import ActionButtons, { PaginationTab } from "./TableComponents";
 
@@ -275,9 +276,8 @@ export default function DepartmentsArchive() {
                 type="text"
                 id={_id + "name"}
                 data-key={_id}
-                className="editable-data"
+                className="editable-data tw-text-sm"
                 placeholder={name}
-                size={40}
                 autoComplete="off"
               />
             </td>
@@ -286,9 +286,8 @@ export default function DepartmentsArchive() {
                 type="text"
                 id={_id + "university"}
                 data-key={_id}
-                className="editable-data"
+                className="editable-data tw-text-sm"
                 placeholder={university}
-                size={30}
                 autoComplete="off"
               />
             </td>
@@ -297,9 +296,8 @@ export default function DepartmentsArchive() {
                 type="text"
                 id={_id + "email"}
                 data-key={_id}
-                className="editable-data"
+                className="editable-data tw-text-sm"
                 placeholder={email}
-                size={30}
                 autoComplete="off"
               />
             </td>
@@ -308,9 +306,8 @@ export default function DepartmentsArchive() {
                 type="text"
                 id={_id + "phone"}
                 data-key={_id}
-                className="editable-data"
+                className="editable-data tw-text-sm"
                 placeholder={phone}
-                size={20}
                 autoComplete="off"
               />
             </td>
@@ -454,34 +451,38 @@ export default function DepartmentsArchive() {
               type="text"
               id="table-search"
               className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-              placeholder="Search for people"
+              placeholder="Search for departments"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
         </div>
-        <Table className="departments-table" size="sm" responsive>
-          <thead>
+        <Table className="departments-table" size="md" responsive>
+          <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
               <th className="table-header">
                 <span id="name" onClick={(e) => toggleOrder(e.target.id)}>
                   Department Name
+                  <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
               <th className="table-header">
                 <span id="university" onClick={(e) => toggleOrder(e.target.id)}>
                   University
+                  <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
               <th className="table-header">
                 <span id="email" onClick={(e) => toggleOrder(e.target.id)}>
                   Email
+                  <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
               <th className="table-header">
                 <span id="phone" onClick={(e) => toggleOrder(e.target.id)}>
                   Phone
+                  <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
               <th className="table-header" style={{ textAlign: "center" }}>
