@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
 import ActionButtons, { PaginationTab } from "./TableComponents";
-import { showShortAlert } from "../utils/utils";
+import { SearchFunction, showShortAlert } from "../../utils/utils";
 
 export default function AreasTable() {
   const [areas, setAreas] = useState([]);
@@ -222,7 +222,6 @@ export default function AreasTable() {
             .then((data) => {
               fetchAreas();
               setMessage("Updated successfully");
-              showShortAlert(setShowAlert);
             })
             .catch((err) => {
               console.log(err);
@@ -365,7 +364,10 @@ export default function AreasTable() {
   function loadingTable(e) {
     return (
       <tr>
-        <td className="loading-data" colSpan="100%">
+        <td
+          className="loading-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan={100}
+        >
           <p
             className="animated headShake infinite"
             style={{ marginBottom: "-0.1rem" }}
@@ -409,22 +411,12 @@ export default function AreasTable() {
         >
           {message}
         </Alert>
-        <div className="tw-flex filter-content tw-justify-start">
-          {/* Search Functionality */}
-          <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
-            <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-              <SearchIcon />
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-              placeholder="Search for categories"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-        </div>
+
+        <SearchFunction
+          query={query}
+          setQuery={(e) => setQuery(e.target.value)}
+        />
+
         <Table className="areas-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>

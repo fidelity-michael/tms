@@ -10,7 +10,7 @@ type PaginationProps = {
   setLimit: () => void;
   renderPageButtonsName: string;
   pagination: any;
-  setPageState: React.Dispatch<React.SetStateAction<never[]>>
+  setPageState: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function ActionButtons({
@@ -39,7 +39,7 @@ export function PaginationTab({
   setLimit,
   renderPageButtonsName,
   pagination,
-  setPageState
+  setPageState,
 }: PaginationProps) {
   return (
     <div className="tw-flex tw-gap-6 tw-items-center tw-bg-light-pale-blue-white tw-py-2 tw-px-4 tw-rounded-md">
@@ -69,6 +69,12 @@ function getPageName(name: string): string {
       return "Users";
     case "university":
       return "Universities";
+    case "area":
+      return "Categories";
+    case "department":
+      return "Departments";
+    case "thesis":
+      return "Theses";
   }
 }
 
@@ -78,29 +84,31 @@ function renderPageButtons(name: string, pagination: any, setPageState) {
 
   return (
     <div
-      className={`tw-flex tw-flex-1 ${pagination.startIndex < 0 ? "tw-justify-between" : "tw-justify-end"}`}
+      className={`tw-flex tw-flex-1 ${pagination.total > 0 ? "tw-justify-between" : "tw-justify-end"}`}
     >
-      {pagination.startIndex > 0 && (
-        <span
-          className={prev}
-          onClick={(e) => {
-            handlePrevPage(setPageState);
-          }}
-        >
-          Previous Page
-        </span>
-      )}
-      {pagination.endIndex < pagination.total && (
-        <span
-          className={next}
-          onClick={(e) => {
-            handleNextPage(setPageState);
-          }}
-        >
-          Next Page
-        </span>
-      )}
-      <span className="tw-float-right">
+      <div className="tw-flex tw-justify-start tw-gap-2 tw-text-light-sky-blue">
+        {pagination.startIndex > 0 && (
+          <span
+            className={"tw-cursor-pointer  hover:tw-text-dark-sky-blue"}
+            onClick={(e) => {
+              handlePrevPage(setPageState);
+            }}
+          >
+            Previous Page
+          </span>
+        )}
+        {pagination.endIndex < pagination.total && (
+          <span
+            className={"tw-cursor-pointer hover:tw-text-dark-sky-blue"}
+            onClick={(e) => {
+              handleNextPage(setPageState);
+            }}
+          >
+            Next Page
+          </span>
+        )}
+      </div>
+      <span className="">
         Results{" "}
         {pagination.endIndex > pagination.total
           ? pagination.total
