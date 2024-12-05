@@ -19,6 +19,7 @@ import Calendar from "../../components/content/Calendar";
 import AdminDashboard from "../../components/content/AdminDashboard";
 import NewUniversityForm from "../../components/forms/NewUniversityForm/NewUniversityForm";
 import NewDepartmentForm from "../../components/forms/NewDepartmentForm/NewDepartmentForm";
+import PageTopContentTable from "../../utils/utils";
 
 export default function AdministratorPage() {
   //we use ths to indicate from where we're coming from (login or changeRole)
@@ -156,26 +157,11 @@ export default function AdministratorPage() {
               ) : null}
               {page === "Users" ? (
                 <div>
-                  <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
-                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
-                      {newUser === false ? "Users Table" : "New User"}
-                    </h5>
-                    <hr />
-                    <div className="tw-flex tw-gap-1">
-                      <button
-                        onClick={() => setNewUser(false)}
-                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
-                      >
-                        Show Users
-                      </button>
-                      <button
-                        onClick={() => setNewUser(true)}
-                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
-                      >
-                        New User
-                      </button>
-                    </div>
-                  </div>
+                  <PageTopContentTable
+                    newOption={newUser}
+                    name="Users"
+                    toggleOption={setNewUser}
+                  />
                   {!newUser && <UsersTable />}
                   {newUser && <NewUser />}
                 </div>
@@ -183,80 +169,34 @@ export default function AdministratorPage() {
               {page === "Statistics" ? <Statistics /> : null}
               {page === "Universities" ? (
                 <div>
-                  <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
-                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
-                      {newUniversity === false
-                        ? "Universities Table"
-                        : "New University"}
-                    </h5>
-                    <hr />
-                    <div className="tw-flex tw-gap-1">
-                      <button
-                        onClick={() => toggleNewUniversity(false)}
-                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
-                      >
-                        Show Universities
-                      </button>
-                      <button
-                        onClick={() => toggleNewUniversity(true)}
-                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
-                      >
-                        New University
-                      </button>
-                    </div>
-                  </div>
+                  <PageTopContentTable
+                    newOption={newUniversity}
+                    name="Universities"
+                    toggleOption={toggleNewUniversity}
+                  />
+
                   {!newUniversity && <UniversitiesTable />}
                   {newUniversity && <NewUniversityForm />}
                 </div>
               ) : null}
               {page === "Departments" ? (
                 <div>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Button group with nested dropdown"
-                  >
-                    <button
-                      type="button"
-                      className="btn btn-light user-btn"
-                      onClick={() => toggleNewDepartment(false)}
-                    >
-                      Show Departments
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-info user-btn new"
-                      onClick={() => toggleNewDepartment(true)}
-                    >
-                      New Department
-                    </button>
-                  </div>
+                  <PageTopContentTable
+                    newOption={newDepartment}
+                    name="Departments"
+                    toggleOption={toggleNewDepartment}
+                  />
                   {!newDepartment && <DepartmentsTable />}
                   {newDepartment && <NewDepartmentForm />}
                 </div>
               ) : null}
               {page === "Areas / Categories" ? (
                 <div>
-                  <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
-                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
-                      {newArea === false ? "Categories Table" : "New Categories"}
-                    </h5>
-                    <hr />
-                    <div className="tw-flex tw-gap-1">
-                      <button
-                        onClick={() => toggleNewArea(false)}
-                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
-                      >
-                        Show Categories
-                      </button>
-                      <button
-                        onClick={() => toggleNewArea(true)}
-                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
-                      >
-                        New Categories
-                      </button>
-                    </div>
-                  </div>
+                  <PageTopContentTable
+                    newOption={newArea}
+                    name="Categories"
+                    toggleOption={toggleNewArea}
+                  />
                   {!newArea && <AreasTable />}
                   {newArea && <NewArea />}
                 </div>
