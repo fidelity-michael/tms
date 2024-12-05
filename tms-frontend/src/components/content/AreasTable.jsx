@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
 import ActionButtons, { PaginationTab } from "./TableComponents";
+import { showShortAlert } from "../utils/utils";
 
 export default function AreasTable() {
   const [areas, setAreas] = useState([]);
@@ -221,7 +222,7 @@ export default function AreasTable() {
             .then((data) => {
               fetchAreas();
               setMessage("Updated successfully");
-              showShortAlert();
+              showShortAlert(setShowAlert);
             })
             .catch((err) => {
               console.log(err);
@@ -245,11 +246,6 @@ export default function AreasTable() {
     const area = id;
     setPath("/api/areas/" + area);
     setShowConfirmation(true);
-  }
-
-  function showShortAlert() {
-    setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 3000);
   }
 
   function renderAreasData() {
@@ -384,7 +380,10 @@ export default function AreasTable() {
   function emptyTable(e) {
     return (
       <tr>
-        <td className="empty-data" colSpan="100%">
+        <td
+          className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan={100}
+        >
           No Data Found
         </td>
       </tr>
