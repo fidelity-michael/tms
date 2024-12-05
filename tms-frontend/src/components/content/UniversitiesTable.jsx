@@ -245,7 +245,7 @@ export default function UniversitiesArchive() {
         return (
           <tr
             key={_id}
-            className="table-data hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+            className="table-data hover:tw-bg-light-pale-blue-white tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
           >
             <td>{pagination.startIndex + index + 1}</td>
             <td className="table-data">
@@ -361,19 +361,19 @@ export default function UniversitiesArchive() {
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
-              <th className="table-header tw-text-center">
+              <th className="table-header">
                 <span id="name" onClick={(e) => toggleOrder(e.target.id)}>
                   University Name
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header text-center">
+              <th className="table-header ">
                 <span id="country" onClick={(e) => toggleOrder(e.target.id)}>
                   Country
                 </span>
                 <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
-              <th className="table-header tw-text-center">
+              <th className="table-header">
                 <span>Action</span>
               </th>
             </tr>
