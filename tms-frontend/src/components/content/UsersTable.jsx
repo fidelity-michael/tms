@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import ConfirmationModal from "../content/ConfirmationModal";
@@ -19,7 +19,7 @@ import {
   MenuSeparator,
 } from "@headlessui/react";
 import ArrowRight from "@mui/icons-material/ArrowRight";
-import { PaginationTab } from "./TableComponents";
+import ActionButtons, { PaginationTab } from "./TableComponents";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -493,18 +493,10 @@ export default function UsersTable() {
             </td>
             <td className="table-data">
               <div className="tw-flex tw-gap-1">
-                <button
-                  onClick={() => updateUser(_id)}
-                  className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleCellDelete(_id)}
-                  className="tw-font-semibold tw-text-white tw-bg-red-incorrect tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95 hover:tw-text-dark-sky-blue hover:tw-border-dark-sky-blue tw-rounded"
-                >
-                  Delete
-                </button>
+                <ActionButtons
+                  updateFunction={() => updateUser(_id)}
+                  deleteFunction={() => handleCellDelete(_id)}
+                />
               </div>
               <div>
                 <b>
