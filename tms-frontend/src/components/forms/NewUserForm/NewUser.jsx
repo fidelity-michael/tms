@@ -199,7 +199,7 @@ export default function NewUser() {
         }}
         className="tw-bg-white tw-shadow-md tw-rounded tw-px-8 tw-pt-6 tw-pb-8 tw-mb-4"
       >
-        <div className="mb-4">
+        <div className="tw-mb-4">
           <label
             className="tw-block tw-text-dark-sky-blue tw-text-sm tw-font-bold tw-mb-2"
             htmlFor="first_name"
@@ -215,7 +215,7 @@ export default function NewUser() {
             placeholder="Username"
           />
         </div>
-        <div className="mb-4">
+        <div className="tw-mb-4">
           <label
             className="tw-block tw-text-dark-sky-blue tw-text-sm tw-font-bold tw-mb-2"
             htmlFor="last_name"
@@ -231,7 +231,7 @@ export default function NewUser() {
             onChange={(e) => handleChange(e.target)}
           />
         </div>
-        <div className="mb-4">
+        <div className="tw-mb-4">
           <label
             className="tw-block tw-text-dark-sky-blue tw-text-sm tw-font-bold tw-mb-2"
             htmlFor="role"
@@ -251,7 +251,7 @@ export default function NewUser() {
         </div>
 
         {user.role === "student" && (
-          <div className="mb-4">
+          <div className="tw-mb-4">
             <label
               className="tw-block tw-text-dark-sky-blue tw-text-sm tw-font-bold tw-mb-2"
               htmlFor="role"
@@ -270,7 +270,7 @@ export default function NewUser() {
           </div>
         )}
 
-        <div className="mb-4">
+        <div className="tw-mb-4">
           <label
             className="tw-block tw-text-dark-sky-blue tw-text-sm tw-font-bold tw-mb-2"
             htmlFor="email"
