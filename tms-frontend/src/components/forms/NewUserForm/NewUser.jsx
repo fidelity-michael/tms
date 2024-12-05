@@ -328,7 +328,7 @@ export default function NewUser() {
             className="tw-bg-dark-sky-blue hover:tw-bg-mid-pale-blue tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded focus:tw-outline-none focus:tw-shadow-outline"
             type="submit"
           >
-            Submit
+            Add User
           </button>
         </div>
       </Form>
