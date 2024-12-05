@@ -271,7 +271,7 @@ export default function DepartmentsArchive() {
             className="hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
           >
             <td className="table-data">{pagination.startIndex + index + 1}</td>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <input
                 type="text"
                 id={_id + "name"}
@@ -281,7 +281,7 @@ export default function DepartmentsArchive() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <input
                 type="text"
                 id={_id + "university"}
@@ -291,7 +291,7 @@ export default function DepartmentsArchive() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <input
                 type="text"
                 id={_id + "email"}
@@ -301,7 +301,7 @@ export default function DepartmentsArchive() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <input
                 type="text"
                 id={_id + "phone"}
@@ -311,7 +311,7 @@ export default function DepartmentsArchive() {
                 autoComplete="off"
               />
             </td>
-            <td className="table-data" style={{ width: "4vw" }}>
+            <td className="table-data tw-text-center" style={{ width: "4vw" }}>
               <ActionButtons
                 updateFunction={() => updateDepartment(_id)}
                 deleteFunction={() => deleteDepartment(_id)}
@@ -461,31 +461,31 @@ export default function DepartmentsArchive() {
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th>#</th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="name" onClick={(e) => toggleOrder(e.target.id)}>
                   Department Name
                   <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="university" onClick={(e) => toggleOrder(e.target.id)}>
                   University
                   <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="email" onClick={(e) => toggleOrder(e.target.id)}>
                   Email
                   <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="phone" onClick={(e) => toggleOrder(e.target.id)}>
                   Phone
                   <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
-              <th className="table-header" style={{ textAlign: "center" }}>
+              <th className="table-header tw-text-center" style={{ textAlign: "center" }}>
                 <span>Action</span>
               </th>
             </tr>
