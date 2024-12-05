@@ -85,7 +85,7 @@ export default function NewArea() {
         </Form.Label>
         <Form.Control
           as="textarea"
-          rows="3"
+          rows={3}
           name="description"
           onChange={(e) => handleChange(e.target)}
           value={area.description}
