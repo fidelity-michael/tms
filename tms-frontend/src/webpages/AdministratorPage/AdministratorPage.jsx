@@ -157,7 +157,9 @@ export default function AdministratorPage() {
               {page === "Users" ? (
                 <div>
                   <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
-                    <h5 className="tw-text-dark-sky-blue">{newUser === false ? "Users Table" : "New User"}</h5>
+                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
+                      {newUser === false ? "Users Table" : "New User"}
+                    </h5>
                     <hr />
                     <div className="tw-flex tw-gap-1">
                       <button
@@ -181,25 +183,27 @@ export default function AdministratorPage() {
               {page === "Statistics" ? <Statistics /> : null}
               {page === "Universities" ? (
                 <div>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Button group with nested dropdown"
-                  >
-                    <button
-                      type="button"
-                      className="btn btn-light user-btn"
-                      onClick={() => toggleNewUniversity(false)}
-                    >
-                      Show Universities
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-info user-btn new"
-                      onClick={() => toggleNewUniversity(true)}
-                    >
-                      New University
-                    </button>
+                  <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
+                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
+                      {newUniversity === false
+                        ? "Universities Table"
+                        : "New University"}
+                    </h5>
+                    <hr />
+                    <div className="tw-flex tw-gap-1">
+                      <button
+                        onClick={() => toggleNewUniversity(false)}
+                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+                      >
+                        Show Universities
+                      </button>
+                      <button
+                        onClick={() => toggleNewUniversity(true)}
+                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
+                      >
+                        New University
+                      </button>
+                    </div>
                   </div>
                   {!newUniversity && <UniversitiesTable />}
                   {newUniversity && <NewUniversityForm />}
@@ -233,27 +237,26 @@ export default function AdministratorPage() {
               ) : null}
               {page === "Areas / Categories" ? (
                 <div>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Button group with nested dropdown"
-                  >
-                    <button
-                      type="button"
-                      className="btn btn-light area-btn"
-                      onClick={() => toggleNewArea(false)}
-                    >
-                      Show Areas
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-dark area-btn new"
-                      onClick={() => toggleNewArea(true)}
-                    >
-                      New Area
-                    </button>
+                  <div className="tw-flex tw-gap-1 tw-justify-between tw-items-center tw-mb-4">
+                    <h5 className="tw-text-dark-sky-blue tw-text-xl">
+                      {newArea === false ? "Categories Table" : "New Categories"}
+                    </h5>
+                    <hr />
+                    <div className="tw-flex tw-gap-1">
+                      <button
+                        onClick={() => toggleNewArea(false)}
+                        className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+                      >
+                        Show Categories
+                      </button>
+                      <button
+                        onClick={() => toggleNewArea(true)}
+                        className="tw-font-semibold tw-text-white tw-bg-dark-sky-blue tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-bg-mid-pale-blue  hover:tw-border-dark-sky-blue tw-rounded"
+                      >
+                        New Categories
+                      </button>
+                    </div>
                   </div>
-
                   {!newArea && <AreasTable />}
                   {newArea && <NewArea />}
                 </div>
