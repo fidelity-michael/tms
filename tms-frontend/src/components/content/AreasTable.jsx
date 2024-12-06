@@ -415,6 +415,7 @@ export default function AreasTable() {
         <SearchFunction
           query={query}
           setQuery={(e) => setQuery(e.target.value)}
+          placeholder="Search for Categories"
         />
 
         <Table className="areas-table" size="md" responsive>

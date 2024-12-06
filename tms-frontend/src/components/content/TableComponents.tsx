@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { Form } from "react-bootstrap";
 
 type ActionButtonsProps = {
@@ -79,9 +78,6 @@ function getPageName(name: string): string {
 }
 
 function renderPageButtons(name: string, pagination: any, setPageState) {
-  const prev = "prev_" + name;
-  const next = "next_" + name;
-
   return (
     <div
       className={`tw-flex tw-flex-1 ${pagination.total > 0 ? "tw-justify-between" : "tw-justify-end"}`}
@@ -90,7 +86,7 @@ function renderPageButtons(name: string, pagination: any, setPageState) {
         {pagination.startIndex > 0 && (
           <span
             className={"tw-cursor-pointer  hover:tw-text-dark-sky-blue"}
-            onClick={(e) => {
+            onClick={() => {
               handlePrevPage(setPageState);
             }}
           >

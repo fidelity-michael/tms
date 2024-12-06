@@ -20,6 +20,7 @@ import {
 } from "@headlessui/react";
 import ArrowRight from "@mui/icons-material/ArrowRight";
 import ActionButtons, { PaginationTab } from "./TableComponents";
+import { SearchFunction } from "../../utils/utils";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -492,12 +493,10 @@ export default function UsersTable() {
               </Select>
             </td>
             <td className="table-data">
-              <div className="tw-flex tw-gap-1">
-                <ActionButtons
-                  updateFunction={() => updateUser(_id)}
-                  deleteFunction={() => handleCellDelete(_id)}
-                />
-              </div>
+              <ActionButtons
+                updateFunction={() => updateUser(_id)}
+                deleteFunction={() => handleCellDelete(_id)}
+              />
               <div>
                 <b>
                   <p className="infoUpdateUser" id={_id + "info"}></p>
@@ -532,7 +531,7 @@ export default function UsersTable() {
       <tr>
         <td
           className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
-          colSpan="100%"
+          colSpan={100}
         >
           No Data Found
         </td>
@@ -671,22 +670,11 @@ export default function UsersTable() {
           {message}
         </Alert>
 
-        <div className="tw-flex filter-content tw-justify-start">
-          {/* Search Functionality */}
-          <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
-            <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-              <SearchIcon />
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-              placeholder="Search for people"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-        </div>
+        <SearchFunction
+          query={query}
+          setQuery={(e) => setQuery(e.target.value)}
+          placeholder={"Search for people"}
+        />
 
         <Table className="users-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">

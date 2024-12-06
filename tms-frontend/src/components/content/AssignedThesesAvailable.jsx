@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
 import ActionButtons, { PaginationTab } from "./TableComponents";
-import { showShortAlert } from "../../utils/utils";
+import { SearchFunction, showShortAlert } from "../../utils/utils";
 
 export default function AssignedThesesAvailable({ userId }) {
   const [theses, setTheses] = useState([]);
@@ -461,22 +461,11 @@ export default function AssignedThesesAvailable({ userId }) {
           <h5 className="tw-text-dark-sky-blue tw-text-xl">
             Assigned Theses Table
           </h5>
-          {/* Search Functionality */}
-          <div className="tw-flex tw-items-center">
-            <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6 tw-top-2">
-              <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-                <SearchIcon />
-              </div>
-              <input
-                type="text"
-                id="table-search"
-                className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-                placeholder="Search for people"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-          </div>
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder="Search for assigned theses"
+          />
         </div>
 
         <Table className="theses-table" size="sm" responsive>

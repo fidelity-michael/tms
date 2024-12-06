@@ -557,6 +557,7 @@ export default function ThesesTable({ userId, userGroup }) {
     <div className="tables-data tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl">
       <div className="theses-container">
         <ConfirmationModal
+          message={""}
           show={showConfirmation}
           setShow={(data) => setShowConfirmation(data)}
           path={path}
@@ -573,13 +574,14 @@ export default function ThesesTable({ userId, userGroup }) {
           {message}
         </Alert>
 
-        <div className="tw-ml-5 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+        <div className="tw-ml-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
           <h5 className="tw-text-dark-sky-blue tw-text-xl">
             Archived Theses Table
           </h5>
           <SearchFunction
             query={query}
             setQuery={(e) => setQuery(e.target.value)}
+            placeholder="Search for archived theses"
           />
         </div>
 

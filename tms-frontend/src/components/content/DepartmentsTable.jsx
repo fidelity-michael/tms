@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import "./content.css";
 import ActionButtons, { PaginationTab } from "./TableComponents";
+import { SearchFunction } from "../../utils/utils";
 
 export default function DepartmentsArchive() {
   const [departments, setDepartments] = useState([]);
@@ -441,22 +442,11 @@ export default function DepartmentsArchive() {
         {message}
       </Alert>
       <div className="departments-container">
-        <div className="tw-flex filter-content tw-justify-start">
-          {/* Search Functionality */}
-          <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
-            <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-              <SearchIcon />
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-              placeholder="Search for departments"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-        </div>
+        <SearchFunction
+          query={query}
+          setQuery={(e) => setQuery(e.target.value)}
+          placeholder={"Search for departments"}
+        />
         <Table className="departments-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
@@ -485,7 +475,10 @@ export default function DepartmentsArchive() {
                   <EditIcon style={{ height: "1rem", width: "1rem" }} />
                 </span>
               </th>
-              <th className="table-header tw-text-center" style={{ textAlign: "center" }}>
+              <th
+                className="table-header tw-text-center"
+                style={{ textAlign: "center" }}
+              >
                 <span>Action</span>
               </th>
             </tr>
