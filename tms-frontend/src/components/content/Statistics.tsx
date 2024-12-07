@@ -245,7 +245,7 @@ function getChartConfigForTheses({ theses }: barChartThesesProps) {
         dataLabels: {
           enabled: false,
         },
-        colors: ["#020617"],
+        colors: ["#384959"],
         plotOptions: {
           bar: {
             columnWidth: "40%",
@@ -332,7 +332,7 @@ function getChartConfigForTheses({ theses }: barChartThesesProps) {
       dataLabels: {
         enabled: false,
       },
-      colors: ["#020617"],
+      colors: ["#384959"],
       plotOptions: {
         bar: {
           columnWidth: "40%",
@@ -425,21 +425,21 @@ export default function Statistics() {
             <NumberCard
               number={totalUsers}
               title="Users"
-              description="Number of registered Users in the Database"
+              description="Number of registered Users in the database"
             />
           </div>
           <div className="col mt-2">
             <NumberCard
               number={totalTheses}
               title="Theses"
-              description="Number of Theses in the Database"
+              description="Number of Theses in the database"
             />
           </div>
           <div className="col mt-2">
             <NumberCard
               number={totalThesesRequests}
               title="Theses Requests"
-              description="Number of Theses Requests in the Database"
+              description="Number of Theses Requests in the database"
             />
           </div>
         </div>
