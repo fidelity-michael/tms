@@ -63,12 +63,12 @@ function PieChart({ chartConfig }: any) {
           >
             Registered Users
           </Typography>
-          {/* <Typography
+          <Typography
             placeholder={""}
             variant="small"
             color="gray"
             className="tw-max-w-sm tw-font-normal"
-          ></Typography> */}
+          >Users pursuing either a Bachelor's or Master's degree are classified under the 'Student' category.</Typography>
         </div>
       </CardHeader>
       <CardBody
@@ -81,7 +81,7 @@ function PieChart({ chartConfig }: any) {
   );
 }
 
-function BarChart({ chartConfig }: any) {
+function BarChart({ chartConfig , title, description}: any) {
   return (
     <Card placeholder={""} className="tw-rounded-xl">
       <CardHeader
@@ -98,17 +98,17 @@ function BarChart({ chartConfig }: any) {
             color="blue-gray"
             className="tw-text-dark-sky-blue tw-text-xl"
           >
-            Available Theses
+            {title}
           </Typography>
-          {/* <Typography
+          <Typography
             placeholder={""}
             variant="small"
             color="gray"
-            className="tw-max-w-sm tw-font-normal"
-          ></Typography> */}
+            className="tw-max-w-lg tw-text-gray-300 tw-font-normal"
+          >{description}</Typography>
         </div>
       </CardHeader>
-      <CardBody className="mt-4 grid place-items-center px-2">
+      <CardBody placeholder={""} className="mt-4 grid place-items-center px-2">
         <Chart {...chartConfig} />
       </CardBody>
     </Card>
@@ -448,7 +448,7 @@ export default function Statistics() {
             <PieChart chartConfig={getChartConfigForUsers({ users })} />
           </div>
           <div className="col">
-            <BarChart chartConfig={getChartConfigForTheses({ theses })} />
+            <BarChart chartConfig={getChartConfigForTheses({ theses })} title={"Available Theses"} description={  "Based on whether users are pursuing a Bachelor's or Master's degree."}/>
           </div>
         </div>
       </div>
