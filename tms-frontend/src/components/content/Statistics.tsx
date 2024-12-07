@@ -68,7 +68,10 @@ function PieChart({ chartConfig }: any) {
             variant="small"
             color="gray"
             className="tw-max-w-sm tw-font-normal"
-          >Users pursuing either a Bachelor's or Master's degree are classified under the 'Student' category.</Typography>
+          >
+            Users pursuing either a Bachelor's or Master's degree are classified
+            under the 'Student' category.
+          </Typography>
         </div>
       </CardHeader>
       <CardBody
@@ -81,7 +84,7 @@ function PieChart({ chartConfig }: any) {
   );
 }
 
-function BarChart({ chartConfig , title, description}: any) {
+function BarChart({ chartConfig, title = "", description = "" }: any) {
   return (
     <Card placeholder={""} className="tw-rounded-xl">
       <CardHeader
@@ -105,7 +108,9 @@ function BarChart({ chartConfig , title, description}: any) {
             variant="small"
             color="gray"
             className="tw-max-w-lg tw-text-gray-300 tw-font-normal"
-          >{description}</Typography>
+          >
+            {description}
+          </Typography>
         </div>
       </CardHeader>
       <CardBody placeholder={""} className="mt-4 grid place-items-center px-2">
@@ -392,6 +397,98 @@ function getChartConfigForTheses({ theses }: barChartThesesProps) {
   return chartConfig;
 }
 
+function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
+  let areasWithTheses = new Map<string, number>();
+
+  theses.map((el) => {
+    if (areasWithTheses.has(el.area)) {
+      areasWithTheses.set(el.area, areasWithTheses.get(el.area)! + 1);
+    } else {
+      areasWithTheses.set(el.area, 1);
+    }
+  });
+
+  const chartConfig = {
+    type: "bar",
+    height: 300,
+    series: [
+      {
+        name: "Theses",
+        data: [...areasWithTheses.values()],
+      },
+    ],
+    options: {
+      chart: {
+        toolbar: {
+          show: false,
+        },
+      },
+      title: {
+        show: "",
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      colors: ["#00897b"],
+      plotOptions: {
+        bar: {
+          columnWidth: "40%",
+          borderRadius: 2,
+        },
+      },
+      xaxis: {
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: [...areasWithTheses.keys()],
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
+      },
+    },
+  };
+
+  return chartConfig;
+}
+
 export default function Statistics() {
   const [users, setUsers] = useState<User[]>([]);
   const [theses, setTheses] = useState<Thesis[]>([]);
@@ -445,10 +542,25 @@ export default function Statistics() {
         </div>
         <div className="row">
           <div className="col">
+            <BarChart
+              chartConfig={getChartConfigForAreaTheses({ theses })}
+              title={"Available Theses per Area"}
+              description={""}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
             <PieChart chartConfig={getChartConfigForUsers({ users })} />
           </div>
           <div className="col">
-            <BarChart chartConfig={getChartConfigForTheses({ theses })} title={"Available Theses"} description={  "Based on whether users are pursuing a Bachelor's or Master's degree."}/>
+            <BarChart
+              chartConfig={getChartConfigForTheses({ theses })}
+              title={"Available Theses"}
+              description={
+                "Based on whether users are pursuing a Bachelor's or Master's degree."
+              }
+            />
           </div>
         </div>
       </div>
