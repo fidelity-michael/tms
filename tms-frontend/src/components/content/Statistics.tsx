@@ -46,8 +46,9 @@ function NumberCard({ number, title, description }: NumberCardProps) {
 
 function PieChart({ chartConfig }: any) {
   return (
-    <Card className="tw-rounded-xl">
+    <Card placeholder={""} className="tw-rounded-xl">
       <CardHeader
+        placeholder={""}
         floated={false}
         shadow={false}
         color="transparent"
@@ -80,6 +81,40 @@ function PieChart({ chartConfig }: any) {
   );
 }
 
+function BarChart({ chartConfig }: any) {
+  return (
+    <Card placeholder={""} className="tw-rounded-xl">
+      <CardHeader
+        placeholder={""}
+        floated={false}
+        shadow={false}
+        color="transparent"
+        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+      >
+        <div className="tw-p-5">
+          <Typography
+            placeholder={""}
+            variant="h6"
+            color="blue-gray"
+            className="tw-text-dark-sky-blue tw-text-xl"
+          >
+            Available Theses
+          </Typography>
+          {/* <Typography
+            placeholder={""}
+            variant="small"
+            color="gray"
+            className="tw-max-w-sm tw-font-normal"
+          ></Typography> */}
+        </div>
+      </CardHeader>
+      <CardBody className="mt-4 grid place-items-center px-2">
+        <Chart {...chartConfig} />
+      </CardBody>
+    </Card>
+  );
+}
+
 type User = {
   _id: string;
   first_name: string;
@@ -99,52 +134,33 @@ type chartConfigForUsersProps = {
   users: User[];
 };
 
-/* function chartConfigForUsers({ users }: chartConfigForUsersProps) {
-  let studentCount = 0;
-  let adminCount = 0;
-  let professorCount = 0;
-  let secretariantCount = 0;
+type Thesis = {
+  _id: string;
+  title: string;
+  topic: string;
+  area: string;
+  description: string;
+  prerequisites: string;
+  group: string;
+  professor: string; // Assuming this references a professor's ID
+  required_files: string[]; // Array of strings for file paths or names
+  thesis_files: string[]; // Array of strings for file paths or names
+  status: "active" | "inactive"; // Assuming "status" is an enum with known values
+  date: string; // ISO date string
+  createdAt: string; // ISO date string for creation timestamp
+  updatedAt: string; // ISO date string for update timestamp
+};
 
-  users.map((el) => {
-    el.role.map((role) => {
-      if (role === "student") studentCount++;
-      else if (role === "professor") professorCount++;
-      else if (role === "secretariat") secretariantCount++;
-      else if (role === "administrator") adminCount++;
-    });
-  });
+type barChartThesesProps = {
+  theses: Thesis[];
+};
 
-  return {
-    type: "pie",
-    width: 280,
-    height: 280,
-    series: [adminCount, secretariantCount, professorCount, studentCount],
-    options: {
-      chart: {
-        toolbar: {
-          show: false,
-        },
-      },
-      title: {
-        show: "",
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      colors: ["#020617", "#ff8f00", "#00897b", "#1e88e5"],
-      legend: {
-        show: false,
-      },
-    },
-  };
-} */
-
-function chartConfigForUsers({ users }: chartConfigForUsersProps) {
+function getChartConfigForUsers({ users }: chartConfigForUsersProps) {
   if (!users || users.length === 0) {
     return {
       type: "pie",
-      width: 280,
-      height: 280,
+      width: 450,
+      height: 450,
       series: [0, 0, 0, 0],
       options: {
         chart: {
@@ -158,7 +174,7 @@ function chartConfigForUsers({ users }: chartConfigForUsersProps) {
         dataLabels: {
           enabled: false,
         },
-        colors: ["#020617", "#ff8f00", "#00897b", "#1e88e5"],
+        colors: ["#384959", "#ff8f00", "#00897b", "#88BDF2"],
         legend: {
           show: false,
         },
@@ -198,7 +214,7 @@ function chartConfigForUsers({ users }: chartConfigForUsersProps) {
       dataLabels: {
         enabled: false,
       },
-      colors: ["#384959", "#ff8f00", "#00897b", "#1e88e5"],
+      colors: ["#384959", "#ff8f00", "#00897b", "#88BDF2"],
       legend: {
         show: true,
       },
@@ -206,8 +222,179 @@ function chartConfigForUsers({ users }: chartConfigForUsersProps) {
   };
 }
 
+function getChartConfigForTheses({ theses }: barChartThesesProps) {
+  if (!theses || theses.length === 0) {
+    return {
+      type: "bar",
+      height: 300,
+      series: [
+        {
+          name: "Theses",
+          data: [0, 0],
+        },
+      ],
+      options: {
+        chart: {
+          toolbar: {
+            show: false,
+          },
+        },
+        title: {
+          show: "",
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        colors: ["#020617"],
+        plotOptions: {
+          bar: {
+            columnWidth: "40%",
+            borderRadius: 2,
+          },
+        },
+        xaxis: {
+          axisTicks: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+          labels: {
+            style: {
+              colors: "#616161",
+              fontSize: "12px",
+              fontFamily: "inherit",
+              fontWeight: 400,
+            },
+          },
+          categories: ["BSc", "MSc"],
+        },
+        yaxis: {
+          labels: {
+            style: {
+              colors: "#616161",
+              fontSize: "12px",
+              fontFamily: "inherit",
+              fontWeight: 400,
+            },
+          },
+        },
+        grid: {
+          show: true,
+          borderColor: "#dddddd",
+          strokeDashArray: 5,
+          xaxis: {
+            lines: {
+              show: true,
+            },
+          },
+          padding: {
+            top: 5,
+            right: 20,
+          },
+        },
+        fill: {
+          opacity: 0.8,
+        },
+        tooltip: {
+          theme: "dark",
+        },
+      },
+    };
+  }
+
+  let bachelorStudent = 0;
+  let masterStudent = 0;
+
+  theses.map((el) => {
+    if (el.group === "BSc") bachelorStudent++;
+    else if (el.group === "MSc") masterStudent++;
+  });
+
+  const chartConfig = {
+    type: "bar",
+    height: 300,
+    series: [
+      {
+        name: "Theses",
+        data: [bachelorStudent, masterStudent],
+      },
+    ],
+    options: {
+      chart: {
+        toolbar: {
+          show: false,
+        },
+      },
+      title: {
+        show: "",
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      colors: ["#020617"],
+      plotOptions: {
+        bar: {
+          columnWidth: "40%",
+          borderRadius: 2,
+        },
+      },
+      xaxis: {
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: ["BSc", "MSc"],
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
+      },
+    },
+  };
+
+  return chartConfig;
+}
+
 export default function Statistics() {
   const [users, setUsers] = useState<User[]>([]);
+  const [theses, setTheses] = useState<Thesis[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [totalTheses, setTotalTheses] = useState<number>(0);
   const [totalThesesRequests, setTotalThesesRequests] = useState<number>(0);
@@ -219,6 +406,8 @@ export default function Statistics() {
       const thesesRequests = await getThesesRequests();
 
       setUsers(users);
+      setTheses(theses);
+
       setTotalUsers(users.length || 0);
       setTotalTheses(theses.length || 0);
       setTotalThesesRequests(thesesRequests.length || 0);
@@ -256,9 +445,11 @@ export default function Statistics() {
         </div>
         <div className="row">
           <div className="col">
-            <PieChart chartConfig={chartConfigForUsers({ users })} />
+            <PieChart chartConfig={getChartConfigForUsers({ users })} />
           </div>
-          <div className="col"></div>
+          <div className="col">
+            <BarChart chartConfig={getChartConfigForTheses({ theses })} />
+          </div>
         </div>
       </div>
     );
