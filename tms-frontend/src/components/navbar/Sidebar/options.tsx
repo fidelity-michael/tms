@@ -66,9 +66,8 @@ export const SecretariatSidebarLinks = [
     label: "Active Theses",
     icon: <SourceIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
-
   {
-    key: "dashboard",
+    key: "completed theses",
     label: "Completed Theses",
     icon: (
       <AssignmentTurnedInIcon
@@ -77,9 +76,8 @@ export const SecretariatSidebarLinks = [
       />
     ),
   },
-
   {
-    key: "archived_theses",
+    key: "theses archive",
     label: "Theses Archive",
     icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
