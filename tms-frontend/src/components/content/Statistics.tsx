@@ -432,8 +432,10 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
       colors: ["#00897b"],
       plotOptions: {
         bar: {
-          columnWidth: "40%",
+          columnWidth: "10%",
+          barHeight: "30%",
           borderRadius: 2,
+          horizontal: true,
         },
       },
       xaxis: {
@@ -445,9 +447,9 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
         },
         labels: {
           style: {
-            colors: "#616161",
-            fontSize: "12px",
-            fontFamily: "inherit",
+            colors: "#384959",
+            fontSize: "15px",
+            fontFamily: "DM",
             fontWeight: 400,
           },
         },
