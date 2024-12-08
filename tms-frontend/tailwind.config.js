@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const flowbite = require("flowbite-react/tailwind");
+const withMT = require("@material-tailwind/react/utils/withMT");
+export default withMT({
   prefix: "tw-",
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}", flowbite.content(),],
   theme: {
     fontFamily: {
       dm: ["DM", "sans-serif"],
+      body: ['"DM"', '"sans-serif"'] // TODO: Check this to apply font to the application
     },
     extend: {
       colors: {
@@ -19,5 +22,5 @@ export default {
       },
     },
   },
-  plugins: [],
-};
+  plugins: [flowbite.plugin(),],
+});
