@@ -35,7 +35,7 @@ export const AdminSidebarLinks = [
   },
   {
     key: "categories",
-    label: "Areas / Categories",
+    label: "Categories",
     icon: <ListAltIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
   {

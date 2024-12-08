@@ -190,7 +190,7 @@ export default function AdministratorPage() {
                   {newDepartment && <NewDepartmentForm />}
                 </div>
               ) : null}
-              {page === "Areas / Categories" ? (
+              {page === "Categories" ? (
                 <div>
                   <PageTopContentTable
                     newOption={newArea}
