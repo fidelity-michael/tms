@@ -3,6 +3,7 @@ import axios from "axios";
 import SmallTable from "./SmallTable";
 import { Badge, Calendar, HStack, List, Stack, VStack } from "rsuite";
 import InfoIcon from "@mui/icons-material/Info";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
@@ -332,15 +333,27 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1 tw-items-start tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
-          <VStack spacing={10} alignItems="stretch" justifyContent="center">
-            <Calendar
-              compact
-              renderCell={renderCells}
-              onSelect={handleSelectedDate}
-            />
-            <TodoList date={selectedDate} />
-          </VStack>
+        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
+          <div className="tw-relative">
+            <div className="tw-absolute tw-left-40 tw-z-50 tw-justify-center tw-pt-2 tw-px-4">
+              <button
+                onClick={() => setPage("My Calendar")}
+                className="tw-max-w-xs tw-gap-1 tw-items-center tw-justify-center tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-1 tw-px-2 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+              >
+                <CalendarMonthIcon />
+              </button>
+            </div>
+            <div className="tw-z-10">
+              <VStack spacing={10} alignItems="stretch" justifyContent="center">
+                <Calendar
+                  compact
+                  renderCell={renderCells}
+                  onSelect={handleSelectedDate}
+                />
+                <TodoList date={selectedDate} />
+              </VStack>
+            </div>
+          </div>
         </div>
       }
     </div>
