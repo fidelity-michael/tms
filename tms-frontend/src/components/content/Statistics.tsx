@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 type NumberCardProps = {
@@ -511,7 +511,6 @@ export default function Statistics() {
       setTotalTheses(theses.length || 0);
       setTotalThesesRequests(thesesRequests.length || 0);
     };
-    console.log("SET?? USERS???: ", users);
 
     fetchData();
   }, []);
