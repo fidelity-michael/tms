@@ -120,7 +120,7 @@ export function TopSidebar({ props }) {
   );
 }
 
-export function BottonSidebar() {
+export function BottomSidebar() {
   return (
     <div className="tw-flex tw-flex-1 tw-flex-col tw-pt-4">
       <div className="tw-flex-1 tw-border-light-pale-blue-white tw-border-b-4 tw-border-solid tw-mb-4"></div>

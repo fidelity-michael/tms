@@ -1,6 +1,34 @@
-import React from "react";
+import { BottomSidebar, SecretariatSidebarLinks, SidebarLink, TopSidebar } from "./options";
 
-function SecretariatSidebar(props) {
+export default function SecretariatSidebar(props) {
+
+  const handleSelect = (label) => {
+    props.onSelect(label);
+  };
+
+  return (
+    <div className="tw-sticky tw-top-0 tw-flex tw-flex-col tw-h-screen tw-py-5 tw-w-80">
+      <TopSidebar props={props} />
+      <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6 tw-pt-8 tw-border-t-4 tw-border-light-pale-blue-white">
+        {SecretariatSidebarLinks.map((item) => (
+          <SidebarLink
+            key={item.key}
+            item={item}
+            props={{
+              onSelect: handleSelect,
+              isSelected: props.selectedItem === item.label,
+            }}
+          />
+        ))}
+      </div>
+      <BottomSidebar />
+    </div>
+  );
+}
+
+
+
+/* function SecretariatSidebar(props) {
   return (
     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       <div className="sidebar-brand d-flex" href="#/">
@@ -54,6 +82,6 @@ function SecretariatSidebar(props) {
       
     </ul>
   );
-}
+} */
 
-export default SecretariatSidebar;
+/* export default SecretariatSidebar; */
