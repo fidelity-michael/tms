@@ -94,7 +94,7 @@ function BarChart({ chartConfig, title = "", description = "" }: any) {
         color="transparent"
         className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
       >
-        <div className="tw-p-5">
+        <div className="tw-px-5 tw-pt-5 tw-pb-2">
           <Typography
             placeholder={""}
             variant="h6"
@@ -107,7 +107,7 @@ function BarChart({ chartConfig, title = "", description = "" }: any) {
             placeholder={""}
             variant="small"
             color="gray"
-            className="tw-max-w-lg tw-text-gray-300 tw-font-normal"
+            className="tw-text-gray-300 tw-font-normal"
           >
             {description}
           </Typography>
@@ -546,8 +546,8 @@ export default function Statistics() {
           <div className="col">
             <BarChart
               chartConfig={getChartConfigForAreaTheses({ theses })}
-              title={"Available Theses per Area"}
-              description={""}
+              title={"Available Theses per Category"}
+              description={"Only categories with ongoing theses associated with them are displayed."}
             />
           </div>
         </div>
