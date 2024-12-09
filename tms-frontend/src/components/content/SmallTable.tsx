@@ -16,12 +16,14 @@ interface smallTableProps {
   caption: Caption;
   headerTitles: String[];
   data: UserData[];
+  rows?: number
 }
 
 export default function SmallTable({
   caption,
   headerTitles,
   data,
+  rows = 3
 }: smallTableProps) {
   return (
     <div className="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
@@ -50,7 +52,7 @@ export default function SmallTable({
         </thead>
         {
           <tbody>
-            {data.slice(0, 3).map((e, index) => (
+            {data.slice(0, rows).map((e, index) => (
               <tr
                 key={index}
                 className="tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white"
@@ -59,7 +61,7 @@ export default function SmallTable({
                   scope="row"
                   className="tw-text-center tw-px-6 tw-py-4 tw-font-medium tw-text-gray-900 tw-whitespace-nowrap tw-capitalize"
                 >
-                  {(Array.isArray(e.first) ? e.first[0] : e.first)}
+                  {Array.isArray(e.first) ? e.first[0] : e.first}
                 </th>
                 <td className="tw-px-4 tw-py-2 tw-text-center">{e.second}</td>
                 <td className="tw-px-4 tw-py-2 tw-text-center">{e.third}</td>

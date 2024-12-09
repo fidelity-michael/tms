@@ -300,36 +300,32 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   return (
     <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 tw-mt-6">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
-        {
-          <div
-            onClick={() => {
-              setPage("Users");
-              setSelectedItem("Users");
-            }}
-            className="tw-cursor-pointer"
-          >
-            <SmallTable
-              caption={{ name: "Users", amount: users }}
-              headerTitles={userHeaders}
-              data={userTableData}
-            />
-          </div>
-        }
-        {
-          <div
-            onClick={() => {
-              setPage("Assigned Theses");
-              setSelectedItem("Assigned Theses");
-            }}
-            className="tw-cursor-pointer"
-          >
-            <SmallTable
-              caption={{ name: "Assigned Theses", amount: theses }}
-              headerTitles={thesisHeaders}
-              data={thesesTableData}
-            />
-          </div>
-        }
+        <div
+          onClick={() => {
+            setPage("Users");
+            setSelectedItem("Users");
+          }}
+          className="tw-cursor-pointer"
+        >
+          <SmallTable
+            caption={{ name: "Users", amount: users }}
+            headerTitles={userHeaders}
+            data={userTableData}
+          />
+        </div>
+        <div
+          onClick={() => {
+            setPage("Assigned Theses");
+            setSelectedItem("Assigned Theses");
+          }}
+          className="tw-cursor-pointer"
+        >
+          <SmallTable
+            caption={{ name: "Assigned Theses", amount: theses }}
+            headerTitles={thesisHeaders}
+            data={thesesTableData}
+          />
+        </div>
       </div>
 
       {
