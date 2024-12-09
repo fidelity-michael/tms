@@ -1,136 +1,234 @@
-import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios';
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import SmallTable from "./SmallTable";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Calendar, VStack } from "rsuite";
+import {
+  convertToGreekDate,
+  renderCells,
+  TodoList,
+} from "./smallCallendarOptions";
 
-function StudentDashboard({userId, setPage}) {
+function StudentDashboard({ userId, setPage, setSelectedItem }) {
+  const [events, setEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
 
-    const [events, setEvents] = useState([])
-    const [loadingEvents, setLoadingEvents] = useState(true)
+  const [completedThesesCount, setCompletedThesesCount] = useState(0);
+  const [thesesTableData, setThesesTableData] = useState([]);
 
-    const [completedTheses, setCompletedTheses] = useState('')
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const componentIsMounted = useRef(true);
+  const complThesesHeaders = [
+    "Date",
+    "Thesis Title",
+    "Student Name",
+    "Student Email",
+  ];
 
-    const componentIsMounted = useRef(true);
+  useEffect(() => {
+    const getCompletedTheses = async () => {
+      axios
+        .get("/api/assigned_theses")
+        .then(async (res) => {
+          var completed = 0;
 
-    useEffect(() => {
-        const getCompletedTheses = async() => {
-            axios.get('/api/assigned_theses')
-            .then((res) => {
-                var completed = 0; 
-                res.data.map((thesis) => {
-                    if(thesis.status === "completed")
-                        ++completed
-                })
-                setCompletedTheses(completed)
-            })
-            .catch((err) => console.log(err))
-        }
+          const final_data = await Promise.all(
+            res.data.map(async (el) => {
+              let thesis = await axios.get("/api/theses/" + el.thesis);
+              let student = await axios.get("/api/users/" + el.student);
+              let student_full_name =
+                student.data.first_name + " " + student.data.last_name;
 
-        getCompletedTheses()
-        return () => {
-            componentIsMounted.current = true
-            // componentIsMounted.current = false
-        }
-    }, []);
+              let date = convertToGreekDate(thesis.data[0].date);
 
-    
-    
-    useEffect(() => {
-        const getEvents = async ()  => {
-            setLoadingEvents(true)
-            await axios.get('/api/calendarEvents/'+userId)
-            .then((res) => {
-                console.log(res.data)
-                sortByDate(res.data)
-                setEvents(res.data)
-                setLoadingEvents(false)
-            })
-            .catch(() => {
-                console.log("Server Internal error occured!")
-            })
-        }
+              return {
+                first: thesis.data[0].title,
+                second: date,
+                third: student_full_name,
+                fourth: student.data.email,
+              };
+            }),
+          );
 
-        const sortByDate= async (myEvents) => {
-            myEvents.sort(function(a, b) {
-                var c = new Date(a.date);
-                var d = new Date(b.date);
-                return c-d;
-            });
+          /* const final_data = res.data.map((thesis) => {
+            if (thesis.status === "completed") {
+              ++completed;
+                return {first: thesis.date, second: thesis.}
+            }
+          }); */
+          setThesesTableData(final_data);
+          setCompletedThesesCount(completed);
+        })
+        .catch((err) => console.log(err));
+    };
 
-            console.log(myEvents)
-        }
-        
-        if (componentIsMounted.current && userId) {
-            getEvents()
-        }
-            
-    }, [userId])
+    getCompletedTheses();
+    return () => {
+      componentIsMounted.current = true;
+      // componentIsMounted.current = false
+    };
+  }, []);
 
-    function renderUpcomingEvents(){
-        var currentDate = Date.now();
-        var lastEventDate = new Date(events[events.length-1].date)
+  useEffect(() => {
+    const getEvents = async () => {
+      setLoadingEvents(true);
+      await axios
+        .get("/api/calendarEvents/" + userId)
+        .then((res) => {
+          console.log(res.data);
+          sortByDate(res.data);
+          setEvents(res.data);
+          setLoadingEvents(false);
+        })
+        .catch(() => {
+          console.log("Server Internal error occured!");
+        });
+    };
 
-        if(lastEventDate<currentDate){
-            return(
-                <p>No upcoming events</p>
-            )
-        } else {
-            return(
-                <ul>
-                    {   
-                        events.map((ev, index) => {
-                            var date = new Date(ev.date)
-                            
-    
-                            if(date>currentDate){
-                                var formattedDate = date.toLocaleDateString();
-            
-                                var minutes = date.getMinutes();
-                                var hours = date.getHours();
-                
-                                if (hours < 10) 
-                                    hours = '0' + hours; 
-                                if (minutes < 10) 
-                                    minutes = '0' + minutes;
-                                    
-                                return(
-                                    <li  key={ev._id} className="liEvents">
-                                        <b> {ev.title} </b> at <b> {hours}:{minutes} {formattedDate}</b>
-                                    </li>
-                                )
-                            }
-                            
-                        })
-                    }
-                </ul>
-               
-            )   
-        }        
+    const sortByDate = async (myEvents) => {
+      myEvents.sort(function (a, b) {
+        var c = new Date(a.date);
+        var d = new Date(b.date);
+        return c - d;
+      });
+
+      console.log(myEvents);
+    };
+
+    if (componentIsMounted.current && userId) {
+      getEvents();
     }
+  }, [userId]);
 
-    function loading() {
-        return (
-          <p className='animated headShake infinite' style={{ marginBottom: '-0.1rem' }}>Loading...</p>
-          
-        );
+  function renderUpcomingEvents() {
+    var currentDate = Date.now();
+    var lastEventDate = new Date(events[events.length - 1].date);
+
+    if (lastEventDate < currentDate) {
+      return <p>No upcoming events</p>;
+    } else {
+      return (
+        <ul>
+          {events.map((ev, index) => {
+            var date = new Date(ev.date);
+
+            if (date > currentDate) {
+              var formattedDate = date.toLocaleDateString();
+
+              var minutes = date.getMinutes();
+              var hours = date.getHours();
+
+              if (hours < 10) hours = "0" + hours;
+              if (minutes < 10) minutes = "0" + minutes;
+
+              return (
+                <li key={ev._id} className="liEvents">
+                  <b> {ev.title} </b> at{" "}
+                  <b>
+                    {" "}
+                    {hours}:{minutes} {formattedDate}
+                  </b>
+                </li>
+              );
+            }
+          })}
+        </ul>
+      );
     }
+  }
 
-
+  function loading() {
     return (
-        <div>
-            <div className="dashboardAdminDiv z-depth-2" type="button"> 
-                <h3 className="adminDashboardInfo" onClick={() => {setPage("Completed Theses")}}><b>Completed Theses: </b>{completedTheses}</h3>
-            </div>
+      <p
+        className="animated headShake infinite"
+        style={{ marginBottom: "-0.1rem" }}
+      >
+        Loading...
+      </p>
+    );
+  }
 
-            <div className="dashboardEventsDiv z-depth-2" type="button" onClick={() => {setPage("My Calendar")}}>
-                <h3>Upcoming Events: </h3>
-                {loadingEvents ? 
-                    loading()
-                : 
-                    (events.length ? renderUpcomingEvents() : <p>No upcoming events</p>)
-                }
-            </div>
+  const handleSelectedDate = (date) => {
+    setSelectedDate(date);
+  };
 
+  return (
+    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 tw-mt-6">
+      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
+        <div
+          onClick={() => {
+            setPage("Completed Theses");
+            setSelectedItem("Completed Theses");
+          }}
+          className="tw-cursor-pointer"
+        >
+          <SmallTable
+            caption={{ name: "Completed Theses", amount: completedThesesCount }}
+            headerTitles={complThesesHeaders}
+            data={thesesTableData}
+          />
         </div>
-    )
+      </div>
+
+      {
+        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
+          <div className="tw-relative">
+            <div className="tw-absolute tw-left-40 tw-z-50 tw-justify-center tw-pt-2 tw-px-4">
+              <button
+                onClick={() => setPage("My Calendar")}
+                className="tw-max-w-xs tw-gap-1 tw-items-center tw-justify-center tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-1 tw-px-2 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+              >
+                <CalendarMonthIcon />
+              </button>
+            </div>
+            <div className="tw-z-10">
+              <VStack spacing={10} alignItems="stretch" justifyContent="center">
+                <Calendar
+                  compact
+                  renderCell={(date) => renderCells(date, events)}
+                  onSelect={handleSelectedDate}
+                />
+                <TodoList date={selectedDate} events={events} />
+              </VStack>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  );
+
+  /* return (
+    <div>
+      <div className="dashboardAdminDiv z-depth-2" type="button">
+        <h3
+          className="adminDashboardInfo"
+          onClick={() => {
+            setPage("Completed Theses");
+          }}
+        >
+          <b>Completed Theses: </b>
+          {completedTheses}
+        </h3>
+      </div>
+
+      <div
+        className="dashboardEventsDiv z-depth-2"
+        type="button"
+        onClick={() => {
+          setPage("My Calendar");
+        }}
+      >
+        <h3>Upcoming Events: </h3>
+        {loadingEvents ? (
+          loading()
+        ) : events.length ? (
+          renderUpcomingEvents()
+        ) : (
+          <p>No upcoming events</p>
+        )}
+      </div>
+    </div>
+  ); */
 }
 
-export default StudentDashboard
+export default StudentDashboard;
