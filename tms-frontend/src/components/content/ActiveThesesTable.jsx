@@ -138,7 +138,10 @@ export default function ActiveThesesTable({
           professor_name,
         } = thesis;
         return (
-          <tr key={_id}>
+          <tr
+            key={_id}
+            className="hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          >
             <td className="table-data-thesis">
               <span style={{ fontSize: "0.85rem" }}>
                 {new Intl.DateTimeFormat("en-GB", {
@@ -176,65 +179,6 @@ export default function ActiveThesesTable({
     }
   }
 
-  function renderPageButtons(name) {
-    const prev = "prev_" + name;
-    const next = "next_" + name;
-
-    return (
-      <div className="page-select">
-        {pagination.startIndex > 0 && (
-          <span
-            className={prev}
-            onClick={(e) => {
-              handlePrevPage(e.target.className);
-            }}
-          >
-            Previous Page
-          </span>
-        )}
-        {pagination.endIndex < pagination.total && (
-          <span
-            className={next}
-            onClick={(e) => {
-              handleNextPage(e.target.className);
-            }}
-          >
-            Next Page
-          </span>
-        )}
-        <span className="page-number">
-          Results{" "}
-          {pagination.endIndex > pagination.total
-            ? pagination.total
-            : pagination.endIndex}{" "}
-          out of {pagination.total}
-        </span>
-      </div>
-    );
-  }
-
-  function handlePrevPage(name) {
-    if (name === "prev_thesis") {
-      setThesesPage(thesesPage - 1);
-      //console.log("Thesis: Previous Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
-  function handleNextPage(name) {
-    if (name === "next_thesis") {
-      setThesesPage(thesesPage + 1);
-      //console.log("Thesis: Next Page!");
-    } else {
-      console.log(
-        "Server internal error occurred. Server failed to load page.",
-      );
-    }
-  }
-
   function loadingTable(e) {
     return (
       <tr>
@@ -263,21 +207,20 @@ export default function ActiveThesesTable({
   return (
     <div className="tables-data tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl">
       <div className="theses-container">
-        <div className="tw-mb-4 tw-ml-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+        <div className="tw-ml-4 tw-mb-6 tw-mt-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
           <h5 className="tw-text-dark-sky-blue tw-text-xl">
             Active Theses Table
           </h5>
-          <div className="tw-mb-6">
-            <SearchFunction
-              query={query}
-              setQuery={(e) => setQuery(e.target.value)}
-              placeholder="Search for active theses"
-            />
-          </div>
+
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder="Search for active theses"
+          />
         </div>
 
         <Table className="table-thesis" size="md" responsive>
-          <thead>
+          <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th className="table-header-thesis">
                 <span id="date" onClick={(e) => toggleOrder(e.target.id)}>
