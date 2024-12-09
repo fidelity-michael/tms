@@ -574,7 +574,7 @@ export default function ThesesTable({ userId, userGroup }) {
           {message}
         </Alert>
 
-        <div className="tw-ml-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+        <div className="tw-ml-4 tw-mb-6 tw-mt-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
           <h5 className="tw-text-dark-sky-blue tw-text-xl">
             Archived Theses Table
           </h5>

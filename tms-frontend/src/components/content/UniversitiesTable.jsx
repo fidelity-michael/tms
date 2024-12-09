@@ -342,11 +342,13 @@ export default function UniversitiesArchive() {
         {message}
       </Alert>
       <div className="universities-container">
-        <SearchFunction
-          query={query}
-          setQuery={(e) => setQuery(e.target.value)}
-          placeholder={"Search for universities"}
-        />
+        <div className="tw-mb-6">
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder={"Search for universities"}
+          />
+        </div>
         <Table className="universities-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>

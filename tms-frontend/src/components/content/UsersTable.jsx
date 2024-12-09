@@ -670,11 +670,13 @@ export default function UsersTable() {
           {message}
         </Alert>
 
-        <SearchFunction
-          query={query}
-          setQuery={(e) => setQuery(e.target.value)}
-          placeholder={"Search for people"}
-        />
+        <div className="tw-mb-6">
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder={"Search for people"}
+          />
+        </div>
 
         <Table className="users-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">

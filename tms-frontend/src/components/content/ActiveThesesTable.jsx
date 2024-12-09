@@ -3,6 +3,7 @@ import { Table, Form } from "react-bootstrap";
 import axios from "axios";
 import "./content.css";
 import { PaginationTab } from "./TableComponents";
+import { SearchFunction } from "../../utils/utils";
 
 export default function ActiveThesesTable({
   userId,
@@ -252,7 +253,7 @@ export default function ActiveThesesTable({
   function emptyTable(e) {
     return (
       <tr>
-        <td className="empty-data" colSpan="100%">
+        <td className="empty-data" colSpan={100}>
           No Data Found
         </td>
       </tr>
@@ -260,32 +261,22 @@ export default function ActiveThesesTable({
   }
 
   return (
-    <div className="tables-data">
+    <div className="tables-data tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl">
       <div className="theses-container">
-        <div className="filter-content">
-          <div className="md-form md-outline input-with-pre-icon">
-            <i
-              className="fa fa-search input-prefix"
-              style={{ color: "#31b1e4" }}
-            ></i>
-            <input
-              type="text"
-              id="search-theses"
-              className="form-control"
-              placeholder="Search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+        <div className="tw-mb-4 tw-ml-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+          <h5 className="tw-text-dark-sky-blue tw-text-xl">
+            Active Theses Table
+          </h5>
+          <div className="tw-mb-6">
+            <SearchFunction
+              query={query}
+              setQuery={(e) => setQuery(e.target.value)}
+              placeholder="Search for active theses"
             />
           </div>
         </div>
-        <Table
-          className="table-thesis"
-          striped
-          bordered
-          hover
-          size="md"
-          responsive
-        >
+
+        <Table className="table-thesis" size="md" responsive>
           <thead>
             <tr>
               <th className="table-header-thesis">

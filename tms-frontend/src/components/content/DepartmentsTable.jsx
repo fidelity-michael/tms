@@ -442,11 +442,13 @@ export default function DepartmentsArchive() {
         {message}
       </Alert>
       <div className="departments-container">
-        <SearchFunction
-          query={query}
-          setQuery={(e) => setQuery(e.target.value)}
-          placeholder={"Search for departments"}
-        />
+        <div className="tw-mb-6">
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder={"Search for departments"}
+          />
+        </div>
         <Table className="departments-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>

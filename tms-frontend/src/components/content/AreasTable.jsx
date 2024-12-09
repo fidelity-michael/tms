@@ -412,11 +412,13 @@ export default function AreasTable() {
           {message}
         </Alert>
 
-        <SearchFunction
-          query={query}
-          setQuery={(e) => setQuery(e.target.value)}
-          placeholder="Search for Categories"
-        />
+        <div className="tw-mb-6">
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder="Search for Categories"
+          />
+        </div>
 
         <Table className="areas-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">

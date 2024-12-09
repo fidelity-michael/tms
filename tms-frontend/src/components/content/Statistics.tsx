@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 type NumberCardProps = {
@@ -546,7 +546,9 @@ export default function Statistics() {
             <BarChart
               chartConfig={getChartConfigForAreaTheses({ theses })}
               title={"Available Theses per Category"}
-              description={"Only categories with ongoing theses associated with them are displayed."}
+              description={
+                "Only categories with ongoing theses associated with them are displayed."
+              }
             />
           </div>
         </div>

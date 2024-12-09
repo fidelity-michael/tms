@@ -56,9 +56,9 @@ export function SearchFunction({
   placeholder,
 }: searchFunctionProps) {
   return (
-    <div className="tw-flex filter-content tw-justify-start">
+    <div className="tw-flex tw-justify-start tw-items-center filter-content">
       {/* Search Functionality */}
-      <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
+      <div className="tw-relative tw-text-gray-300">
         <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
           <SearchIcon />
         </div>
