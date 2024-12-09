@@ -144,7 +144,7 @@ export default function AdministratorPage() {
               email={email}
               onSelect={(page) => setPage(page)}
             />
-            <div className="tw-flex tw-flex-col tw-mx-10 tw-mt-10">
+            <div className="tw-flex tw-flex-col tw-m-10">
               <p className="tw-flex tw-text-dark-sky-blue tw-font-bold tw-text-2xl xl:tw-text-3xl">
                 {page === "Dashboard" ? "Overview" : ""}
               </p>
