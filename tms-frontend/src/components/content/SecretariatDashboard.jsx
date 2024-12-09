@@ -163,7 +163,7 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
   }
 
   return (
-    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 tw-mt-6">
+    <div className="tw-flex tw-flex-col 2xl:tw-flex-row tw-gap-7 tw-mt-6">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
         <div
           onClick={() => {
@@ -188,7 +188,7 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
       </div>
 
       {
-        <div className="tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
+        <div className="2xl:tw-min-h-[70dvh] tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
           <div className="tw-relative">
             <div className="tw-absolute tw-left-40 tw-z-50 tw-justify-center tw-pt-2 tw-px-4">
               <button
