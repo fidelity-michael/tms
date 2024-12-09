@@ -134,7 +134,13 @@ function SecretariatPage() {
                 />
               ) : null}
               {page === "Active Theses" ? (
-                <ActiveThesesTable userId={userId} userGroup={"Secretariat"} />
+                <div>
+                  <h5 className="tw-text-dark-sky-blue tw-text-xl">Active Theses</h5>
+                  <ActiveThesesTable
+                    userId={userId}
+                    userGroup={"Secretariat"}
+                  />
+                </div>
               ) : null}
               {page === "Completed Theses" ? (
                 <CompletedTheses userId={userId} />
