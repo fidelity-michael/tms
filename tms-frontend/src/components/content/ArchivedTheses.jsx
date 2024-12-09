@@ -3,6 +3,8 @@ import { Table, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./content.css";
 import { SearchFunction } from "../../utils/utils";
+import EditIcon from "@mui/icons-material/Edit";
+import { PaginationTab } from "./TableComponents";
 
 export default function ArchivedTheses({ userId }) {
   const [theses, setTheses] = useState([]);
@@ -253,7 +255,10 @@ export default function ArchivedTheses({ userId }) {
           thesis_grade,
         } = find_thesis;
         return (
-          <tr key={_id}>
+          <tr
+            key={_id}
+            className="hover:tw-bg-light-pale-blue-white tw-text-center tw-align-middle tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          >
             <td className="table-data">
               <span style={{ fontSize: "0.85rem" }}>
                 {new Intl.DateTimeFormat("en-GB", {
@@ -327,12 +332,8 @@ export default function ArchivedTheses({ userId }) {
             </td>
             <td className="table-data">
               <button
-                type="button"
-                data-key={_id}
-                id={student_id}
-                className="btn btn-info accept-request"
-                style={{ width: "10vw" }}
                 onClick={() => updateAssignedThesis(_id)}
+                className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
               >
                 Update
               </button>
@@ -465,15 +466,8 @@ export default function ArchivedTheses({ userId }) {
           />
         </div>
 
-        <Table
-          className="theses-table"
-          striped
-          bordered
-          hover
-          size="md"
-          responsive
-        >
-          <thead>
+        <Table className="theses-table" size="md" responsive>
+          <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th className="table-header">
                 <span id="date" onClick={(e) => toggleOrder(e.target.id)}>
@@ -484,13 +478,13 @@ export default function ArchivedTheses({ userId }) {
                 <span id="title_1" onClick={(e) => toggleOrder(e.target.id)}>
                   Thesis Greek Title
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
               <th className="table-header">
                 <span id="title_2" onClick={(e) => toggleOrder(e.target.id)}>
                   Thesis English Title
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
               <th className="table-header">
                 <span id="group" onClick={(e) => toggleOrder(e.target.id)}>
@@ -511,7 +505,7 @@ export default function ArchivedTheses({ userId }) {
                 <span id="grade" onClick={(e) => toggleOrder(e.target.id)}>
                   Grade
                 </span>
-                <i className="fa fa-edit edit-input-icon"></i>
+                <EditIcon style={{ height: "1rem", width: "1rem" }} />
               </th>
               <th className="table-header" style={{ textAlign: "center" }}>
                 <span>Action</span>
@@ -526,23 +520,15 @@ export default function ArchivedTheses({ userId }) {
                 : emptyTable()}
           </tbody>
         </Table>
-        {renderPageButtons("thesis")}
-        <div className="dropdown-limit">
-          <Form.Group controlId="selectControl">
-            <Form.Label className="page-limit-lbl">Theses per page</Form.Label>
-            <Form.Control
-              className="page-limit"
-              as="select"
-              onChange={(e) => {
-                setThesesLimit(e.target.value);
-              }}
-            >
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
+  
+        <PaginationTab
+          setLimit={(e) => {
+            setThesesLimit(e.target.value);
+          }}
+          renderPageButtonsName="thesis"
+          pagination={pagination}
+          setPageState={setThesesPage}
+        />
       </div>
     </div>
   );
