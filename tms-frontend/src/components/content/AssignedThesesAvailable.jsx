@@ -219,7 +219,8 @@ export default function AssignedThesesAvailable({ userId }) {
           })
           .then((data) => {
             fetchTheses();
-            showShortAlert(setShowAlert);
+            setMessage("Status updated successfully!")
+            showShortAlert({setShowAlert});
           })
           .catch((err) => {
             console.log(err);
