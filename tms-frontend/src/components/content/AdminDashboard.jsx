@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import SmallTable from "./SmallTable";
+import SmallTable, { SmallTableEmpty } from "./SmallTable";
 import { Badge, Calendar, HStack, List, Stack, VStack } from "rsuite";
 import InfoIcon from "@mui/icons-material/Info";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -15,7 +15,7 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
   const [completedTheses, setCompletedTheses] = useState("");
   const [gradedTheses, setGradedTheses] = useState("");
 
-  const [users, setUsers] = useState("");
+  const [users, setUsers] = useState(0);
   const [students, setStudents] = useState("");
   const [professors, setProfessors] = useState("");
   const [admins, setAdmins] = useState("");
@@ -307,11 +307,21 @@ function AdminDashboard({ userId, setPage, setSelectedItem }) {
           }}
           className="tw-cursor-pointer"
         >
-          <SmallTable
-            caption={{ name: "Users", amount: users }}
-            headerTitles={userHeaders}
-            data={userTableData}
-          />
+          {userTableData.length ? (
+            <SmallTable
+              caption={{ name: "Users", amount: users }}
+              headerTitles={userHeaders}
+              data={userTableData}
+            />
+          ) : (
+            <SmallTableEmpty
+              caption={{
+                name: "Completed Theses",
+                amount: users,
+              }}
+              headerTitles={userHeaders}
+            />
+          )}
         </div>
         <div
           onClick={() => {
