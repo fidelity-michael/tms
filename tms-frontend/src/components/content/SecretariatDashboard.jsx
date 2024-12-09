@@ -45,8 +45,8 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
                 let date = convertToGreekDate(thesis.data[0].date);
 
                 return {
-                  first: thesis.data[0].title,
-                  second: date,
+                  first: date,
+                  second: thesis.data[0].title,
                   third: student_full_name,
                   fourth: student.data.email,
                 };
