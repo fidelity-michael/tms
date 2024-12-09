@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import SmallTable from "./SmallTable";
+import SmallTable, { SmallTableEmpty } from "./SmallTable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Calendar, VStack } from "rsuite";
 import {
@@ -51,8 +51,11 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
                   fourth: student.data.email,
                 };
               }
+              return null;
             }),
           );
+
+          final_data = final_data.filter((item) => item != null);
           setThesesTableData(final_data);
           setCompletedThesesCount(completed);
         })
@@ -149,19 +152,6 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
     setSelectedDate(date);
   };
 
-  function emptyTable(e) {
-    return (
-      <tr>
-        <td
-          className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
-          colSpan={100}
-        >
-          No Data Found
-        </td>
-      </tr>
-    );
-  }
-
   return (
     <div className="tw-flex tw-flex-col 2xl:tw-flex-row tw-gap-7 tw-mt-6">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
@@ -180,9 +170,16 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
               }}
               headerTitles={complThesesHeaders}
               data={thesesTableData}
+              rows={10}
             />
           ) : (
-            emptyTable()
+            <SmallTableEmpty
+              caption={{
+                name: "Completed Theses",
+                amount: completedThesesCount,
+              }}
+              headerTitles={complThesesHeaders}
+            />
           )}
         </div>
       </div>
