@@ -1,4 +1,5 @@
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface Caption {
   name: string; // Header Name
@@ -15,7 +16,7 @@ interface UserData {
 interface smallTableProps {
   caption: Caption;
   headerTitles: String[];
-  data: UserData[];
+  data?: UserData[];
   rows?: number;
 }
 
@@ -82,6 +83,51 @@ export default function SmallTable({
                 </td>
               </tr>
             ))}
+          </tbody>
+        }
+      </table>
+    </div>
+  );
+}
+
+export function SmallTableEmpty({ caption, headerTitles }: smallTableProps) {
+  return (
+    <div className="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
+      <table className="tw-w-full tw-text-sm tw-text-dark-sky-blue">
+        <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
+          <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
+            <div className="tw-text-left">
+              {caption.name} ({caption.amount})
+            </div>
+            <div className="tw-flex tw-items-center tw-cursor-pointer">
+              <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center hover:tw-underline hover:tw-decoration-mid-pale-blue">
+                Show All
+              </div>
+              <KeyboardArrowRight className="tw-text-mid-pale-blue" />
+            </div>
+          </div>
+        </caption>
+        <thead className="tw-text-center tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
+          <tr>
+            {headerTitles.map((el, index) => (
+              <th scope="col" key={index} className="tw-px-6 tw-py-3">
+                {el}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        {
+          <tbody>
+            <tr className=" tw-text-center tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white">
+              <th colSpan={100}>
+                <div className="tw-flex tw-flex-col tw-m-6">
+                  <div>
+                    <SearchIcon />
+                  </div>{" "}
+                  <span>No Results Found</span>
+                </div>
+              </th>
+            </tr>
           </tbody>
         }
       </table>
