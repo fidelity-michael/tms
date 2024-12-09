@@ -30,32 +30,29 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
       axios
         .get("/api/assigned_theses")
         .then(async (res) => {
-          var completed = 0;
+          let completed = 0;
 
-          const final_data = await Promise.all(
+          let final_data = await Promise.all(
             res.data.map(async (el) => {
-              let thesis = await axios.get("/api/theses/" + el.thesis);
-              let student = await axios.get("/api/users/" + el.student);
-              let student_full_name =
-                student.data.first_name + " " + student.data.last_name;
+              if (el.status === "completed") {
+                completed++;
 
-              let date = convertToGreekDate(thesis.data[0].date);
+                let thesis = await axios.get("/api/theses/" + el.thesis);
+                let student = await axios.get("/api/users/" + el.student);
+                let student_full_name =
+                  student.data.first_name + " " + student.data.last_name;
 
-              return {
-                first: thesis.data[0].title,
-                second: date,
-                third: student_full_name,
-                fourth: student.data.email,
-              };
+                let date = convertToGreekDate(thesis.data[0].date);
+
+                return {
+                  first: thesis.data[0].title,
+                  second: date,
+                  third: student_full_name,
+                  fourth: student.data.email,
+                };
+              }
             }),
           );
-
-          /* const final_data = res.data.map((thesis) => {
-            if (thesis.status === "completed") {
-              ++completed;
-                return {first: thesis.date, second: thesis.}
-            }
-          }); */
           setThesesTableData(final_data);
           setCompletedThesesCount(completed);
         })
@@ -152,6 +149,19 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
     setSelectedDate(date);
   };
 
+  function emptyTable(e) {
+    return (
+      <tr>
+        <td
+          className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan={100}
+        >
+          No Data Found
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-7 tw-mt-6">
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
@@ -162,11 +172,18 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
           }}
           className="tw-cursor-pointer"
         >
-          <SmallTable
-            caption={{ name: "Completed Theses", amount: completedThesesCount }}
-            headerTitles={complThesesHeaders}
-            data={thesesTableData}
-          />
+          {thesesTableData.length ? (
+            <SmallTable
+              caption={{
+                name: "Completed Theses",
+                amount: completedThesesCount,
+              }}
+              headerTitles={complThesesHeaders}
+              data={thesesTableData}
+            />
+          ) : (
+            emptyTable()
+          )}
         </div>
       </div>
 
