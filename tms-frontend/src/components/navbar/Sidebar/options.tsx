@@ -9,6 +9,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SourceIcon from "@mui/icons-material/Source";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export const AdminSidebarLinks = [
   {
@@ -79,6 +80,39 @@ export const SecretariatSidebarLinks = [
   {
     key: "theses archive",
     label: "Theses Archive",
+    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+];
+
+export const StudentSidebarLinks = [
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "favourite areas",
+    label: "Favourite Categories",
+    icon: <FavoriteIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "available theses",
+    label: "Available Theses",
+    icon: <SourceIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "requests approved",
+    label: "Requests Approved",
+    icon: (
+      <AssignmentTurnedInIcon
+        fontSize="large"
+        className="tw-text-light-sky-blue"
+      />
+    ),
+  },
+  {
+    key: "my thesis",
+    label: "My Thesis",
     icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
 ];
