@@ -181,7 +181,7 @@ export default function NewUser() {
   }
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="tw-w-full tw-max-w-xs">
       {showAlert ? (
         <Alert
           className="upload-alert"
