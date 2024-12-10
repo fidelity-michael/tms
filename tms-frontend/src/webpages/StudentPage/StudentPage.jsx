@@ -198,18 +198,17 @@ function StudentPage() {
             setSelectedItem(page);
           }}
         />
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
+        <div id="content-wrapper" className="tw-flex tw-flex-col">
+          <div id="content" className="tw-bg-light-pale-blue-white">
             <Topbar
               userId={user.userId}
               email={user.email}
               onSelect={(page) => setPage(page)}
             />
-            <div className="container-fluid">
-              {/* <span>{user.userId}</span> <hr /> */}
-              <b>
-                <p className="text-gray-800">{page !== "Chat" ? page : null}</p>
-              </b>
+            <div className="tw-flex tw-flex-col tw-m-10">
+              <p className="tw-flex tw-text-dark-sky-blue tw-font-bold tw-text-2xl xl:tw-text-3xl">
+                {page === "Dashboard" ? "Overview" : ""}
+              </p>
               <div className="favourites-content">
                 {page === "Dashboard" ? (
                   <StudentDashboard
@@ -218,7 +217,7 @@ function StudentPage() {
                     setPage={setPage}
                   />
                 ) : null}
-                {page === "Favourite Categories" ? (
+                {page === "Favourite Areas" ? (
                   <div>
                     <FavouriteCarousel
                       userId={user.userId}
