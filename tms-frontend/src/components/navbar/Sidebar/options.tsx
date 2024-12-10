@@ -12,6 +12,7 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 export const AdminSidebarLinks = [
   {
@@ -121,6 +122,11 @@ export const StudentSidebarLinks = [
     key: "my reports",
     label: "My Reports",
     icon: <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "chat",
+    label: "Chat",
+    icon: <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
 ];
 
