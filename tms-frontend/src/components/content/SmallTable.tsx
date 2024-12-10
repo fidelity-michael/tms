@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 interface Caption {
   name: string; // Header Name
-  amount: number; // Header amount
+  amount?: number; // Header amount
 }
 
 interface UserData {
@@ -32,7 +32,7 @@ export default function SmallTable({
         <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
           <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
             <div className="tw-text-left">
-              {caption.name} ({caption.amount})
+              {caption.name} {caption.amount ? caption.amount : ""}
             </div>
             <div className="tw-flex tw-items-center tw-cursor-pointer">
               <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center hover:tw-underline hover:tw-decoration-mid-pale-blue">
@@ -97,7 +97,7 @@ export function SmallTableEmpty({ caption, headerTitles }: smallTableProps) {
         <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
           <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
             <div className="tw-text-left">
-              {caption.name} ({caption.amount})
+              {caption.name} {caption.amount ? caption.amount : ""}
             </div>
             <div className="tw-flex tw-items-center tw-cursor-pointer">
               <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center hover:tw-underline hover:tw-decoration-mid-pale-blue">
