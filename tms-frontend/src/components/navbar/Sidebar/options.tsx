@@ -10,6 +10,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SourceIcon from "@mui/icons-material/Source";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export const AdminSidebarLinks = [
   {
@@ -113,7 +115,12 @@ export const StudentSidebarLinks = [
   {
     key: "my thesis",
     label: "My Thesis",
-    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: <FolderOpenIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "my reports",
+    label: "My Reports",
+    icon: <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
 ];
 
