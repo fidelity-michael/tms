@@ -120,29 +120,31 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
 
   return (
     <div className="tw-flex tw-flex-col 2xl:tw-flex-row tw-gap-7 tw-mt-6">
-      <div
-        className="tw-flex tw-flex-col tw-flex-1 tw-gap-8 tw-cursor-pointer"
-        onClick={() => {
-          setPage("My Thesis");
-          setSelectedItem("My Thesis");
-        }}
-      >
-        {thesisData ? (
-          <SmallTable
-            caption={{
-              name: "My Thesis",
-            }}
-            headerTitles={myThesisHeader}
-            data={thesesTableData}
-          />
-        ) : (
-          <SmallTableEmpty
-            caption={{
-              name: "My Thesis",
-            }}
-            headerTitles={myThesisHeader}
-          />
-        )}
+      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
+        <div
+          className="tw-cursor-pointer"
+          onClick={() => {
+            setPage("My Thesis");
+            setSelectedItem("My Thesis");
+          }}
+        >
+          {thesisData ? (
+            <SmallTable
+              caption={{
+                name: "My Thesis",
+              }}
+              headerTitles={myThesisHeader}
+              data={thesesTableData}
+            />
+          ) : (
+            <SmallTableEmpty
+              caption={{
+                name: "My Thesis",
+              }}
+              headerTitles={myThesisHeader}
+            />
+          )}
+        </div>
       </div>
       {
         <div className="2xl:tw-min-h-[70dvh] tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
