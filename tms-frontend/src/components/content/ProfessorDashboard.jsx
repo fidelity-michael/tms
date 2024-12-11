@@ -125,7 +125,7 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
 
   function renderActiveTheses() {
     if (activeTheses.length) {
-      return (
+      /* return (
         <ul>
           {activeTheses.map((thesis) => {
             return (
@@ -139,7 +139,7 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
             );
           })}
         </ul>
-      );
+      ); */
     } else {
       return <p>No active theses</p>;
     }
