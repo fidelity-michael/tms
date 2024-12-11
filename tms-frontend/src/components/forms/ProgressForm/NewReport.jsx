@@ -183,84 +183,97 @@ export default function NewReport({
   }
 
   return (
-    <Form onSubmit={(e) => submitReport(e)}>
-      <h5>New Progress Report</h5> <hr />
-      {showAlert ? (
-        <Alert
-          className="upload-alert"
-          key={"alert-message"}
-          variant={variant}
-          onClose={() => setShowAlert(false)}
-          dismissible
-        >
-          {message}
-        </Alert>
-      ) : null}
-      <Form.Group controlId="formDescription">
-        <Form.Label>Report Title</Form.Label>
-        <Form.Control
-          name="title"
-          type="text"
-          value={report.title}
-          onChange={(e) => handleChange(e.target)}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formDescription">
-        <Form.Label>Description</Form.Label>
-        <Form.Control
-          name="description"
-          as="textarea"
-          rows={4}
-          value={report.description}
-          onChange={(e) => handleChange(e.target)}
-          required
-        />
-      </Form.Group>
-      <Form.Group className="upload-files">
-        <Form.Group>
-          <Form.Label>Upload files (optional) :</Form.Label>
+    <div className="tw-flex tw-flex-1 tw-align-middle tw-justify-center">
+      <Form
+        onSubmit={(e) => submitReport(e)}
+        className="tw-w-full tw-max-w-4xl tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl"
+      >
+        {showAlert ? (
+          <Alert
+            className="upload-alert"
+            key={"alert-message"}
+            variant={variant}
+            onClose={() => setShowAlert(false)}
+            dismissible
+          >
+            {message}
+          </Alert>
+        ) : null}
+        <Form.Group controlId="formDescription" className="mb-4">
+          <Form.Label className="tw-text-dark-sky-blue tw-text-sm tw-font-bold">
+            Report Title
+          </Form.Label>
           <Form.Control
-            key={fileKey}
-            id="formControlFile"
-            name="thesis_files"
-            className="file-input"
-            type="file"
-            onChange={(e) => handleFileChange(e.target)}
-            accept=".zip,.pdf,.doc,.docx,.txt"
-            multiple
+            name="title"
+            type="text"
+            value={report.title}
+            onChange={(e) => handleChange(e.target)}
+            required
           />
         </Form.Group>
-        <div className="required-files">{renderReportFiles()}</div>
-      </Form.Group>
-      <Form.Group controlId="formCheckbox">
-        <Form.Check
-          name="isFinal"
-          type="checkbox"
-          label="Submit Thesis"
-          checked={report.isFinal}
-          onChange={(e) => {
-            // console.log("Checkbox: ", report.isFinal);
-            setReport((prevState) => ({
-              ...prevState,
-              isFinal: !report.isFinal,
-            }));
-          }}
-        />
-      </Form.Group>
-      {report.isFinal ? (
-        <span style={{ color: "red", textAlign: "center" }}>
-          Caution: If you submit thesis you will not be able to upload more
-          reports!
-        </span>
-      ) : null}
-      <Button
-        className="btn-grad submit-progress-form"
-        type="submit"
-        disabled={thesisCompleted}
-      >
-        {thesisCompleted ? "Submit Thesis" : "Submit Report"}
-      </Button>
-    </Form>
+        <Form.Group controlId="formDescription" className="mb-4">
+          <Form.Label className="tw-text-dark-sky-blue tw-text-sm tw-font-bold">
+            Description
+          </Form.Label>
+          <Form.Control
+            name="description"
+            as="textarea"
+            rows={4}
+            value={report.description}
+            onChange={(e) => handleChange(e.target)}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="tw-mb-4 tw-py-3 tw-px-6 tw-bg-light-pale-blue-white tw-rounded-lg">
+          <Form.Group>
+            <Form.Label>Upload files (optional) :</Form.Label>
+            <Form.Control
+              key={fileKey}
+              id="formControlFile"
+              name="thesis_files"
+              className="file-input"
+              type="file"
+              onChange={(e) => handleFileChange(e.target)}
+              accept=".zip,.pdf,.doc,.docx,.txt"
+              multiple
+            />
+          </Form.Group>
+          <div className="required-files">{renderReportFiles()}</div>
+        </Form.Group>
+        <Form.Group controlId="formCheckbox" className="tw-mb-4 tw-select-none">
+          <Form.Check
+            className="tw-m-0"
+            inline
+            label={"Submit Thesis"}
+            name="isFinal"
+            type="checkbox"
+            id="isFinalCheck"
+            checked={report.isFinal}
+            onChange={(e) => {
+              // console.log("Checkbox: ", report.isFinal);
+              setReport((prevState) => ({
+                ...prevState,
+                isFinal: !report.isFinal,
+              }));
+            }}
+          />
+        </Form.Group>
+        {report.isFinal ? (
+          <span style={{ color: "red", textAlign: "center" }}>
+            Caution: If you submit thesis you will not be able to upload more
+            reports!
+          </span>
+        ) : null}
+        <div className="tw-flex tw-justify-end">
+          <button
+            className=" tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+            type="submit"
+            disabled={thesisCompleted}
+          >
+            {thesisCompleted ? "Submit Thesis" : "Submit Report"}
+          </button>
+        </div>
+      </Form>
+    </div>
   );
 }
