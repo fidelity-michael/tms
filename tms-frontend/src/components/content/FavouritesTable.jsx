@@ -309,7 +309,7 @@ export default function FavouritesTable({ userId, studentFavourites }) {
   function emptyTable(e) {
     return (
       <tr>
-        <td className="empty-data" colSpan={100}>
+        <td className="empty-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue" colSpan={100}>
           No Data Found
         </td>
       </tr>
