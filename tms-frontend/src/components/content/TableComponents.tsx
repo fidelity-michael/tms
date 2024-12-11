@@ -74,6 +74,8 @@ function getPageName(name: string): string {
       return "Departments";
     case "thesis":
       return "Theses";
+    case "request":
+      return "Requests";
   }
 }
 
