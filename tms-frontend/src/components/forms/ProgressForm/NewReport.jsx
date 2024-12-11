@@ -258,15 +258,17 @@ export default function NewReport({
             }}
           />
         </Form.Group>
-        {report.isFinal ? (
-          <span style={{ color: "red", textAlign: "center" }}>
-            Caution: If you submit thesis you will not be able to upload more
-            reports!
-          </span>
-        ) : null}
-        <div className="tw-flex tw-justify-end">
+        <div className="tw-flex tw-justify-between tw-items-center">
+          {report.isFinal ? (
+            <span className="tw-inline-block tw-text-red-incorrect tw-align-middle">
+              Caution: If you submit thesis you will not be able to upload more
+              reports!
+            </span>
+          ) : (
+            <span className="tw-inline-block tw-text-red-incorrect tw-align-middle"></span>
+          )}
           <button
-            className=" tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+            className="tw-bg-transparent hover:tw-bg-mid-pale-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
             type="submit"
             disabled={thesisCompleted}
           >
