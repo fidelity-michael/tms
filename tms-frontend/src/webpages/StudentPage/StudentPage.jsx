@@ -16,6 +16,7 @@ import MyRoles from "../../components/content/MyRoles";
 import Chat from "../../components/content/Chat";
 import Calendar from "../../components/content/Calendar";
 import StudentDashboard from "../../components/content/StudentDashboard";
+import ActionButtons from "../../components/content/TableComponents";
 
 function StudentPage() {
   //we use ths to indicate from where we're coming from (login or changeRole)
@@ -105,7 +106,6 @@ function StudentPage() {
               user_data.data.first_name + " " + user_data.data.last_name,
             );
 
-            console.log("fullName:!! ", fullName);
             setAuth(true);
 
             const credentials = {
@@ -215,6 +215,7 @@ function StudentPage() {
                     userId={user.userId}
                     thesisData={thesisData}
                     setPage={setPage}
+                    setSelectedItem={setSelectedItem}
                   />
                 ) : null}
                 {page === "Favourite Areas" ? (
@@ -264,29 +265,24 @@ function StudentPage() {
                 ) : null}
                 {page === "My Reports" ? (
                   <div>
-                    <div
-                      className="btn-group"
-                      role="group"
-                      aria-label="Button group with nested dropdown"
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light user-btn"
-                        onClick={(e) => toggleNewReport(false)}
-                      >
-                        My Reports
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-info user-btn new"
-                        onClick={(e) => toggleNewReport(true)}
-                        disabled={thesisCompleted}
-                      >
-                        New Report
-                      </button>
+                    <div className="tw-ml-4 tw-mb-6 tw-mt-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+                      <h5 className="tw-text-mid-pale-blue tw-text-2xl tw-font-extrabold">
+                        {newReport ? "New Progress Report" : "Thesis Reports"}
+                      </h5>
+                      <ActionButtons
+                        updateFunction={() => toggleNewReport(false)}
+                        deleteFunction={() => toggleNewReport(true)}
+                        firstButtonName="My Reports"
+                        secondButtonName="New Report"
+                        secondCustomColors="tw-text-white tw-bg-dark-sky-blue hover:tw-bg-mid-pale-blue"
+                      />
                     </div>
                     {!newReport && (
-                      <MyReports userId={user.userId} user={"student"} />
+                      <MyReports
+                        userId={user.userId}
+                        email={user.email}
+                        user={"student"}
+                      />
                     )}
                     {newReport && (
                       <NewReport

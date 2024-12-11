@@ -3,6 +3,9 @@ import { Form } from "react-bootstrap";
 type ActionButtonsProps = {
   updateFunction: () => void;
   deleteFunction: () => void;
+  firstButtonName?: string;
+  secondButtonName?: string;
+  secondCustomColors?: string;
 };
 
 type PaginationProps = {
@@ -15,6 +18,9 @@ type PaginationProps = {
 export default function ActionButtons({
   updateFunction,
   deleteFunction,
+  firstButtonName = "Update",
+  secondButtonName = "Delete",
+  secondCustomColors = "tw-text-white tw-bg-red-incorrect tw-border-dark-sky-blue hover:tw-opacity-95 hover:tw-text-dark-sky-blue hover:tw-border-dark-sky-blue",
 }: ActionButtonsProps) {
   return (
     <div className="tw-flex tw-gap-1">
@@ -22,13 +28,13 @@ export default function ActionButtons({
         onClick={updateFunction}
         className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
       >
-        Update
+        {firstButtonName}
       </button>
       <button
         onClick={deleteFunction}
-        className="tw-font-semibold tw-text-white tw-bg-red-incorrect tw-py-2 tw-px-4 tw-border-dark-sky-blue hover:tw-opacity-95 hover:tw-text-dark-sky-blue hover:tw-border-dark-sky-blue tw-rounded"
+        className={`tw-font-semibold tw-py-2 tw-px-4 tw-rounded ${secondCustomColors}`}
       >
-        Delete
+        {secondButtonName}
       </button>
     </div>
   );
@@ -76,6 +82,8 @@ function getPageName(name: string): string {
       return "Theses";
     case "request":
       return "Requests";
+    case "report":
+      return "Reports";
   }
 }
 
