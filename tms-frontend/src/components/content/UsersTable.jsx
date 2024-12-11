@@ -514,7 +514,10 @@ export default function UsersTable() {
   function loadingTable(e) {
     return (
       <tr>
-        <td className="loading-data" colSpan="100%">
+        <td
+          className="loading-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
+          colSpan={100}
+        >
           <p
             className="animated headShake infinite"
             style={{ marginBottom: "-0.1rem" }}
