@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./content.css";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 export default function MyThesis({ userId, thesisAssigned }) {
   const [supervisors, setSupervisors] = useState([]);
@@ -99,7 +100,6 @@ export default function MyThesis({ userId, thesisAssigned }) {
   }
 
   function renderSupervisors() {
-    console.log("mphkeee", supervisors, supervisors.length);
     if (supervisors.length > 0) {
       return supervisors.map((supervisor) => {
         return <li key={supervisor}>{supervisor}</li>;
@@ -110,55 +110,111 @@ export default function MyThesis({ userId, thesisAssigned }) {
   }
 
   return (
-    <div className="thesis-information" style={{ marginTop: "0.75rem" }}>
+    <div className="tw-flex tw-flex-1 tw-px-8 tw-py-6 tw-justify-center tw-rounded-xl">
       {thesisAssigned.thesis ? (
-        <div className="thesis-wrapper">
-          <p>
-            <b>Title : </b>
-            {thesisAssigned.thesis.title}
-          </p>
-          <p>
-            <b>Topic : </b>
-            {thesisAssigned.thesis.topic}
-          </p>
-          {/* <p><b>Group : </b>{thesisAssigned.thesis.group}</p> */}
-          <p>
-            <b>Area : </b>
-            {thesisAssigned.thesis.area}
-          </p>
-          <p>
-            <b>Professor : </b>
-            {thesisAssigned.thesis.professor}
-          </p>
+        <div className="tw-font-dm tw-relative tw-w-full tw-max-w-4xl tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
+          <table className="tw-w-full tw-text-sm tw-text-dark-sky-blue">
+            <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
+              <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
+                <div className="tw-text-left tw-text-mid-pale-blue tw-text-3xl">
+                  My Thesis
+                </div>
+              </div>
+            </caption>
+            <thead className="tw-text-center tw-text-xl tw-text-mid-pale-blue tw-bg-light-pale-blue-white">
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Title
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {thesisAssigned.thesis.title}
+                </td>
+              </tr>
 
-          <b>Supervisors: </b>
-          <ul>{loadingSupervisors ? loading() : renderSupervisors()}</ul>
-
-          <p>
-            <b>Description : </b>
-            {thesisAssigned.thesis.description.length > 0
-              ? thesisAssigned.thesis.description
-              : "No description available!"}
-          </p>
-          <p>
-            <b>Date Assigned : </b>
-            {new Intl.DateTimeFormat("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "2-digit",
-              // hour: 'numeric', minute: 'numeric', second: 'numeric',
-              // hour12: false
-            }).format(new Date(thesisAssigned.date))}
-          </p>
-
-          {thesisAssigned.thesis.thesis_files[0] && (
-            <div className="download-files-list">
-              <p>
-                <b>Thesis Files : </b>
-              </p>
-              {renderDownloads()}
-            </div>
-          )}
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Topic
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {thesisAssigned.thesis.topic}
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Area
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {thesisAssigned.thesis.area}
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Professor
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {thesisAssigned.thesis.professor}
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Supervisors
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  <ul>
+                    {loadingSupervisors ? loading() : renderSupervisors()}
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Description
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {thesisAssigned.thesis.description}
+                </td>
+              </tr>
+              <tr>
+                <th
+                  scope="col"
+                  key={""}
+                  className="tw-text-xl tw-px-6 tw-py-3 tw-align-middle"
+                >
+                  Date Assigned
+                </th>
+                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                  {new Intl.DateTimeFormat("en-GB", {
+                    year: "numeric",
+                    month: "long",
+                    day: "2-digit",
+                  }).format(new Date(thesisAssigned.date))}
+                </td>
+              </tr>
+            </thead>
+          </table>
         </div>
       ) : null}
     </div>
