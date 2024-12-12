@@ -91,7 +91,6 @@ function StudentPage() {
     const authUser = async () => {
       try {
         const auth_data = await axios.get("/api/auth/authorization");
-        console.log(auth_data.data);
         if (auth_data.data.auth) {
           if (
             (location.state === "changeRole" &&
@@ -210,7 +209,8 @@ function StudentPage() {
                 {page === "Dashboard" ? "Overview" : ""}
               </p>
               <div className="favourites-content">
-                {page === "Dashboard" ? (
+
+                {page === "Dashboard" && thesisData !== "" ? (
                   <StudentDashboard
                     userId={user.userId}
                     thesisData={thesisData}

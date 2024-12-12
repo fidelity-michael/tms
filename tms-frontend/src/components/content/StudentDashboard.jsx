@@ -16,18 +16,18 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
   const myThesisHeader = ["Title", "Topic", "Area", "Supervisor"];
   const [thesesTableData, setThesesTableData] = useState([]);
 
-  useEffect(() => {
-    async function initTableData() {
-      setThesesTableData([
-        {
-          first: thesisData.thesis.title,
-          second: thesisData.thesis.topic,
-          third: thesisData.thesis.area,
-          fourth: thesisData.thesis.professor,
-        },
-      ]);
-    }
+  async function initTableData() {
+    setThesesTableData([
+      {
+        first: thesisData.thesis.title,
+        second: thesisData.thesis.topic,
+        third: thesisData.thesis.area,
+        fourth: thesisData.thesis.professor,
+      },
+    ]);
+  }
 
+  useEffect(() => {
     initTableData();
 
     return () => {
@@ -65,6 +65,7 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
     if (componentIsMounted.current && userId) {
       getEvents();
     }
+    initTableData();
   }, [userId]);
 
   function renderUpcomingEvents() {
