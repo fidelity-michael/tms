@@ -130,7 +130,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Title
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.title}
                 </td>
               </tr>
@@ -143,7 +143,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Topic
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.topic}
                 </td>
               </tr>
@@ -155,7 +155,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Area
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.area}
                 </td>
               </tr>
@@ -167,7 +167,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Professor
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.professor}
                 </td>
               </tr>
@@ -179,7 +179,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Supervisors
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   <ul>
                     {loadingSupervisors ? loading() : renderSupervisors()}
                   </ul>
@@ -193,7 +193,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Description
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.description}
                 </td>
               </tr>
@@ -205,7 +205,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Date Assigned
                 </th>
-                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-dark-sky-blue tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {new Intl.DateTimeFormat("en-GB", {
                     year: "numeric",
                     month: "long",
