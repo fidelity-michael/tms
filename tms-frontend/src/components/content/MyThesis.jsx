@@ -112,7 +112,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
   return (
     <div className="tw-flex tw-flex-1 tw-px-8 tw-py-6 tw-justify-center tw-rounded-xl">
       {thesisAssigned.thesis ? (
-        <div className="tw-font-dm tw-relative tw-w-full tw-max-w-4xl tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
+        <div className="tw-font-dm tw-relative tw-w-full tw-max-w-2xl tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6 tw-bg-white">
           <table className="tw-w-full tw-text-sm tw-text-dark-sky-blue">
             <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
               <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
@@ -121,7 +121,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 </div>
               </div>
             </caption>
-            <thead className="tw-text-center tw-text-xl tw-text-mid-pale-blue tw-bg-light-pale-blue-white">
+            <thead className="tw-text-left tw-text-xl tw-text-mid-pale-blue tw-bg-light-pale-blue-white">
               <tr>
                 <th
                   scope="col"
@@ -130,7 +130,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Title
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.title}
                 </td>
               </tr>
@@ -143,7 +143,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Topic
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.topic}
                 </td>
               </tr>
@@ -155,7 +155,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Area
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.area}
                 </td>
               </tr>
@@ -167,7 +167,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Professor
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.professor}
                 </td>
               </tr>
@@ -179,7 +179,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Supervisors
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   <ul>
                     {loadingSupervisors ? loading() : renderSupervisors()}
                   </ul>
@@ -193,7 +193,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Description
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {thesisAssigned.thesis.description}
                 </td>
               </tr>
@@ -205,7 +205,7 @@ export default function MyThesis({ userId, thesisAssigned }) {
                 >
                   Date Assigned
                 </th>
-                <td className="tw-text-xl tw-text-center tw-align-middle tw-bg-white tw-border-b tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
+                <td className="tw-text-xl tw-text-left tw-align-middle tw-bg-white tw-border-light-sky-blue hover:tw-bg-light-pale-blue-white tw-px-4 tw-py-2">
                   {new Intl.DateTimeFormat("en-GB", {
                     year: "numeric",
                     month: "long",
