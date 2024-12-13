@@ -900,7 +900,7 @@ export default function Chat({ userId, role }) {
       </div>
 
       {/**chat */}
-      <div className="chatContainer z-depth-3">
+      <div className="tw-w-[70dvw] tw-h-[76dvh] z-depth-3 tw-bg-white">
         <div className="tw-px-4 tw-py-2">
           {currentContact !== "" ? (
             <h5>
@@ -913,7 +913,7 @@ export default function Chat({ userId, role }) {
           )}
         </div>
 
-        <div className="conversation" id="conversation"></div>
+        <div className="tw-w-full tw-h-[60dvh] tw-border tw-overflow-auto tw-block" id="conversation"></div>
 
         <div className="tw-flex tw-items-center tw-gap-3 tw-bg-light-pale-blue-white tw-p-3 tw-mb-0 tw-border tw-border-light-pale-blue-white">
           <textarea
