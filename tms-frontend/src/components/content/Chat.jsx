@@ -5,6 +5,8 @@ import axios from "axios";
 import sound from "../../assets/sound.mp3";
 import newMessage from "../../assets/newMessage.mp3";
 import FilesContainer from "./FilesContainer";
+import SendIcon from "@mui/icons-material/Send";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Contacts from "./Contacts";
 
 export default function Chat({ userId, role }) {
@@ -22,12 +24,29 @@ export default function Chat({ userId, role }) {
 
   const [files, setFiles] = useState([]);
 
+  const [fileContainerOpen, setFileContainerOpen] = useState(false);
+  const popupRef = useRef(null);
+  const togglePopup = () => {
+    setFileContainerOpen((prev) => !prev);
+  };
+
   const componentIsMounted = useRef(true);
 
   //for sockets
-  //TODO: [Frontend] Check Port here, probably needs a change
   const socketRef = useRef(null);
   const ENDPOINT = "http://localhost:8080/chat"; // /chat for namespace
+
+  useEffect(() => {
+    /* const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setFileContainerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }; */
+  }, []);
 
   //we establish connection with endpoint
   useEffect(() => {
@@ -39,7 +58,9 @@ export default function Chat({ userId, role }) {
     socketRef.current.on("connect", () => {
       console.log("Connected to chat!");
       socketRef.current.emit("chat:map", userId);
-      socketRef.current.on("chat:message", (socket) => {console.log(socket.message)})
+      socketRef.current.on("chat:message", (socket) => {
+        console.log(socket.message);
+      });
     });
 
     socketRef.current.on("disconnect", () => {
@@ -733,14 +754,14 @@ export default function Chat({ userId, role }) {
 
   //we manipulate the style in order to fit the files
   function appendFileStyle() {
-    document.getElementById("filesOl").style.display = "block";
+    document.getElementById("filesOl").style.display = "inline-block";
 
     document.getElementById("filesContainer").style.width = "20vw";
     document.getElementById("filesContainer").style.height = "10vh";
 
-    document.getElementById("messageInput").style.width = "29vw";
+    document.getElementById("messageInput").style.width = "2vw";
 
-    document.getElementById("iconsDiv").style.marginLeft = "23vw";
+    document.getElementById("iconsDiv").style.marginLeft = "2vw";
   }
 
   //setState for files
@@ -786,8 +807,6 @@ export default function Chat({ userId, role }) {
   }
 
   function uploadFileNamestoDB(messageId, fileNames) {
-    console.log("eeeela", fileNames);
-
     const upload = async () => {
       await axios
         .patch("/chat/message/addFiles/" + messageId, {
@@ -807,7 +826,6 @@ export default function Chat({ userId, role }) {
   //reset files array and ui of message input
   function resetFiles() {
     setFiles([]);
-    //document.getElementById("filesOl").innerHTML = "" //lagare me auto
 
     document.getElementById("filesContainer").style.width = "0";
     document.getElementById("filesContainer").style.height = "0";
@@ -856,15 +874,15 @@ export default function Chat({ userId, role }) {
   }
 
   return (
-    <div>
+    <div className="tw-flex tw-flex-col xl:tw-flex-row">
       {/**contacts */}
-      <div className="contactsWrapper" type="button">
-        <div className="titleWrapper">
-          <h5 className="titleContactGroup">{contactsTitle}</h5>
+      <div className=" tw-bg-light-pale-blue-white tw-p-3">
+        <div className="tw-pb-3 tw-bg-light-pale-blue-white">
+          <h5 className="tw-text-dark-sky-blue">{contactsTitle}</h5>
         </div>
 
-        <div className="contacts">
-          <ul className="contactGroup list-group" id="myContacts">
+        <div className="tw-w-full tw-max-w-sm ">
+          <ul className="" id="myContacts">
             {loadingConversations ? (
               loading()
             ) : (
@@ -883,57 +901,96 @@ export default function Chat({ userId, role }) {
 
       {/**chat */}
       <div className="chatContainer z-depth-3">
-        <div className="chatTitle">
+        <div className="tw-px-4 tw-py-2">
           {currentContact !== "" ? (
             <h5>
               {currentContact.first_name + " " + currentContact.last_name}
             </h5>
           ) : (
-            <small>Choose someone to chat with...</small>
+            <span className="tw-font-medium tw-text-dark-sky-blue">
+              Choose someone to chat with...
+            </span>
           )}
         </div>
 
         <div className="conversation" id="conversation"></div>
 
-        <div className="newMessageContainer">
+        <div className="tw-flex tw-items-center tw-gap-3 tw-bg-light-pale-blue-white tw-p-3 tw-mb-0 tw-border tw-border-light-pale-blue-white">
           <textarea
             name="input"
             id="messageInput"
-            className="messageInput md-form md-outline input-with-pre-icon"
+            className="tw-flex tw-flex-1 tw-min-h-24 tw-rounded-xl tw-resize-none tw-outline-none tw-border-none focus:tw-border-none focus:tw-outline-none"
             placeholder="Type your message"
           ></textarea>
 
-          <div className="container" id="filesContainer">
-            <ol id="filesOl">
-              {<FilesContainer files={files} removeFile={removeFile} />}
-            </ol>
-          </div>
+          <div className="tw-flex tw-items-center" id="iconsDiv">
+            <div className="tw-flex tw-flex-row tw-items-center tw-text-center tw-w-full tw-min-w-24">
+              <div className="tw-relative tw-inline-block">
+                {/* Icon */}
+                <button
+                  onClick={togglePopup}
+                  className="tw-text-mid-pale-blue tw-p-2 hover:tw-text-gray-800 focus:tw-outline-none"
+                  aria-label="Open popup"
+                >
+                  <AttachFileIcon style={{height: "2rem", width: "2rem"}}/>
+                </button>
 
-          <div className="icons" id="iconsDiv">
-            <label htmlFor="fileUpload" className="customFileUpload">
-              <i
-                className="fas fa-paperclip"
-                type="button"
-                onClick={() => {
-                  /*uploadFile()*/
+                {/* Popup */}
+                {fileContainerOpen && (
+                  <div
+                    ref={popupRef}
+                    className="tw-w-64 tw-h-52 tw-absolute tw-z-10 tw-p-4 tw-mt-2 tw-bottom-12 tw-right-36 tw-text-sm tw-bg-white tw-border tw-border-gray-200 tw-rounded-md tw-shadow-lg  tw-transform tw-translate-x-1/2"
+                  >
+                    <ol className="tw-w-full">
+                      <FilesContainer files={files} removeFile={removeFile} />
+                    </ol>
+                  </div>
+                )}
+              </div>
+
+              {/* <label
+                htmlFor="fileUpload"
+                className="hover:tw-text-dark-sky-blue"
+              >
+                <i
+                  className="fas fa-paperclip hover:tw-text-dark-sky-blue"
+                  onClick={() => {}}
+                ></i>
+              </label>
+
+              <div
+                className="tw-absolute tw-bottom-40 tw-right-36"
+                id="filesContainer"
+              >
+                <ol id="filesOl" className="">
+                  <FilesContainer files={files} removeFile={removeFile} />
+                </ol>
+              </div> */}
+
+              <input
+                className="hover:tw-text-dark-sky-blue tw-align-middle tw-text-center"
+                id="fileUpload"
+                type="file"
+                onChange={(e) => {
+                  addFile(e.target.files[0]);
                 }}
-              ></i>
-            </label>
-            <input
-              id="fileUpload"
-              type="file"
-              onChange={(e) => {
-                addFile(e.target.files[0]);
-              }}
-            />
+              />
 
-            <i
-              className="fas fa-paper-plane"
-              type="button"
-              onClick={() => {
-                sendMessage();
-              }}
-            ></i>
+              <div
+                className="tw-text-mid-pale-blue hover:tw-text-dark-sky-blue hover:tw-cursor-pointer"
+                onClick={() => {
+                  sendMessage();
+                }}
+              >
+                <SendIcon style={{height: "2rem", width: "2rem"}}/>
+              </div>
+            </div>
+            {/* <AttachFileIcon
+className=""
+onChange={(e) => {
+addFile(e.target.files[0]);
+}}
+/> */}
           </div>
         </div>
       </div>
