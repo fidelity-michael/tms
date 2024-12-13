@@ -876,7 +876,7 @@ export default function Chat({ userId, role }) {
   return (
     <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-4">
       {/**contacts */}
-      <div className="tw-bg-white tw-px-4 tw-py-6 tw-rounded-xl tw-shadow-sm">
+      <div className="tw-bg-white tw-px-4 tw-py-6 tw-rounded-xl tw-shadow-lg">
         <div className="tw-pb-3">
           <h5 className="tw-text-dark-sky-blue">{contactsTitle}</h5>
         </div>
@@ -900,7 +900,7 @@ export default function Chat({ userId, role }) {
       </div>
 
       {/**chat */}
-      <div className="tw-w-[65dvw] tw-h-[76dvh] z-depth-1 tw-bg-white">
+      <div className="tw-w-[65dvw] tw-h-[76dvh] tw-border tw-shadow-lg tw-bg-white">
         <div className="tw-px-4 tw-py-2">
           {currentContact !== "" ? (
             <h5>
@@ -914,8 +914,9 @@ export default function Chat({ userId, role }) {
         </div>
 
         <div
-          className="tw-w-full tw-h-[60dvh] tw-border tw-overflow-auto tw-block"
+          className="tw-w-full tw-h-[60dvh] tw-border hover:tw-overflow-auto tw-overflow-y-hidden tw-block"
           id="conversation"
+          style={{ scrollbarGutter: "stable" }}
         ></div>
 
         <div className="tw-flex tw-items-center tw-gap-3 tw-bg-light-pale-blue-white tw-p-3 tw-mb-0 tw-border tw-border-light-pale-blue-white">
