@@ -874,14 +874,14 @@ export default function Chat({ userId, role }) {
   }
 
   return (
-    <div className="tw-flex tw-flex-col xl:tw-flex-row">
+    <div className="tw-flex tw-flex-col xl:tw-flex-row tw-gap-4">
       {/**contacts */}
-      <div className=" tw-bg-light-pale-blue-white tw-p-3">
-        <div className="tw-pb-3 tw-bg-light-pale-blue-white">
+      <div className="tw-bg-white tw-px-4 tw-py-6 tw-rounded-xl tw-shadow-sm">
+        <div className="tw-pb-3">
           <h5 className="tw-text-dark-sky-blue">{contactsTitle}</h5>
         </div>
 
-        <div className="tw-w-full tw-max-w-sm ">
+        <div className="tw-w-full tw-max-w-sm tw-overflow-auto">
           <ul className="" id="myContacts">
             {loadingConversations ? (
               loading()
@@ -900,7 +900,7 @@ export default function Chat({ userId, role }) {
       </div>
 
       {/**chat */}
-      <div className="tw-w-[70dvw] tw-h-[76dvh] z-depth-3 tw-bg-white">
+      <div className="tw-w-[65dvw] tw-h-[76dvh] z-depth-1 tw-bg-white">
         <div className="tw-px-4 tw-py-2">
           {currentContact !== "" ? (
             <h5>
@@ -913,7 +913,10 @@ export default function Chat({ userId, role }) {
           )}
         </div>
 
-        <div className="tw-w-full tw-h-[60dvh] tw-border tw-overflow-auto tw-block" id="conversation"></div>
+        <div
+          className="tw-w-full tw-h-[60dvh] tw-border tw-overflow-auto tw-block"
+          id="conversation"
+        ></div>
 
         <div className="tw-flex tw-items-center tw-gap-3 tw-bg-light-pale-blue-white tw-p-3 tw-mb-0 tw-border tw-border-light-pale-blue-white">
           <textarea
@@ -932,7 +935,7 @@ export default function Chat({ userId, role }) {
                   className="tw-text-mid-pale-blue tw-p-2 hover:tw-text-gray-800 focus:tw-outline-none"
                   aria-label="Open popup"
                 >
-                  <AttachFileIcon style={{height: "2rem", width: "2rem"}}/>
+                  <AttachFileIcon style={{ height: "2rem", width: "2rem" }} />
                 </button>
 
                 {/* Popup */}
@@ -982,7 +985,7 @@ export default function Chat({ userId, role }) {
                   sendMessage();
                 }}
               >
-                <SendIcon style={{height: "2rem", width: "2rem"}}/>
+                <SendIcon style={{ height: "2rem", width: "2rem" }} />
               </div>
             </div>
             {/* <AttachFileIcon
