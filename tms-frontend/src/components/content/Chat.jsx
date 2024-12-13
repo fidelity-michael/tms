@@ -218,12 +218,12 @@ export default function Chat({ userId, role }) {
     }
   }, [currentChatId]);
 
+  /* TODO: Clean up this */
   useEffect(() => {
-    console.log("ta files", files);
     //append file
-    if (files.length > 0 && files[files.length - 1]) {
-      /* appendFileStyle(); */
-    }
+    /* if (files.length > 0 && files[files.length - 1]) { */
+    /*   appendFileStyle(); */
+    /* } */
   }, [files]);
 
   async function fetchConversations() {
@@ -938,6 +938,16 @@ export default function Chat({ userId, role }) {
                   htmlFor="fileUpload"
                 >
                   <AttachFileIcon style={{ height: "2rem", width: "2rem" }} />
+                  {/* Badge to indicate to user that he's uploading files when pop up is closed */}
+                  {files.length > 0 && (
+                    <span className="tw-absolute tw-right-0 tw-bottom-7 badge badge-danger badge-counter">
+                      {files.length
+                        ? files.length > 9
+                          ? "9+"
+                          : files.length
+                        : null}
+                    </span>
+                  )}
                 </label>
 
                 <input
