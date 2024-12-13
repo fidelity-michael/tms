@@ -37,7 +37,7 @@ export default function Chat({ userId, role }) {
   const ENDPOINT = "http://localhost:8080/chat"; // /chat for namespace
 
   useEffect(() => {
-    /* const handleClickOutside = (event) => {
+    const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setFileContainerOpen(false);
       }
@@ -45,7 +45,7 @@ export default function Chat({ userId, role }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-    }; */
+    };
   }, []);
 
   //we establish connection with endpoint
@@ -222,7 +222,7 @@ export default function Chat({ userId, role }) {
     console.log("ta files", files);
     //append file
     if (files.length > 0 && files[files.length - 1]) {
-      appendFileStyle();
+      /* appendFileStyle(); */
     }
   }, [files]);
 
@@ -928,16 +928,26 @@ export default function Chat({ userId, role }) {
           ></textarea>
 
           <div className="tw-flex tw-items-center" id="iconsDiv">
-            <div className="tw-flex tw-flex-row tw-items-center tw-text-center tw-w-full tw-min-w-24">
+            <div className="tw-flex tw-flex-row tw-items-center tw-gap-4 tw-text-center tw-w-full tw-min-w-24">
               <div className="tw-relative tw-inline-block">
-                {/* Icon */}
-                <button
+                {/* Attach Files */}
+                <label
                   onClick={togglePopup}
-                  className="tw-text-mid-pale-blue tw-p-2 hover:tw-text-gray-800 focus:tw-outline-none"
+                  className="tw-mb-0 tw-cursor-pointer tw-text-mid-pale-blue tw-align-middle hover:tw-text-gray-800 focus:tw-outline-none"
                   aria-label="Open popup"
+                  htmlFor="fileUpload"
                 >
                   <AttachFileIcon style={{ height: "2rem", width: "2rem" }} />
-                </button>
+                </label>
+
+                <input
+                  className="hover:tw-text-dark-sky-blue tw-align-middle tw-text-center"
+                  id="fileUpload"
+                  type="file"
+                  onChange={(e) => {
+                    addFile(e.target.files[0]);
+                  }}
+                />
 
                 {/* Popup */}
                 {fileContainerOpen && (
@@ -970,15 +980,6 @@ export default function Chat({ userId, role }) {
                   <FilesContainer files={files} removeFile={removeFile} />
                 </ol>
               </div> */}
-
-              <input
-                className="hover:tw-text-dark-sky-blue tw-align-middle tw-text-center"
-                id="fileUpload"
-                type="file"
-                onChange={(e) => {
-                  addFile(e.target.files[0]);
-                }}
-              />
 
               <div
                 className="tw-text-mid-pale-blue hover:tw-text-dark-sky-blue hover:tw-cursor-pointer"
