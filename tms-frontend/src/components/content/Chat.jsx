@@ -218,14 +218,6 @@ export default function Chat({ userId, role }) {
     }
   }, [currentChatId]);
 
-  /* TODO: Clean up this */
-  useEffect(() => {
-    //append file
-    /* if (files.length > 0 && files[files.length - 1]) { */
-    /*   appendFileStyle(); */
-    /* } */
-  }, [files]);
-
   async function fetchConversations() {
     try {
       const res = await axios.get("/chat/privateConversation/" + userId);
@@ -752,18 +744,6 @@ export default function Chat({ userId, role }) {
     }
   }
 
-  //we manipulate the style in order to fit the files
-  function appendFileStyle() {
-    document.getElementById("filesOl").style.display = "inline-block";
-
-    document.getElementById("filesContainer").style.width = "20vw";
-    document.getElementById("filesContainer").style.height = "10vh";
-
-    document.getElementById("messageInput").style.width = "2vw";
-
-    document.getElementById("iconsDiv").style.marginLeft = "2vw";
-  }
-
   //setState for files
   function removeFile(file, index) {
     //element.style.display = "none"
@@ -972,25 +952,6 @@ export default function Chat({ userId, role }) {
                 )}
               </div>
 
-              {/* <label
-                htmlFor="fileUpload"
-                className="hover:tw-text-dark-sky-blue"
-              >
-                <i
-                  className="fas fa-paperclip hover:tw-text-dark-sky-blue"
-                  onClick={() => {}}
-                ></i>
-              </label>
-
-              <div
-                className="tw-absolute tw-bottom-40 tw-right-36"
-                id="filesContainer"
-              >
-                <ol id="filesOl" className="">
-                  <FilesContainer files={files} removeFile={removeFile} />
-                </ol>
-              </div> */}
-
               <div
                 className="tw-text-mid-pale-blue hover:tw-text-dark-sky-blue hover:tw-cursor-pointer"
                 onClick={() => {
@@ -999,13 +960,8 @@ export default function Chat({ userId, role }) {
               >
                 <SendIcon style={{ height: "2rem", width: "2rem" }} />
               </div>
+
             </div>
-            {/* <AttachFileIcon
-className=""
-onChange={(e) => {
-addFile(e.target.files[0]);
-}}
-/> */}
           </div>
         </div>
       </div>
