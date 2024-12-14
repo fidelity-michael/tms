@@ -57,7 +57,6 @@ function StudentPage() {
               auth_data.data.role.includes("student")) || //we come from my roles page
             (location.state === "login" && auth_data.data.role[0] === "student") //we come from login
           ) {
-            console.log(location.state);
             const user_data = await axios.get(
               "/api/users/" + auth_data.data.id,
             );
@@ -209,7 +208,6 @@ function StudentPage() {
                 {page === "Dashboard" ? "Overview" : ""}
               </p>
               <div className="favourites-content">
-
                 {page === "Dashboard" && thesisData !== "" ? (
                   <StudentDashboard
                     userId={user.userId}
