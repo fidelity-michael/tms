@@ -6,6 +6,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import "./content.css";
+import { SearchFunction } from "../../utils/utils";
+import { PaginationTab } from "./TableComponents";
 
 export default function AssignedThesesTable({ userId }) {
   const [theses, setTheses] = useState([]);
@@ -611,31 +613,19 @@ export default function AssignedThesesTable({ userId }) {
       />
 
       <div className="theses-container">
-        <div className="tw-flex filter-content tw-justify-start">
-          {/* Search Functionality */}
-          <div className="tw-relative tw-mt-1 tw-text-gray-300 tw-mb-6">
-            <div className="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-              <SearchIcon />
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="tw-flex tw-flex-1 tw-items-center tw-py-2 tw-ps-10 tw-text-sm tw-text-dark-sky-blue tw-border tw-border-light-blue tw-rounded-lg tw-w-80 tw-bg-light-pale-blue-white focus:tw-outline-none focus:tw-ring-mid-pale-blue focus:tw-border-mid-pale-blue"
-              placeholder="Search for people"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
+        <div className="tw-ml-4 tw-mb-6 tw-mt-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
+          <h5 className="tw-text-dark-sky-blue tw-text-xl">
+            Assigned Theses Table
+          </h5>
+
+          <SearchFunction
+            query={query}
+            setQuery={(e) => setQuery(e.target.value)}
+            placeholder="Search for active theses"
+          />
         </div>
-        <Table
-          className="theses-table"
-          striped
-          bordered
-          hover
-          size="md"
-          responsive
-        >
-          <thead>
+        <Table className="theses-table" size="md" responsive>
+          <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
               <th className="table-header">
                 <span id="date" onClick={(e) => toggleOrder(e.target.id)}>
@@ -716,23 +706,14 @@ export default function AssignedThesesTable({ userId }) {
                 : emptyTable()}
           </tbody>
         </Table>
-        {renderPageButtons("thesis")}
-        <div className="dropdown-limit">
-          <Form.Group controlId="selectControl">
-            <Form.Label className="page-limit-lbl">Theses per page</Form.Label>
-            <Form.Control
-              className="page-limit"
-              as="select"
-              onChange={(e) => {
-                setThesesLimit(e.target.value);
-              }}
-            >
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
+        <PaginationTab
+          setLimit={(e) => {
+            setThesesLimit(e.target.value);
+          }}
+          renderPageButtonsName="thesis"
+          pagination={pagination}
+          setPageState={setThesesPage}
+        />
       </div>
     </div>
   );
