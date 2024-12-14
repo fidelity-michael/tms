@@ -32,7 +32,8 @@ export default function SmallTable({
         <caption className="tw-caption-top tw-text-xl tw-font-semibold tw-text-dark-sky-blue tw-bg-white">
           <div className="tw-flex tw-flex-1 tw-items-center tw-justify-between">
             <div className="tw-text-left">
-              {caption.name} {caption.amount ? caption.amount : ""}
+              {caption.name}{" "}
+              {caption.amount ? <span>({caption.amount})</span> : ""}
             </div>
             <div className="tw-flex tw-items-center tw-cursor-pointer">
               <div className="tw-text-right tw-text-mid-pale-blue tw-text-sm tw-items-center hover:tw-underline hover:tw-decoration-mid-pale-blue">
@@ -68,14 +69,16 @@ export default function SmallTable({
                 <td className="tw-px-4 tw-py-2 tw-text-center">{e.third}</td>
                 <td className="tw-px-4 tw-py-2 tw-text-center">
                   {e.fourth === "active" || e.fourth === "inactive" ? (
-                    <div
-                      className={`tw-flex tw-w-10 tw-h-10 tw-rounded-full tw-items-center tw-justify-center  ${
-                        e.fourth === "active"
-                          ? "tw-bg-green-correct"
-                          : "tw-bg-red-incorrect"
-                      }`}
-                    >
-                      {e.fourth === "active" ? "Yes" : "No"}
+                    <div className="tw-flex tw-flex-1 tw-justify-center">
+                      <div
+                        className={`tw-flex tw-w-10 tw-h-10 tw-rounded-full tw-items-center tw-justify-center  ${
+                          e.fourth === "active"
+                            ? "tw-bg-green-correct"
+                            : "tw-bg-red-incorrect"
+                        }`}
+                      >
+                        {e.fourth === "active" ? "Yes" : "No"}
+                      </div>
                     </div>
                   ) : (
                     e.fourth
