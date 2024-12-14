@@ -10,9 +10,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SourceIcon from "@mui/icons-material/Source";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import EmailIcon from "@mui/icons-material/Email";
+import AddIcon from "@mui/icons-material/Add";
 
 export const AdminSidebarLinks = [
   {
@@ -95,7 +98,7 @@ export const StudentSidebarLinks = [
   },
   {
     key: "favourite areas",
-    label: "Favourite Categories",
+    label: "Favourite Areas",
     icon: <FavoriteIcon fontSize="large" className="tw-text-light-sky-blue" />,
   },
   {
@@ -116,17 +119,63 @@ export const StudentSidebarLinks = [
   {
     key: "my thesis",
     label: "My Thesis",
-    icon: <FolderOpenIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: (
+      <FolderOpenIcon fontSize="large" className="tw-text-light-sky-blue" />
+    ),
   },
   {
     key: "my reports",
     label: "My Reports",
-    icon: <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: (
+      <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />
+    ),
   },
   {
     key: "chat",
     label: "Chat",
-    icon: <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: (
+      <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />
+    ),
+  },
+];
+
+export const ProfessorSidebarLinks = [
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "assigned_theses",
+    label: "Assigned Theses",
+    icon: <FolderIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "supervised theses",
+    label: "Supervised Theses",
+    icon: (
+      <SupervisedUserCircleIcon
+        fontSize="large"
+        className="tw-text-light-sky-blue"
+      />
+    ),
+  },
+  {
+    key: "theses requests",
+    label: "Theses Requests",
+    icon: <EmailIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "archived_theses",
+    label: "Theses Archive",
+    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+  },
+  {
+    key: "chat",
+    label: "Chat",
+    icon: (
+      <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />
+    ),
   },
 ];
 
@@ -165,10 +214,27 @@ export function TopSidebar({ props }) {
   );
 }
 
-export function BottomSidebar() {
+type BottomSidebarProps = {
+  button?: boolean;
+  onSelect?: () => void;
+};
+
+export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
   return (
     <div className="tw-flex tw-flex-1 tw-flex-col tw-pt-4">
-      <div className="tw-flex-1 tw-border-light-pale-blue-white tw-border-b-4 tw-border-solid tw-mb-4"></div>
+      <div className="tw-flex tw-flex-1 tw-items-end tw-justify-center tw-border-light-pale-blue-white tw-border-b-4 tw-border-solid tw-mb-4">
+        {button ? (
+          <button
+            onClick={onSelect}
+            className={`tw-flex tw-flex-1 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-xl tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+          >
+            <AddIcon style={{width: "2rem", height: "2rem"}}/>
+            Add Thesis
+          </button>
+        ) : (
+          ""
+        )}
+      </div>
       <div
         id="logoAndVersion"
         className="tw-inline-flex tw-items-end tw-justify-between tw-pr-2"

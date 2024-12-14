@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import "./sidebar.css";
+import {
+  TopSidebar,
+  ProfessorSidebarLinks,
+  SidebarLink,
+  BottomSidebar,
+} from "./options";
 
 function ProfessorSidebar(props) {
   const [selected, setSelected] = useState("");
@@ -86,130 +92,30 @@ function ProfessorSidebar(props) {
     document.getElementById("chatCircle").style = "display: none !important";
   }
 
+  const handleSelect = (label) => {
+    props.onSelect(label);
+  };
+
   return (
-    <ul
-      className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-      id="accordionSidebar"
-    >
-      <div className="sidebar-brand d-flex" href="#/">
-        <i className="fas fa-user-tie" style={{ marginTop: "0.2rem" }}></i>
-        <div style={{ marginLeft: "0.7rem" }}>Professor</div>
+    <div className="tw-sticky tw-top-0 tw-flex tw-flex-col tw-h-screen tw-py-5 tw-w-80">
+      <TopSidebar props={props} />
+      <div className="tw-flex tw-flex-col tw-pl-1 tw-gap-6 tw-pt-8 tw-border-t-4 tw-border-light-pale-blue-white">
+        {ProfessorSidebarLinks.map((item) => (
+          <SidebarLink
+            key={item.key}
+            item={item}
+            props={{
+              onSelect: handleSelect,
+              isSelected: props.selectedItem === item.label,
+            }}
+          />
+        ))}
       </div>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Dashboard");
-          setSelected("Dashboard");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fas fa-fw fa-home"></i>
-          </div>
-
-          <span>Dashboard</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("New Thesis");
-          setSelected("New Thesis");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fa fa-fw fa-folder-plus"></i>
-          </div>
-
-          <span>New Thesis</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Assigned Theses");
-          setSelected("Assigned Theses");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fas fa-fw fa-folder-open"></i>
-          </div>
-
-          <span>Assigned Theses</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Supervise Theses");
-          setSelected("Supervise Theses");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fas fa-fw fa-glasses"></i>
-          </div>
-
-          <span>Supervise Theses</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Theses Requests");
-          setSelected("Theses Requests");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fas fa-fw fa-envelope"></i>
-          </div>
-
-          <span>Theses Requests</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Theses Archive");
-          setSelected("Theses Archive");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="fas fa-fw fa-archive"></i>
-          </div>
-
-          <span>Theses Archive</span>
-        </div>
-      </li>
-
-      <li
-        className="nav-item"
-        onClick={(e) => {
-          props.onSelect("Chat");
-          hideNotifyChatIcon();
-          setSelected("Chat");
-        }}
-      >
-        <div className="nav-link" style={{ cursor: "pointer" }}>
-          <div className="imgSidebar">
-            <i className="far fa-comments"></i>
-          </div>
-
-          <span>Chat</span>
-          <i className="fas fa-circle chatNotification" id="chatCircle"></i>
-        </div>
-      </li>
-    </ul>
+      <BottomSidebar
+        button={true}
+        onSelect={() => props.onSelect("New Thesis")}
+      />
+    </div>
   );
 }
 
