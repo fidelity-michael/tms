@@ -1,7 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Calendar, VStack } from "rsuite";
+import { renderCells, TodoList } from "./smallCallendarOptions";
 
-function ProfessorDashboard({ userId, myStudents, setPage }) {
+import SmallTable, { SmallTableEmpty } from "./SmallTable";
+
+function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
@@ -10,7 +15,53 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
 
   const componentIsMounted = useRef(true);
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const activeThesesHeaders = ["Thesis Title", "Date", "Assigned To", "Email"];
+  const [thesesTableData, setThesesTableData] = useState([]);
+
   useEffect(() => {
+    const getThesesAndStudents = async () => {
+      try {
+        setLoadingTheses(true);
+        // Fetch all data for each student in parallel
+        const activeThesesData = await Promise.all(
+          myStudents.map(async (studentId) => {
+            try {
+              const assignedThesisRes = await axios.get(
+                `/api/assigned_theses/assigned_thesis/${studentId}`,
+              );
+              // Proceed only if the thesis is active
+              if (assignedThesisRes.data.status === "active") {
+                const [thesisRes, studentRes] = await Promise.all([
+                  axios.get(`/api/theses/${assignedThesisRes.data.thesis}`),
+                  axios.get(`/api/data/users/${studentId}`),
+                ]);
+
+                const mergedData = { ...thesisRes.data[0], ...studentRes.data };
+                return mergedData;
+              }
+            } catch (error) {
+              console.log("Error fetching data for student", studentId, error);
+              return null; // Returning null to filter out failed requests later
+            }
+          }),
+        );
+        let all_data = activeThesesData.filter((data) => data !== null);
+        const small_table_data = all_data.map((el) => ({
+          first: el.title,
+          second: el.date,
+          third: el.first_name + " " + el.last_name,
+          fourth: el.email,
+        }));
+        setThesesTableData(small_table_data);
+        console.log("ActiveTheses!!: ", activeTheses);
+        setLoadingTheses(false);
+      } catch {
+        console.log("gsgs");
+      }
+    };
+
     return () => {
       componentIsMounted.current = true;
     };
@@ -44,6 +95,7 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
           }),
         );
         setActiveTheses(activeThesesData.filter((data) => data !== null));
+        console.log("ActiveTheses!!: ", activeTheses);
         setLoadingTheses(false);
       } catch {
         console.log("gsgs");
@@ -156,8 +208,64 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
     );
   }
 
+  const handleSelectedDate = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
-    <div>
+    <div className="tw-flex tw-flex-col 2xl:tw-flex-row tw-gap-7 tw-mt-6">
+      <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
+        <div
+          className="tw-cursor-pointer"
+          onClick={() => {
+            setPage("My Thesis");
+            setSelectedItem("My Thesis");
+          }}
+        >
+          {activeTheses.length ? (
+            <SmallTable
+              caption={{
+                name: "Active Theses",
+              }}
+              headerTitles={activeThesesHeaders}
+              data={thesesTableData}
+            />
+          ) : (
+            <SmallTableEmpty
+              caption={{
+                name: "Active Theses",
+              }}
+              headerTitles={activeThesesHeaders}
+            />
+          )}
+        </div>
+      </div>
+      {
+        <div className="2xl:tw-min-h-[67dvh] tw-flex tw-flex-1 tw-text-dark-sky-blue tw-bg-white tw-rounded-2xl tw-shadow-lg tw-pt-2 tw-pb-6 tw-px-4">
+          <div className="tw-relative">
+            <div className="tw-absolute tw-left-40 tw-z-50 tw-justify-center tw-pt-2 tw-px-4">
+              <button
+                onClick={() => setPage("My Calendar")}
+                className="tw-max-w-xs tw-gap-1 tw-items-center tw-justify-center tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-1 tw-px-2 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+              >
+                <CalendarMonthIcon />
+              </button>
+            </div>
+            <div className="tw-z-10">
+              <VStack spacing={10} alignItems="stretch" justifyContent="center">
+                <Calendar
+                  compact
+                  renderCell={(date) => renderCells(date, events)}
+                  onSelect={handleSelectedDate}
+                />
+                <TodoList date={selectedDate} events={events} />
+              </VStack>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    /* <div>
       <a
         className="dashboardEventsDiv z-depth-2"
         type="button"
@@ -185,7 +293,7 @@ function ProfessorDashboard({ userId, myStudents, setPage }) {
           <p>No upcoming events</p>
         )}
       </a>
-    </div>
+    </div> */
   );
 }
 
