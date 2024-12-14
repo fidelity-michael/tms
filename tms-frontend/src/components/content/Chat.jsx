@@ -222,8 +222,7 @@ export default function Chat({ userId, role }) {
     try {
       const res = await axios.get("/chat/privateConversation/" + userId);
       if (res.data.length > 0) {
-        // console.log("OOK", res.data);
-        // console.log("Conversations SETing");
+        /* console.log("OOK", res.data); */
 
         setConversations(res.data);
         // console.log("Conversations SET");
@@ -880,7 +879,7 @@ export default function Chat({ userId, role }) {
       </div>
 
       {/**chat */}
-      <div className="tw-w-[65dvw] tw-h-[76dvh] tw-border tw-shadow-lg tw-bg-white">
+      <div className="xl:tw-w-[65dvw] tw-w-full tw-h-[76dvh] tw-border tw-shadow-lg tw-bg-white">
         <div className="tw-px-4 tw-py-2 tw-bg-light-pale-blue-white">
           {currentContact !== "" ? (
             <h5>
@@ -960,7 +959,6 @@ export default function Chat({ userId, role }) {
               >
                 <SendIcon style={{ height: "2rem", width: "2rem" }} />
               </div>
-
             </div>
           </div>
         </div>
