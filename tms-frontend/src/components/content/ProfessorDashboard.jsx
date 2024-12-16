@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Calendar, VStack } from "rsuite";
-import { renderCells, TodoList } from "./smallCallendarOptions";
+import { convertToGreekDate, renderCells, TodoList } from "./smallCallendarOptions";
 
 import SmallTable, { SmallTableEmpty } from "./SmallTable";
 
@@ -25,6 +25,7 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
       try {
         setLoadingTheses(true);
         // Fetch all data for each student in parallel
+        console.log("myStudents ", myStudents)
         const activeThesesData = await Promise.all(
           myStudents.map(async (studentId) => {
             try {
@@ -54,8 +55,10 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
           third: el.first_name + " " + el.last_name,
           fourth: el.email,
         }));
-        setThesesTableData(small_table_data);
+        
         console.log("ActiveTheses!!: ", activeTheses);
+        setThesesTableData(small_table_data);
+        console.log("all_data:");
         setLoadingTheses(false);
       } catch {
         console.log("gsgs");
@@ -94,8 +97,17 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
             }
           }),
         );
+
+        let all_data = activeThesesData.filter((data) => data !== null);
+        const small_table_data = all_data.map((el) => ({
+          first: el.title,
+          second: convertToGreekDate(el.date),
+          third: el.first_name + " " + el.last_name,
+          fourth: el.email,
+        }));
+        
+        setThesesTableData(small_table_data);
         setActiveTheses(activeThesesData.filter((data) => data !== null));
-        console.log("ActiveTheses!!: ", activeTheses);
         setLoadingTheses(false);
       } catch {
         console.log("gsgs");
@@ -114,7 +126,6 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
       await axios
         .get("/api/calendarEvents/" + userId)
         .then((res) => {
-          console.log(res.data);
           sortByDate(res.data);
           setEvents(res.data);
           setLoadingEvents(false);
@@ -130,8 +141,6 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
         var d = new Date(b.date);
         return c - d;
       });
-
-      console.log(myEvents);
     };
 
     if (componentIsMounted.current && userId) {
@@ -218,11 +227,11 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
         <div
           className="tw-cursor-pointer"
           onClick={() => {
-            setPage("My Thesis");
-            setSelectedItem("My Thesis");
+            setPage("Assigned Theses");
+            setSelectedItem("Assigned Theses");
           }}
         >
-          {activeTheses.length ? (
+          {activeTheses.length && myStudents ? (
             <SmallTable
               caption={{
                 name: "Active Theses",

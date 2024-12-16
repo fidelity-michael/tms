@@ -174,6 +174,7 @@ function ProfessorPage() {
                     userId={user.userId}
                     myStudents={myStudents}
                     setPage={setPage}
+                    setSelectedItem={setSelectedItem}
                   />
                 ) : null}
                 {page === "New Thesis" ? (
