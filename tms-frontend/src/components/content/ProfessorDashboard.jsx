@@ -238,6 +238,7 @@ function ProfessorDashboard({ userId, myStudents, setPage, setSelectedItem }) {
               }}
               headerTitles={activeThesesHeaders}
               data={thesesTableData}
+              rows={9}
             />
           ) : (
             <SmallTableEmpty
