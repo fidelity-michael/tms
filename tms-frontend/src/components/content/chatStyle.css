@@ -1,14 +1,14 @@
-.contactsWrapper{
-    float: right;
+.contactsWrapper {
+  float: right;
 }
 
-.contacts{
-    width: 18vw;
-    background-color: white;
-    overflow-y: scroll;
-    max-height: 60vh;
-    overflow: hidden;
-    border:2px rgb(194, 208, 255) solid;
+.contacts {
+  width: 18vw;
+  background-color: white;
+  overflow-y: scroll;
+  max-height: 60vh;
+  overflow: hidden;
+  border: 2px rgb(194, 208, 255) solid;
 }
 
 .contacts:hover {
@@ -16,500 +16,532 @@
   scrollbar-width: thin;
 }
 
-.titleWrapper{
-    background-color: #f8f9fc !important; /* For browsers that do not support gradients */
-    height: 5vh;
-    text-align: left;
+.titleWrapper {
+  background-color: #f8f9fc !important; /* For browsers that do not support gradients */
+  height: 5vh;
+  text-align: left;
 }
 
-.titleContactGroup{
-    padding-top: 0.4vh;
-    color:rgb(98, 100, 100);
+.titleContactGroup {
+  padding-top: 0.4vh;
+  color: rgb(98, 100, 100);
 }
 
-.contactGroup{
-    width: 17.8vw;
+.contactGroup {
+  width: 17.8vw;
 }
 
-.contact{
-    height: 11vh;
-    color:rgb(100, 98, 98);
-    background-color: rgb(242, 249, 250) !important;; /* For browsers that do not support gradients */
-    /*background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) ;*/
-    border:3px rgb(194, 208, 255) solid;
-    font-weight: bold;
-    margin-left: 0% !important;
-    font-size: 1rem;
+.contact {
+  height: 11vh;
+  color: rgb(100, 98, 98);
+  background-color: rgb(
+    242,
+    249,
+    250
+  ) !important; /* For browsers that do not support gradients */
+  /*background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) ;*/
+  border: 3px rgb(194, 208, 255) solid;
+  font-weight: bold;
+  margin-left: 0% !important;
+  font-size: 1rem;
 }
 
 .contact:hover {
-    color:white !important;
-    background-color: rgb(71, 181, 245) ; /* For browsers that do not support gradients */
-    background-image: linear-gradient(rgb(71, 181, 245), rgb(181, 212, 219)) ;
+  color: white !important;
+  background-color: rgb(
+    71,
+    181,
+    245
+  ); /* For browsers that do not support gradients */
+  background-image: linear-gradient(rgb(71, 181, 245), rgb(181, 212, 219));
 }
 
-.user{
-    font-size: 0.97rem;
-    height: 9vh;
-    color:rgb(100, 98, 98);
-    background-color: rgb(223, 230, 255) ; /* For browsers that do not support gradients */
-    background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) ;
-    border: none !important;
-    margin-left: 0% !important;
+.user {
+  font-size: 0.97rem;
+  height: 9vh;
+  color: rgb(100, 98, 98);
+  background-color: rgb(
+    223,
+    230,
+    255
+  ); /* For browsers that do not support gradients */
+  background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255));
+  border: none !important;
+  margin-left: 0% !important;
 }
 
-.user:hover{
-    color:white;
-    background-color: rgb(71, 181, 245) ; /* For browsers that do not support gradients */
-    background-image: linear-gradient(rgb(71, 181, 245), rgb(181, 212, 219)) ;
+.user:hover {
+  color: white;
+  background-color: rgb(
+    71,
+    181,
+    245
+  ); /* For browsers that do not support gradients */
+  background-image: linear-gradient(rgb(71, 181, 245), rgb(181, 212, 219));
 }
 
-.fa-plus-square{
-    color: rgb(114, 145, 250) ;
-    margin-left: 1vw;
-    margin-top: 2vh;
-    font-size: 1.5rem;
+.fa-plus-square {
+  color: rgb(114, 145, 250);
+  margin-left: 1vw;
+  margin-top: 2vh;
+  font-size: 1.5rem;
 }
 
-.fa-plus-square:hover{
-    color: rgb(39, 86, 240) ;
+.fa-plus-square:hover {
+  color: rgb(39, 86, 240);
 }
 
-.fa-check{
-    color: rgb(33, 182, 33) !important;
-    margin-left: 1vw;
-    margin-top: 2vh;
+.fa-check {
+  color: rgb(33, 182, 33) !important;
+  margin-left: 1vw;
+  margin-top: 2vh;
 }
 
-.fa-trash-alt{
-    color: red !important;
-    margin-left: 0.8vw;
+.fa-trash-alt {
+  color: red !important;
+  margin-left: 0.8vw;
 }
 
 .profileImg {
-    display: inline-block;
-    border-radius: 60px;
-    box-shadow: 0px 0px 2px #888;
-    padding: 0.5em 0.6em;
-    border-color: black;
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 0px 2px #888;
+  padding: 0.5em 0.6em;
+  border-color: black;
 }
 
-.contact:hover .profileImg{  color: white !important;}
-
-.searchContact{
-    margin-top: 0px !important;
-    margin-bottom: 0 !important;
-    width: 18vw;
-    box-shadow: 0px 0px 2px #6c8eeb;
+.contact:hover .profileImg {
+  color: white !important;
 }
 
-.searchUser{
-    margin-top: 0px !important;
-    margin-bottom: 0 !important;
-    width: 62vw;
-    box-shadow: 0px 0px 2px #6c8eeb;
-}
-  
-.searchIcon{
-    color: #31b1e4 !important;
+.searchContact {
+  margin-top: 0px !important;
+  margin-bottom: 0 !important;
+  width: 18vw;
+  box-shadow: 0px 0px 2px #6c8eeb;
 }
 
-.searchInput{
-    width: 16vw;
-    margin-top: 0px !important;
-    margin-bottom: 2px !important;
+.searchUser {
+  margin-top: 0px !important;
+  margin-bottom: 0 !important;
+  width: 62vw;
+  box-shadow: 0px 0px 2px #6c8eeb;
 }
 
-.chatContainer{
-    width: 65vw;
-    height: 78vh;
+.searchIcon {
+  color: #31b1e4 !important;
+}
 
-    background-color: rgb(255, 255, 255);
-    justify-content: space-between;
-    flex-direction: column;
-    display: flex;
-    
-    border-radius: 0.5% !important;
+.searchInput {
+  width: 16vw;
+  margin-top: 0px !important;
+  margin-bottom: 2px !important;
+}
+
+.chatContainer {
+  width: 65vw;
+  height: 78vh;
+
+  background-color: rgb(255, 255, 255);
+  justify-content: space-between;
+  flex-direction: column;
+  display: flex;
+
+  border-radius: 0.5% !important;
 }
 
 /*gia olo to div pou periexei mhnumata */
-.conversation{
-    width: 64vw;
-    height: 62vh;
-    background-color: rgb(255, 255, 255);
-    border-radius: 1% !important;
-    display: block !important;
-    
-    overflow-y: scroll;
-    scrollbar-width: thin;
+.conversation {
+  width: 64vw;
+  height: 62vh;
+  background-color: rgb(255, 255, 255);
+  border-radius: 1% !important;
+  display: block !important;
+
+  overflow-y: scroll;
+  scrollbar-width: thin;
 }
 
 /*gia to input ktlp*/
-.newMessageContainer{
-    display: inline-block;
-    margin-bottom: 0!important;
-    border-radius: 0.5% !important;
-    padding-top: 1%;
-    padding-bottom: 0.5%;
-    padding-left: 1.5%;
-    background-color: #023e8a!important; /* For browsers that do not support gradients */
-    /*background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) !important;*/
+.newMessageContainer {
+  display: inline-block;
+  margin-bottom: 0 !important;
+  border-radius: 0.5% !important;
+  padding-top: 1%;
+  padding-bottom: 0.5%;
+  padding-left: 1.5%;
+  background-color: #023e8a !important; /* For browsers that do not support gradients */
+  /*background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) !important;*/
 }
 
-#filesContainer{
-    width: 0px;
-    height: 0;    
-    position: fixed;
+#filesContainer {
+  width: 0px;
+  height: 0;
+  position: fixed;
 
-    margin-top: 0px !important;
-    margin-bottom: 0 !important;
-    background-color: white;
-    display: inline-block;
-    overflow-y: scroll;
-    border:  1px solid #023e8a;
-
+  margin-top: 0px !important;
+  margin-bottom: 0 !important;
+  background-color: white;
+  display: inline-block;
+  overflow-y: scroll;
+  border: 1px solid #023e8a;
 }
 
-#filesOl{
-    color: #023e8a;
-    padding: 0;
+#filesOl {
+  color: #023e8a;
+  padding: 0;
 }
 
-.newFileDiv{
-    color: #023e8a;
-    display: flex;
-    margin-left: 0;
-    margin-bottom: 1vh;
+.newFileDiv {
+  color: #023e8a;
+  display: flex;
+  margin-left: 0;
+  margin-bottom: 1vh;
 }
 
-.messageInput{
-    display: inline-block;
-    resize: none;
-    position: fixed;
-    width: 49vw ;
-    height: 10vh;
-    margin-top: 0px !important;
-    margin-bottom: 0 !important;
-    
+.messageInput {
+  display: inline-block;
+  resize: none;
+  position: fixed;
+  width: 49vw;
+  height: 10vh;
+  margin-top: 0px !important;
+  margin-bottom: 0 !important;
 
-    border: none;
-    overflow: auto;
-    outline: none;
+  border: none;
+  overflow: auto;
+  outline: none;
 
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
-.icons{
-    position: fixed;
-    display: inline-block;
-    margin-top: 2vh;
-    margin-left: 3vw;
+.icons {
+  position: fixed;
+  display: inline-block;
+  margin-top: 2vh;
+  margin-left: 3vw;
 }
 
-.fa-paperclip{
-    font-size: 1.5rem;
-    border-radius: 60%;
-    
-    padding: 0.3em 0.4em;
+.fa-paperclip {
+  font-size: 1.5rem;
+  border-radius: 60%;
 
-    color: rgb(187, 198, 235); 
-    border:rgb(187, 198, 235) solid;
+  padding: 0.3em 0.4em;
+
+  color: rgb(187, 198, 235);
+  border: rgb(187, 198, 235) solid;
 }
 
 .fa-paperclip:hover {
-    color: white; 
-    border:white solid;
+  color: white;
+  border: white solid;
 }
 
-#fileUpload  {
-    display: none;
+#fileUpload {
+  display: none;
 }
 
-.fa-paper-plane{
-    margin-left: 1.8vw;
-    font-size: 1.5rem;
-    border-radius: 60%;
-    padding: 0.3em 0.4em;
+.fa-paper-plane {
+  margin-left: 1.8vw;
+  font-size: 1.5rem;
+  border-radius: 60%;
+  padding: 0.3em 0.4em;
 
-    color: rgb(187, 198, 235); 
-    border:rgb(187, 198, 235) solid;
+  color: rgb(187, 198, 235);
+  border: rgb(187, 198, 235) solid;
 }
 
 .fa-paper-plane:hover {
-    color: white; 
-    border:white solid;
+  color: white;
+  border: white solid;
 }
-
 
 /*gia ta mhmumata pou stelnw*/
 .myMessageWrapper {
-    width: 100%;
-    clear: right;
-    float: right;
-    padding-top: 0.1vh;
-    padding-bottom: 0.2vh;
-    padding-right: 0.5vw;
+  width: 100%;
+  clear: right;
+  float: right;
+  padding-top: 0.1vh;
+  padding-bottom: 0.2vh;
+  padding-right: 0.5vw;
 }
-
-
 
 .messageFilesDiv {
-    width: 100%;
-    overflow: auto;
-    margin-right: 1vw;
-    margin-top: 1vh;
-    margin-bottom: 1vh;
+  display: flex; /* Enable flexbox layout */
+  justify-content: flex-end; /* Align items to the right */
+  width: 100%; /* Ensure it uses the full width of the parent */
+  margin: 1vh 0 1vh auto; /* Vertical margins and auto-align to the right */
+  overflow: auto;
 }
 
-.myMessageFilesWrapper{
-    margin-right: 1vw;
-    float: right;
+.myMessageFilesWrapper {
+  margin-right: 1vw;
+  float: right;
 }
 
-.myMessageFilesWrapper:hover{
-    color: rgb(50, 87, 211);
+.myMessageFilesWrapper:hover {
+  color: rgb(50, 87, 211);
 }
 
 .myMessageFilesWrapper:hover > p {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 #fileIcon {
-    display: inline-block;
-    overflow: auto;
-    width: 2vw;
+  display: inline-block;
+  overflow: auto;
+  width: 2vw;
 }
 
-.fileName{
-    margin-bottom: 0.2vh;
-    margin-left: 0vh;
-    font-weight: bold;
-    display: inline-block;
-    font-size: 2vh;
+.fileName {
+  margin-bottom: 0.2vh;
+  margin-left: 0vh;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 2vh;
 }
 
-.incomingFilesWrapper{
-    margin-right: 1vw;
-    float: left;
+.incomingFilesWrapper {
+  margin-right: 1vw;
+  float: left;
 }
 
 .incomingFilesWrapper:hover > p {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-.incomingFilesWrapper:hover{
-    color: rgb(50, 87, 211);
+.incomingFilesWrapper:hover {
+  color: rgb(50, 87, 211);
 }
 
-.myMessage{
-    width: fit-content;
-    float: right;
-    background-color: rgb(50, 87, 211) !important; 
-    /*background-image: linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206)) !important;*/
-    color: white;
-    
-    border-radius: 10px 10px 10px 10px;
-    
-    padding: 10px;
-    overflow: hidden;
-    display: block;
-    
-    min-height: 4vh;
-    min-width: 3vw;
-    max-width: 30vw;
-    word-wrap:break-word;
+.myMessage {
+  width: fit-content;
+  float: right;
+  background-color: rgb(50, 87, 211) !important;
+  /*background-image: linear-gradient(rgb(50, 87, 211), rgb(147, 195, 206)) !important;*/
+  color: white;
+
+  border-radius: 10px 10px 10px 10px;
+
+  padding: 10px;
+  overflow: hidden;
+  display: block;
+
+  min-height: 4vh;
+  min-width: 3vw;
+  max-width: 30vw;
+  word-wrap: break-word;
 }
 
-.myMessage:hover{
-    background-image: linear-gradient(rgb(50, 87, 211) , rgb(138, 188, 199)) !important;
+.myMessage:hover {
+  background-image: linear-gradient(
+    rgb(50, 87, 211),
+    rgb(138, 188, 199)
+  ) !important;
 }
 
-.messageInfo{
-    margin-bottom: 1vh;
-    margin-right: 0.6vw;
-    display: block;
-    float: right;
-    clear: right;
+.messageInfo {
+  margin-bottom: 1vh;
+  margin-right: 0.6vw;
+  display: block;
+  float: right;
+  clear: right;
 }
 
-.messageInfoIncoming{
-    margin-bottom: 1vh;
-    margin-left: 0.6vw;
-    display: block;
-    float: left;
+.messageInfoIncoming {
+  margin-bottom: 1vh;
+  margin-left: 0.6vw;
+  display: block;
+  float: left;
 }
 
-.fa-check-circle{
-    margin-left: 0.7vw;
-    display: inline-block !important;
+.fa-check-circle {
+  margin-left: 0.7vw;
+  display: inline-block !important;
 }
-
-
-
 
 /*gia ta mhmumata pou dexome*/
 .incomingMessageWrapper {
-    width: 100%;
-    clear: left;
-    float: left;
-    padding-top: 0.1vh;
-    padding-bottom: 0.2vh;
-    padding-left: 0.5vw;;
+  width: 100%;
+  clear: left;
+  float: left;
+  padding-top: 0.1vh;
+  padding-bottom: 0.2vh;
+  padding-left: 0.5vw;
 }
 
-.incomingMessage{
-    width: fit-content;
-    float: left;
-    color: white;
-    background-color: rgb(94, 201, 240) !important; /* For browsers that do not support gradients */
-    /*background-image: linear-gradient(rgb(94, 201, 240), rgb(188, 222, 235))!important;*/
-    border-radius: 10px 10px 10px 10px;
-    
-    padding: 10px;
-    overflow: hidden;
-    display: block;
-    
-    min-height: 4vh;
-    min-width: 3vw;
-    max-width: 30vw;
-    word-wrap:break-word;
+.incomingMessage {
+  width: fit-content;
+  float: left;
+  color: white;
+  background-color: rgb(
+    94,
+    201,
+    240
+  ) !important; /* For browsers that do not support gradients */
+  /*background-image: linear-gradient(rgb(94, 201, 240), rgb(188, 222, 235))!important;*/
+  border-radius: 10px 10px 10px 10px;
+
+  padding: 10px;
+  overflow: hidden;
+  display: block;
+
+  min-height: 4vh;
+  min-width: 3vw;
+  max-width: 30vw;
+  word-wrap: break-word;
 }
 
-.incomingMessage:hover{
-    background-image: linear-gradient(rgb(94, 201, 240), rgb(174, 190, 240)) !important;
+.incomingMessage:hover {
+  background-image: linear-gradient(
+    rgb(94, 201, 240),
+    rgb(174, 190, 240)
+  ) !important;
 }
 
-
-.chatTitle{
-    color: rgb(50, 87, 211);
-    background-color: rgb(226, 236, 238) !important; /* For browsers that do not support gradients */
-    background-image: linear-gradient(rgb(226, 236, 238), rgb(255, 255, 255)) !important;
+.chatTitle {
+  color: rgb(50, 87, 211);
+  background-color: rgb(
+    226,
+    236,
+    238
+  ) !important; /* For browsers that do not support gradients */
+  background-image: linear-gradient(
+    rgb(226, 236, 238),
+    rgb(255, 255, 255)
+  ) !important;
 }
 
-.fa-circle{
-    color: rgb(50, 87, 211);
-    position: absolute; 
-    top: 2vh;
-    right: 0.5vw;
-    display: block;
+.fa-circle {
+  color: rgb(50, 87, 211);
+  position: absolute;
+  top: 2vh;
+  right: 0.5vw;
+  display: block;
 }
 
-.loader{
-    margin-top: 15vh;
-    margin-left: 25vw;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    width: 120px;
-    height: 120px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
+.loader {
+  margin-top: 15vh;
+  margin-left: 25vw;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
 }
 
-.chatNotification{
-    color: #a2d5f7 !important;
-    right: 3vw;
-    font-size: 0.9vw !important;
-    display: none !important;
+.chatNotification {
+  color: #a2d5f7 !important;
+  right: 3vw;
+  font-size: 0.9vw !important;
+  display: none !important;
 }
 
-
-.calendarBtn{
-    width: 10vw;
-    font-size: 1vw !important;
+.calendarBtn {
+  width: 10vw;
+  font-size: 1vw !important;
 }
 
-.addEvent{
-    float: right;
+.addEvent {
+  float: right;
 }
 
-.calendarContainer{
-   display: block;
+.calendarContainer {
+  display: block;
 }
 
-.eventFieldInfo{
-    color: red;
-    display: none;
+.eventFieldInfo {
+  color: red;
+  display: none;
 }
 
-.eventSaved{
-    color: green;
-    display: none;
+.eventSaved {
+  color: green;
+  display: none;
 }
 
-.resultDiv{
-    clear:both;
-    float: right;
+.resultDiv {
+  clear: both;
+  float: right;
 }
 
-.dashboardThesisDiv{
-    padding: 2vh;
-    width: 50vw;
+.dashboardThesisDiv {
+  padding: 2vh;
+  width: 50vw;
 }
 
-.dashboardThesisDiv:hover{
-    transform: scale(1.04);
+.dashboardThesisDiv:hover {
+  transform: scale(1.04);
 }
 
-.dashboardEventsDiv{
-    margin-top: 5vh;
-    padding: 2vh;
-    width: 50vw;
+.dashboardEventsDiv {
+  margin-top: 5vh;
+  padding: 2vh;
+  width: 50vw;
 }
 
-.dashboardEventsDiv:hover{
-    transform: scale(1.04);
+.dashboardEventsDiv:hover {
+  transform: scale(1.04);
 }
 
-.dashboardAdminDiv{
-    margin-top: 5vh;
-    padding: 2vh;
-    width: 25vw;
+.dashboardAdminDiv {
+  margin-top: 5vh;
+  padding: 2vh;
+  width: 25vw;
 }
 
-.dashboardAdminDiv:hover{
-    transform: scale(1.04);
+.dashboardAdminDiv:hover {
+  transform: scale(1.04);
 }
 
-.adminDashboardInfo:hover{
-    color: #3498db;
+.adminDashboardInfo:hover {
+  color: #3498db;
 }
 
-.thesisTitleDashboard:hover{
-    transform: scale(1.04);
-    color: #3498db;
+.thesisTitleDashboard:hover {
+  transform: scale(1.04);
+  color: #3498db;
 }
 
-.liEvents:hover{
-    color: #3498db;
+.liEvents:hover {
+  color: #3498db;
 }
 
-.reapplyFeedback{
-    font-size: 1.1vw;
-    color: rgb(48, 172, 48); 
-    margin-top: 1vh;
-    display: none;
+.reapplyFeedback {
+  font-size: 1.1vw;
+  color: rgb(48, 172, 48);
+  margin-top: 1vh;
+  display: none;
 }
 
-.newThesisFile{
-    display: inline-block;
+.newThesisFile {
+  display: inline-block;
 }
 
 ::-webkit-file-upload-button {
-    background: #3686bb;;
-    color: white;
-  }
+  background: #3686bb;
+  color: white;
+}
 
 /* Safari */
 @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
