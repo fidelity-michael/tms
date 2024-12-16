@@ -768,7 +768,7 @@ export default function Chat({ userId, role }) {
 
     const uploadData = async () => {
       await axios
-        .post("/api/uploads/chat", formData)
+        .post("/api/data/uploads/chat", formData)
         .then((res) => {
           console.log("Saved: ", res.data);
           uploadFileNamestoDB(messageId, res.data.files_list); //update message to db
@@ -806,14 +806,14 @@ export default function Chat({ userId, role }) {
   function resetFiles() {
     setFiles([]);
 
-    document.getElementById("filesContainer").style.width = "0";
+    /* document.getElementById("filesContainer").style.width = "0";
     document.getElementById("filesContainer").style.height = "0";
 
     document.getElementById("messageInput").style.width = "49vw";
 
     document.getElementById("iconsDiv").style.marginLeft = "3vw";
 
-    document.getElementById("fileUpload").value = "";
+    document.getElementById("fileUpload").value = ""; */
   }
 
   function downloadFile(file) {
@@ -834,7 +834,7 @@ export default function Chat({ userId, role }) {
     const fetchData = async () => {
       console.log("File to download: ", file);
       await axios
-        .get("/api/downloads/chat/" + file, { responseType: "blob" })
+        .get("/api/data/downloads/chat/" + file, { responseType: "blob" })
         .then((res) => {
           // console.log("Response: ", res.data);
           // Redirect to file (open file in browser) : window.location.assign(res.data);
