@@ -415,7 +415,7 @@ export default function ArchivedTheses({ userId }) {
       <tr>
         <td
           className="loading-data hover:tw-bg-light-pale-blue-white tw-text-dark-sky-blue tw-placeholder-dark-sky-blue"
-          colSpan="100%"
+          colSpan={100}
         >
           <p
             className="animated headShake infinite"
@@ -520,7 +520,7 @@ export default function ArchivedTheses({ userId }) {
                 : emptyTable()}
           </tbody>
         </Table>
-  
+
         <PaginationTab
           setLimit={(e) => {
             setThesesLimit(e.target.value);

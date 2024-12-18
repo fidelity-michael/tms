@@ -163,7 +163,7 @@ export default function SuperviseThesesTable({ userId, email }) {
 
         return (
           <tr key={_id}>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <span style={{ fontSize: "0.85rem" }}>
                 {new Intl.DateTimeFormat("en-GB", {
                   year: "numeric",
@@ -174,33 +174,34 @@ export default function SuperviseThesesTable({ userId, email }) {
                 }).format(new Date(date))}
               </span>
             </td>
-            <td className="table-data">{thesis_title}</td>
-            <td className="table-data">{thesis_topic}</td>
-            <td className="table-data">{thesis_area}</td>
+            <td className="table-data tw-text-center">{thesis_title}</td>
+            <td className="table-data tw-text-center">{thesis_topic}</td>
+            <td className="table-data tw-text-center">{thesis_area}</td>
             <td
-              className="table-data"
+              className="table-data tw-text-center"
               data-toggle="tooltip"
               data-placement="right"
               title={professor_name}
             >
               {professor_email}
             </td>
-            <td className="table-data">{thesis_group}</td>
+            <td className="table-data tw-text-center">{thesis_group}</td>
             <td
-              className="table-data"
+              className="table-data tw-text-center"
               data-toggle="tooltip"
               data-placement="right"
               title={student_name}
             >
               {student_email}
             </td>
-            <td className="table-data" style={{ color: colorStatus }}>
+            <td className="table-data tw-text-center" style={{ color: colorStatus }}>
               <b>{thesis_status}</b>
             </td>
-            <td className="table-data">
+            <td className="table-data tw-text-center">
               <i
                 id={student_id}
-                className="modal-item far fa-file-alt fa-lg"
+                className="modal-item far fa-file-alt fa-lg tw-text-center"
+                style={{ fontSize: "2vh", color: "#384959" }}
                 onClick={(e) => {
                   setTitle(thesis_title);
                   loadReports(e.target);
@@ -325,12 +326,12 @@ export default function SuperviseThesesTable({ userId, email }) {
         <Table className="theses-table" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="date" onClick={(e) => toggleOrder(e.target.id)}>
                   Date
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="thesis_title"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -338,7 +339,7 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Thesis Title
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="thesis_topic"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -346,7 +347,7 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Thesis Topic
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="thesis_area"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -354,7 +355,7 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Thesis Area
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="professor_email"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -362,7 +363,7 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Professor
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="thesis_group"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -370,7 +371,7 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Group
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span
                   id="student_email"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -378,12 +379,12 @@ export default function SuperviseThesesTable({ userId, email }) {
                   Student
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="status" onClick={(e) => toggleOrder(e.target.id)}>
                   Status
                 </span>
               </th>
-              <th className="table-header">
+              <th className="table-header tw-text-center">
                 <span id="reports" onClick={(e) => toggleOrder(e.target.id)}>
                   Reports
                 </span>
