@@ -8,6 +8,7 @@ import axios from "axios";
 import "./content.css";
 import { SearchFunction } from "../../utils/utils";
 import { PaginationTab } from "./TableComponents";
+import ArticleIcon from "@mui/icons-material/Article";
 
 export default function AssignedThesesTable({ userId }) {
   const [theses, setTheses] = useState([]);
@@ -438,8 +439,8 @@ export default function AssignedThesesTable({ userId }) {
             <td className="table-data">
               <i
                 id={student_id}
-                className="modal-item far fa-file-alt fa-lg"
-                style={{ fontSize: "4vh" }}
+                className="modal-item far fa-file-alt fa-lg hover:tw-opacity-85"
+                style={{ fontSize: "4vh", color: "#384959" }}
                 onClick={(e) => {
                   setTitle(thesis_title);
                   loadReports(e.target);
@@ -449,7 +450,7 @@ export default function AssignedThesesTable({ userId }) {
             <td className="table-data">
               {
                 <div
-                  className="btn-group"
+                  className="tw-flex tw-gap-0"
                   role="group"
                   aria-label="Button group with nested dropdown"
                 >
@@ -458,7 +459,7 @@ export default function AssignedThesesTable({ userId }) {
                       as="select"
                       id={_id}
                       data-key={index}
-                      className="supervisors-dropdown"
+                      className="tw-min-w-48"
                       value={updateSupervisor[index]}
                       onChange={(e) => handleSupervisorChange(e.target, index)}
                     >
@@ -468,7 +469,7 @@ export default function AssignedThesesTable({ userId }) {
                   <button
                     type="button"
                     id={_id}
-                    className="btn btn-info propose-btn"
+                    className="tw-bg-transparent hover:tw-bg-dark-sky-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
                     onClick={(e) =>
                       handleProposeSupervisor(
                         e.target,
