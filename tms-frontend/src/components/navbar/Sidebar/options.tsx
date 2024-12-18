@@ -16,6 +16,7 @@ import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import AddIcon from "@mui/icons-material/Add";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 
 export const AdminSidebarLinks = [
   {
@@ -134,7 +135,7 @@ export const StudentSidebarLinks = [
     key: "chat",
     label: "Chat",
     icon: (
-      <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />
+      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />
     ),
   },
 ];
@@ -174,7 +175,7 @@ export const ProfessorSidebarLinks = [
     key: "chat",
     label: "Chat",
     icon: (
-      <QuestionAnswerIcon fontSize="large" className="tw-text-light-sky-blue" />
+      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />
     ),
   },
 ];
@@ -226,9 +227,9 @@ export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
         {button ? (
           <button
             onClick={onSelect}
-            className={`tw-flex tw-flex-1 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-xl tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+            className={`xl:tw-text-xl tw-flex tw-flex-1 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
           >
-            <AddIcon style={{width: "2rem", height: "2rem"}}/>
+            <AddIcon className="tw-text-lg xl:tw-text-2xl" />
             Add Thesis
           </button>
         ) : (
