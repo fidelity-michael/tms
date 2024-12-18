@@ -7,6 +7,9 @@ dns.setDefaultResultOrder("verbatim");
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ["chunk-UCMNR7HQ"], // Replace this with the actual dependency if identified
+  },
   server: {
     host: true,
     port: 4200,
@@ -55,6 +58,11 @@ export default defineConfig({
       "/chat": {
         target: "http://backend:8080", // Your backend server
         changeOrigin: true,
+      },
+      "/socket.io": {
+        target: "http://backend:8080", // Your backend server
+        changeOrigin: true,
+        ws: true,
       },
     },
   },
