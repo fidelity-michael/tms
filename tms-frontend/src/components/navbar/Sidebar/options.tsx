@@ -227,10 +227,10 @@ export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
         {button ? (
           <button
             onClick={onSelect}
-            className={`xl:tw-text-xl tw-flex tw-flex-1 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+            className={`xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
           >
             <AddIcon className="tw-text-lg xl:tw-text-2xl" />
-            Add Thesis
+            Create Thesis
           </button>
         ) : (
           ""
