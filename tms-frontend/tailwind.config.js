@@ -5,11 +5,10 @@ export default withMT({
   prefix: "tw-",
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}", flowbite.content(),],
   theme: {
-    fontFamily: {
-      dm: ["DM", "sans-serif"],
-      body: ['"DM"', '"sans-serif"'] // TODO: Check this to apply font to the application
-    },
     extend: {
+      fontFamily: {
+        sans: ["DM", "sans-serif"],
+      },
       colors: {
         "mid-pale-blue": "#6A89A7",
         "light-blue": "#BDDDFC",
