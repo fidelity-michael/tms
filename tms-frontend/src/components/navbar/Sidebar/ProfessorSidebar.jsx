@@ -17,83 +17,70 @@ function ProfessorSidebar(props) {
   const socketRef = useRef(null);
   const ENDPOINT = "http://localhost:8080/chat";
 
-  //we establish connection with endpoint
+  // NOTE: First
   useEffect(() => {
     function notifyChatIcon() {
       setNotifyIcon(true);
-      /* if (selected !== "Chat")
-        document.getElementById("chatCircle").style =
-          "display: block !important"; */
     }
 
-    //check if there are unread messages
-    const checkUnread = async () => {
-      await axios
-        .get("/chat/privateConversation/" + props.userId)
-        .then((res) => {
-          console.log(res.data, selected);
+    if (socketRef.current) {
+      socketRef.current.off("chat:privateMessage");
+      socketRef.current.on("chat:privateMessage", () => {
+        notifyChatIcon();
+      });
+    }
 
-          if (selected !== "Chat") {
-            for (var i = 0; i < res.data.length; i++) {
-              if (
-                res.data[i].lastMessage.sender !== props.userId &&
-                res.data[i].lastMessage.read.length === 0
-              ) {
-                notifyChatIcon();
-                break;
-              }
-            }
-          }
-        })
-        .catch(() => {
-          console.log("Errooor");
-        });
-    };
-
-    if (props.userId) {
-      if (socketRef.current == null) {
-        //current will persist for the full lifetime of the component
-        socketRef.current = io(ENDPOINT);
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off("chat:privateMessage");
       }
+    };
+  }, [props.selectedItem]);
 
-      checkUnread();
+  // NOTE: Second
+  useEffect(() => {
+    if (props.userId && socketRef.current == null) {
+      socketRef.current = io(ENDPOINT);
 
       socketRef.current.on("connect", () => {
         console.log("Sidebar connected to chat server!");
         socketRef.current.emit("chat:map", props.userId);
       });
 
-      //cleanup (disconnect from chat server)
-      // return () => {
-      //   if (socketRef.current) {
-      //     socketRef.current.disconnect();
-      //     socketRef.current.close();
-      //   }
-      // };
-    }
-  }, [ENDPOINT, props.userId]);
-  useEffect(() => {
-    function notifyChatIcon() {
-      setNotifyIcon(true);
-      /* if (selected !== "Chat")
-        document.getElementById("chatCircle").style =
-          "display: block !important"; */
-    }
-
-    if (socketRef.current)
-      socketRef.current.on("chat:privateMessage", () => {
-        notifyChatIcon();
+      socketRef.current.on("disconnect", () => {
+        console.log("Sidebar disconnected from chat server.");
       });
+    }
 
-    //cleanup events
-    // return() => {
-    //   socketRef.current.off("chat:privateMessage")
-    // }
-  }, [selected, socketRef.current]);
+    const checkUnread = async () => {
+      try {
+        const res = await axios.get(
+          `/chat/privateConversation/${props.userId}`,
+        );
+        if (props.selectedItem !== "Chat") {
+          const hasUnread = res.data.some(
+            (conversation) =>
+              conversation.lastMessage.sender !== props.userId &&
+              conversation.lastMessage.read.length === 0,
+          );
+          if (hasUnread) setNotifyIcon(true);
+        }
+      } catch (error) {
+        console.error("Error fetching unread messages", error);
+      }
+    };
 
-  function hideNotifyChatIcon() {
-    document.getElementById("chatCircle").style = "display: none !important";
-  }
+    if (props.userId) {
+      checkUnread();
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, [ENDPOINT, props.userId]);
 
   const handleSelect = (label) => {
     props.onSelect(label);

@@ -12,7 +12,6 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import AddIcon from "@mui/icons-material/Add";
@@ -154,6 +153,10 @@ export const StudentSidebarLinks = [
     label: "Chat",
     icon: [
       <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />,
+      <MarkChatUnreadIcon
+        fontSize="large"
+        className="tw-text-light-sky-blue"
+      />,
     ],
   },
 ];
@@ -215,7 +218,9 @@ export function SidebarLink({ item, props }) {
       className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
       <div className="tw-mt-1 tw-inline-block 2xl:tw-text-xl">
-        {props.notifyIcon && item.label === "Chat" ? item.icon[1] : item.icon[0]}
+        {props.notifyIcon && item.label === "Chat"
+          ? item.icon[1]
+          : item.icon[0]}
       </div>
       <div
         className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-flex tw-items-end  tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full 2xl:tw-text-xl`}
