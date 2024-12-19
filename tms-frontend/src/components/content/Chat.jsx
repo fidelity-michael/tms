@@ -8,6 +8,7 @@ import FilesContainer from "./FilesContainer";
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Contacts from "./Contacts";
+import ArticleIcon from "@mui/icons-material/Article";
 
 export default function Chat({ userId, role }) {
   //supervisors for students and students for
@@ -51,30 +52,24 @@ export default function Chat({ userId, role }) {
   //we establish connection with endpoint
   useEffect(() => {
     if (socketRef.current == null) {
-      //current will persist for the full lifetime of the component
       socketRef.current = io(ENDPOINT);
     }
 
     socketRef.current.on("connect", () => {
       console.log("Connected to chat!");
       socketRef.current.emit("chat:map", userId);
-      socketRef.current.on("chat:message", (socket) => {
-        console.log(socket.message);
-      });
     });
 
     socketRef.current.on("disconnect", () => {
-      console.log("Disonnected from chat!");
+      console.log("Disconnected from chat!");
     });
 
-    //cleanup (disconnect from chat server)
-    // return () => {
-    //   if (socketRef.current) {
-    //     socketRef.current.disconnect();
-    //     socketRef.current.close();
-    //     componentIsMounted.current = false;
-    //   }
-    // };
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
   }, [ENDPOINT, userId]);
 
   //setting title of contacts depending on our role
@@ -159,28 +154,30 @@ export default function Chat({ userId, role }) {
     }
   }, [role, userId]);
 
-  //socket events and basic fetching
   useEffect(() => {
-    // console.log("new current contact:", currentContact);
-
-    //receiving message event
-    socketRef.current.on("chat:privateMessage", (data) => {
+    const handlePrivateMessage = (data) => {
       receiveMessage(data);
-    });
+    };
 
-    //display my message event
-    socketRef.current.on("chat:myMessage", (data) => {
+    const handleMyMessage = (data) => {
       if (currentContact._id === data.receiverId) {
-        var date = new Date(data.date);
+        const date = new Date(data.date);
         displayMyMessage(data, date);
       }
-    });
+    };
 
-    //cleanup events
-    // return () => {
-    //   // console.log("clean");
-    //   // socketRef.current.off("privateMessage");
-    // };
+    if (socketRef.current) {
+      socketRef.current.on("chat:privateMessage", handlePrivateMessage);
+      socketRef.current.on("chat:myMessage", handleMyMessage);
+    }
+
+    // Cleanup listeners
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off("chat:privateMessage", handlePrivateMessage);
+        socketRef.current.off("chat:myMessage", handleMyMessage);
+      }
+    };
   }, [currentContact]);
 
   //loadMessages of currentchat
