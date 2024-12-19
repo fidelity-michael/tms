@@ -17,49 +17,59 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import AddIcon from "@mui/icons-material/Add";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
 
 export const AdminSidebarLinks = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "users",
     label: "Users",
-    icon: <Group fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<Group fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "analytics",
     label: "Statistics",
-    icon: <AnalyticsIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <AnalyticsIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "universities",
     label: "Universities",
-    icon: <SchoolIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<SchoolIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "departments",
     label: "Departments",
-    icon: (
-      <AccountBalanceIcon fontSize="large" className="tw-text-light-sky-blue" />
-    ),
+    icon: [
+      <AccountBalanceIcon
+        fontSize="large"
+        className="tw-text-light-sky-blue"
+      />,
+    ],
   },
   {
     key: "categories",
     label: "Categories",
-    icon: <ListAltIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<ListAltIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "assigned_theses",
     label: "Assigned Theses",
-    icon: <FolderIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<FolderIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "archived_theses",
     label: "Theses Archive",
-    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
 ];
 
@@ -67,27 +77,31 @@ export const SecretariatSidebarLinks = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "active theses",
     label: "Active Theses",
-    icon: <SourceIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<SourceIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "completed theses",
     label: "Completed Theses",
-    icon: (
+    icon: [
       <AssignmentTurnedInIcon
         fontSize="large"
         className="tw-text-light-sky-blue"
-      />
-    ),
+      />,
+    ],
   },
   {
     key: "theses archive",
     label: "Theses Archive",
-    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
 ];
 
@@ -95,48 +109,52 @@ export const StudentSidebarLinks = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "favourite areas",
     label: "Favourite Areas",
-    icon: <FavoriteIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <FavoriteIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "available theses",
     label: "Available Theses",
-    icon: <SourceIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<SourceIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "requests approved",
     label: "Requests Approved",
-    icon: (
+    icon: [
       <AssignmentTurnedInIcon
         fontSize="large"
         className="tw-text-light-sky-blue"
-      />
-    ),
+      />,
+    ],
   },
   {
     key: "my thesis",
     label: "My Thesis",
-    icon: (
-      <FolderOpenIcon fontSize="large" className="tw-text-light-sky-blue" />
-    ),
+    icon: [
+      <FolderOpenIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "my reports",
     label: "My Reports",
-    icon: (
-      <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />
-    ),
+    icon: [
+      <AssignmentIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "chat",
     label: "Chat",
-    icon: (
-      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />
-    ),
+    icon: [
+      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
 ];
 
@@ -144,39 +162,47 @@ export const ProfessorSidebarLinks = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <DashboardIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "assigned_theses",
     label: "Assigned Theses",
-    icon: <FolderIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<FolderIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "supervised theses",
     label: "Supervised Theses",
-    icon: (
+    icon: [
       <SupervisedUserCircleIcon
         fontSize="large"
         className="tw-text-light-sky-blue"
-      />
-    ),
+      />,
+    ],
   },
   {
     key: "theses requests",
     label: "Theses Requests",
-    icon: <EmailIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [<EmailIcon fontSize="large" className="tw-text-light-sky-blue" />],
   },
   {
     key: "archived_theses",
     label: "Theses Archive",
-    icon: <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    icon: [
+      <InventoryIcon fontSize="large" className="tw-text-light-sky-blue" />,
+    ],
   },
   {
     key: "chat",
     label: "Chat",
-    icon: (
-      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />
-    ),
+    icon: [
+      <ChatBubbleIcon fontSize="large" className="tw-text-light-sky-blue" />,
+      <MarkChatUnreadIcon
+        fontSize="large"
+        className="tw-text-light-sky-blue"
+      />,
+    ],
   },
 ];
 
@@ -188,7 +214,9 @@ export function SidebarLink({ item, props }) {
       }}
       className={`${props.isSelected ? "tw-border-solid tw-border-l-4  tw-border-light-sky-blue" : ""} tw-pl-4 hover:tw-bg-light-pale-blue-white  tw-flex tw-cursor-pointer`}
     >
-      <div className="tw-mt-1 tw-inline-block 2xl:tw-text-xl">{item.icon}</div>
+      <div className="tw-mt-1 tw-inline-block 2xl:tw-text-xl">
+        {props.notifyIcon && item.label === "Chat" ? item.icon[1] : item.icon[0]}
+      </div>
       <div
         className={`${props.isSelected ? "tw-bg-light-pale-blue-white hover:tw-no-underline tw-mr-2" : ""} tw-flex tw-items-end  tw-font-bold tw-text-sm tw-flex-auto tw-pl-4 tw-py-2 tw-text-dark-sky-blue tw-rounded-full 2xl:tw-text-xl`}
       >

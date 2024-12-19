@@ -11,6 +11,7 @@ import {
 
 function ProfessorSidebar(props) {
   const [selected, setSelected] = useState("");
+  const [notifyIcon, setNotifyIcon] = useState(false);
 
   //for sockets
   const socketRef = useRef(null);
@@ -19,9 +20,10 @@ function ProfessorSidebar(props) {
   //we establish connection with endpoint
   useEffect(() => {
     function notifyChatIcon() {
-      if (selected !== "Chat")
+      setNotifyIcon(true);
+      /* if (selected !== "Chat")
         document.getElementById("chatCircle").style =
-          "display: block !important";
+          "display: block !important"; */
     }
 
     //check if there are unread messages
@@ -72,9 +74,10 @@ function ProfessorSidebar(props) {
   }, [ENDPOINT, props.userId]);
   useEffect(() => {
     function notifyChatIcon() {
-      if (selected !== "Chat")
+      setNotifyIcon(true);
+      /* if (selected !== "Chat")
         document.getElementById("chatCircle").style =
-          "display: block !important";
+          "display: block !important"; */
     }
 
     if (socketRef.current)
@@ -94,6 +97,7 @@ function ProfessorSidebar(props) {
 
   const handleSelect = (label) => {
     props.onSelect(label);
+    if (label === "Chat") setNotifyIcon(false);
   };
 
   return (
@@ -107,6 +111,7 @@ function ProfessorSidebar(props) {
             props={{
               onSelect: handleSelect,
               isSelected: props.selectedItem === item.label,
+              notifyIcon: notifyIcon,
             }}
           />
         ))}
