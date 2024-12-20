@@ -276,6 +276,14 @@
   overflow: auto;
 }
 
+.incomingMessageFilesDiv {
+  display: flex; /* Enable flexbox layout */
+  justify-content: flex-start; /* Align items to the right */
+  width: 100%; /* Ensure it uses the full width of the parent */
+  margin: 1vh 0 1vh auto; /* Vertical margins and auto-align to the right */
+  overflow: auto;
+}
+
 .myMessageFilesWrapper {
   margin-right: 1vw;
   float: right;

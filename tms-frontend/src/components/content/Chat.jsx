@@ -614,7 +614,7 @@ export default function Chat({ userId, role }) {
     if (message.files.length > 0) {
       message.files.forEach((file) => {
         const messageFilesDiv = document.createElement("div");
-        messageFilesDiv.className = "messageFilesDiv";
+        messageFilesDiv.className = "incomingMessageFilesDiv";
 
         const wrapper = document.createElement("div");
         wrapper.className = "incomingFilesWrapper";
