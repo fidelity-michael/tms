@@ -165,7 +165,7 @@ export default function CompletedTheses({ userId }) {
             <td className="table-data-thesis">{professor_email}</td>
             <td className="table-data-thesis">{student_email}</td>
             <td className="table-data-thesis">{thesis_grade}</td>
-            <td className="table-data-thesis" align="center">
+            <td className="table-data-thesis" align="left">
               {thesesArchived.indexOf(_id) > -1 ? (
                 <span>Thesis archived</span>
               ) : (
@@ -286,7 +286,7 @@ export default function CompletedTheses({ userId }) {
       <div className="theses-container">
         <div className="tw-ml-4 tw-mb-6 tw-mt-4 tw-flex tw-items-center tw-align-middle filter-content tw-justify-between">
           <h5 className="tw-text-dark-sky-blue tw-text-xl">
-            Completed Theses Table
+            Graded Theses Table
           </h5>
           <SearchFunction
             query={query}
