@@ -222,22 +222,22 @@ export default function ActiveThesesTable({
         <Table className="table-thesis" size="md" responsive>
           <thead className="tw-text-xs tw-text-mid-pale-blue tw-capitalize tw-bg-light-pale-blue-white">
             <tr>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span id="date" onClick={(e) => toggleOrder(e.target.id)}>
                   Date
                 </span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span id="title" onClick={(e) => toggleOrder(e.target.id)}>
                   Thesis Title
                 </span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span id="topic" onClick={(e) => toggleOrder(e.target.id)}>
                   Thesis Topic
                 </span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span
                   id="prerequisites"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -245,10 +245,10 @@ export default function ActiveThesesTable({
                   Prerequisites
                 </span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span id="description">Description</span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span
                   id="professor_email"
                   onClick={(e) => toggleOrder(e.target.id)}
@@ -256,7 +256,7 @@ export default function ActiveThesesTable({
                   Professor
                 </span>
               </th>
-              <th className="table-header-thesis">
+              <th className="table-header-thesis tw-text-center">
                 <span id="group" onClick={(e) => toggleOrder(e.target.id)}>
                   Group
                 </span>
