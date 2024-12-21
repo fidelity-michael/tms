@@ -63,11 +63,11 @@ export default function EmailBellComponent(props) {
         >
           {({ active }) => (
             <a>
-              {props.email.length > 0 ? props.email : "Administrator"}
+              {props.email.length > 0 ? props.email : props.role}
               <KeyboardArrowRightIcon
                 className={clsx(
-                  active && "tw--rotate-90",
-                  "tw-transition-transform tw-rotate-90 tw-ease-in-out tw-duration-500 tw-delay-300 tw-text-dark-sky-blue",
+                  active && "tw-rotate-90",
+                  "tw-transition-transform tw-ease-in-out tw-duration-500 tw-delay-300 tw-text-dark-sky-blue",
                 )}
               />
             </a>

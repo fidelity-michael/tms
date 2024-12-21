@@ -96,6 +96,7 @@ export default function StudentTopbar(props) {
           userId={props.userId}
           notifications={notifications}
           setNotifications={setNotifications}
+          role={"Student"}
         />
       </div>
     </div>

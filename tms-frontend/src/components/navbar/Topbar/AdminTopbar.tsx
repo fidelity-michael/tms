@@ -96,6 +96,7 @@ export default function AdminTopbar(props) {
           userId={props.userId}
           notifications={notifications}
           setNotifications={setNotifications}
+          role={"Admin"}
         />
       </div>
     </div>

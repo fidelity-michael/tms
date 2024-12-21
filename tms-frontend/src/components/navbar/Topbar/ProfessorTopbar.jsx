@@ -81,6 +81,7 @@ export default function ProfessorTopbar(props) {
           userId={props.userId}
           notifications={notifications}
           setNotifications={setNotifications}
+          role={"Professor"}
         />
       </div>
     </div>

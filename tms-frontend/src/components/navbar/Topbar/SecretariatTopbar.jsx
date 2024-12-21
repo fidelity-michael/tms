@@ -96,6 +96,7 @@ export default function SecretariatTopbar(props) {
           userId={props.userId}
           notifications={notifications}
           setNotifications={setNotifications}
+          role={"Secretariat"}
         />
       </div>
     </div>
