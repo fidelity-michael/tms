@@ -320,7 +320,7 @@ export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
         {button ? (
           <button
             onClick={onSelect}
-            className={`tw-mx-4 xl:tw-px-4 tw-py-2 xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12  tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+            className={`tw-mb-12 tw-mx-6 xl:tw-px-4 tw-py-2 xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
           >
             <AddIcon className="tw-text-lg xl:tw-text-2xl" />
             Create Thesis
