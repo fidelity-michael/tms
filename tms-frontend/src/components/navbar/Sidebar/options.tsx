@@ -17,6 +17,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import AddIcon from "@mui/icons-material/Add";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
+import { useRef, useState } from "react";
 
 export const AdminSidebarLinks = [
   {
@@ -87,7 +88,7 @@ export const SecretariatSidebarLinks = [
   },
   {
     key: "completed theses",
-    label: "Completed Theses",
+    label: "Graded Theses",
     icon: [
       <AssignmentTurnedInIcon
         fontSize="large"
@@ -232,12 +233,56 @@ export function SidebarLink({ item, props }) {
 }
 
 export function TopSidebar({ props }) {
+  const [image, setImage] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleIconClick = () => {
+    if(fileInputRef.current)
+      fileInputRef.current.click();
+  };
+
+  const handleImageUpload = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
       <div className="tw-flex tw-items-center">
-        <AccountCircleIcon
-          style={{ height: "5rem", width: "5rem" }}
-          className="tw-flex tw-flex-1 tw-text-dark-sky-blue"
+        {image ? (
+          <img
+            src={image}
+            alt="User"
+            style={{
+              height: "5rem",
+              width: "5rem",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+            className="tw-flex tw-flex-1 hover:tw-opacity-50 hover:tw-cursor-pointer"
+            onClick={handleIconClick}
+          />
+        ) : (
+          <AccountCircleIcon
+            style={{ height: "5rem", width: "5rem" }}
+            className="tw-flex tw-flex-1 tw-text-dark-sky-blue hover:tw-opacity-50 hover:tw-cursor-pointer"
+            onClick={handleIconClick}
+          />
+        )}
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={handleImageUpload}
         />
       </div>
       <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
@@ -246,6 +291,21 @@ export function TopSidebar({ props }) {
       </div>
     </div>
   );
+
+  /* return (
+    <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
+      <div className="tw-flex tw-items-center">
+        <AccountCircleIcon
+          style={{ height: "5rem", width: "5rem" }}
+          className="tw-flex tw-flex-1 tw-text-dark-sky-blue hover:tw-opacity-50 hover:tw-cursor-pointer"
+        />
+      </div>
+      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
+        <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
+        <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
+      </div>
+    </div>
+  ); */
 }
 
 type BottomSidebarProps = {
@@ -260,7 +320,7 @@ export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
         {button ? (
           <button
             onClick={onSelect}
-            className={`xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12 tw-mx-10 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+            className={`tw-mx-4 xl:tw-px-4 tw-py-2 xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-mb-12  tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
           >
             <AddIcon className="tw-text-lg xl:tw-text-2xl" />
             Create Thesis
