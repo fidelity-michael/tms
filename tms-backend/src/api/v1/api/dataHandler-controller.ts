@@ -16,6 +16,22 @@ import { ThesesRepModel } from "../theses_reports/theses_rep-model";
 import path from "path";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import { UploadedFile } from "express-fileupload";
+
+/* interface UploadedFile {
+  lastModified: number;
+  lastModifiedDate: string;
+  name: string;
+  size: number;
+  type: string;
+  webkitRelativePath: string;
+} */
+
+/* interface FileListArray {
+  length: number;
+  [key: number]: UploadedFile;
+} */
 
 type PaginatedData = {
   results?: {} | [];
@@ -49,7 +65,13 @@ interface CustomResponse extends Response {
 
 export class DataHandlerController {
   private logger: Logger = Logger.getInstance();
-  constructor() {}
+  private upload;
+  constructor() {
+    this.upload = multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 10 * 1024 * 1024 },
+    });
+  }
   /**
    * Apply all routes for api
    *
@@ -420,83 +442,118 @@ export class DataHandlerController {
     this.logger.debug("uploadFile request");
     try {
       const folder = req.params.folderName;
-      const files = req.files!.files;
+      // @ts-ignore: Suppressing type error for custom file structure
+      const files = req.files?.files;
 
-      let newFilenames = [];
+      const newFilenames: string[] = [];
 
-      if (
-        !(
-          folder === "theses" ||
-          folder === "requests" ||
-          folder === "reports" ||
-          folder === "chat"
-        )
-      ) {
-        res
+      if (!["theses", "requests", "reports", "chat"].includes(folder)) {
+        return res
           .status(StatusCodes.NOT_FOUND)
           .send({ message: "Folder doesn't exist!" });
       }
 
-      // console.log(files);
-      if (files instanceof Array) {
-        Promise.all(
-          files.map((file, index) => {
-            let filename = file.name;
-            let ext = path.extname(filename);
-            let name = path.basename(filename, ext);
-            let filename_timestamp =
-              name + "_" + new Date().getTime().toString() + ext;
+      if (!files) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .send({ message: "No files were uploaded!" });
+      }
 
-            newFilenames.push(filename_timestamp);
+      /* const directory = `public/uploads/${folder}`; */
+      const directory = path.resolve(__dirname, "public/uploads", folder); // NOTE: Works
+      /* const directory = path.resolve("public/uploads", folder); */
+      /* const directory = "../../../../public/uploads/" + folder; */
 
-            let directory = "./public/uploads";
-            file.mv(`${directory}/${folder}/${filename_timestamp}`, (err) => {
-              if (err) {
-                console.log(err);
-                return res
-                  .status(500)
-                  .send({ message: "Server internal error occurred!" });
-              } else {
-                this.logger.debug("Modified Names: " + filename_timestamp);
-                // console.log(`File Path: ./public/uploads/${folder}/${filename_timestamp}`);
-              }
+      /* const directory = `../../../../public/uploads/${folder}`; */
+      this.logger.debug("EXISTS?: ", fs.existsSync(directory));
+      this.logger.debug("directory: ", directory);
+
+      /* fs.access(directory, fs.constants.F_OK, (err) => {
+        if (err) {
+          // Directory does not exist
+          fs.mkdir(directory, { recursive: true }, (mkdirErr) => {
+            if (mkdirErr) {
+              console.error(
+                `Error creating directory: ${directory}`,
+                mkdirErr,
+              );
+            } else {
+              console.log(`Directory created: ${directory}`);
+            }
+          });
+        } else {
+          // Directory exists
+          console.log(`Directory already exists: ${directory}`);
+        }
+      }); */
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+      } else {
+        fs.chmodSync(directory, 0o755);
+      }
+
+      if (Array.isArray(files)) {
+        // Multiple files
+        await Promise.all(
+          files.map((file) => {
+            const ext = path.extname(file.name);
+            const name = path.basename(file.name, ext);
+            const filenameTimestamp = `${name}_${Date.now()}${ext}`;
+            /* const filePath = `${directory}/${filenameTimestamp}`; */
+            const filePath = path.join(directory, filenameTimestamp);
+
+            newFilenames.push(filenameTimestamp);
+
+            return new Promise<void>((resolve, reject) => {
+              file.mv(filePath, (err: any) => {
+                if (err) {
+                  console.error("File move error:", err);
+                  reject(err);
+                } else {
+                  this.logger.debug("File uploaded:", filenameTimestamp);
+                  resolve();
+                }
+              });
             });
-
-            return index;
           }),
         );
       } else {
-        let filename = files.name;
-        let ext = path.extname(filename);
-        let name = path.basename(filename, ext);
-        let filename_timestamp =
-          name + "_" + new Date().getTime().toString() + ext;
+        // Single file
+        const file = files;
+        const ext = path.extname(file.name);
+        const name = path.basename(file.name, ext);
+        this.logger.debug("name: ", name);
+        this.logger.debug("dir: ", directory);
+        const filenameTimestamp = `${name}_${Date.now()}${ext}`;
+        const filePath = path.join(directory, filenameTimestamp);
+        /* const filePath = `${directory}/${filenameTimestamp}`; */
 
-        newFilenames.push(filename_timestamp);
+        newFilenames.push(filenameTimestamp);
 
-        let directory = "./public/uploads";
-        files.mv(`${directory}/${folder}/${filename_timestamp}`, (err) => {
-          if (err) {
-            console.log(err);
-            return res
-              .status(StatusCodes.INTERNAL_SERVER_ERROR)
-              .send({ message: "Server internal error occurred!" });
-          } else {
-            console.log("Modified Name: ", filename_timestamp);
-            // console.log(`File Path: ./public/uploads/${folder}/${filename_timestamp}`);
-          }
+        this.logger.debug("filepath: ", filePath);
+
+        await new Promise<void>((resolve, reject) => {
+          file.mv(filePath, (err: any) => {
+            if (err) {
+              console.error("File move error:", err);
+              reject(err);
+            } else {
+              this.logger.debug("File uploaded:", filenameTimestamp);
+              resolve();
+            }
+          });
         });
       }
 
-      // console.log("Files uploaded successfully!");
-      // console.log("Filenames: ", newFilenames);
-      return res.send({
+      return res.status(StatusCodes.OK).send({
         files_list: newFilenames,
         message: "Files uploaded!",
       });
     } catch (err: any) {
-      this.logger.error(err);
-      return res.status(StatusCodes.BAD_REQUEST).send(err);
+      console.error(err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send({ error: err.message });
     }
   };
 
