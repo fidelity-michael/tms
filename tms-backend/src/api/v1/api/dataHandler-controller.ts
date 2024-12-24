@@ -417,7 +417,6 @@ export class DataHandlerController {
           };
         });
 
-        // console.log(areas);
         areas.sort((a, b) => {
           let result = 0;
           if (a.name && b.name)
@@ -459,33 +458,8 @@ export class DataHandlerController {
           .send({ message: "No files were uploaded!" });
       }
 
-      /* const directory = `public/uploads/${folder}`; */
       const directory = path.resolve(__dirname, "public/uploads", folder); // NOTE: Works
-      /* const directory = path.resolve("public/uploads", folder); */
-      /* const directory = "../../../../public/uploads/" + folder; */
 
-      /* const directory = `../../../../public/uploads/${folder}`; */
-      this.logger.debug("EXISTS?: ", fs.existsSync(directory));
-      this.logger.debug("directory: ", directory);
-
-      /* fs.access(directory, fs.constants.F_OK, (err) => {
-        if (err) {
-          // Directory does not exist
-          fs.mkdir(directory, { recursive: true }, (mkdirErr) => {
-            if (mkdirErr) {
-              console.error(
-                `Error creating directory: ${directory}`,
-                mkdirErr,
-              );
-            } else {
-              console.log(`Directory created: ${directory}`);
-            }
-          });
-        } else {
-          // Directory exists
-          console.log(`Directory already exists: ${directory}`);
-        }
-      }); */
       if (!fs.existsSync(directory)) {
         fs.mkdirSync(directory, { recursive: true });
       } else {
@@ -499,7 +473,6 @@ export class DataHandlerController {
             const ext = path.extname(file.name);
             const name = path.basename(file.name, ext);
             const filenameTimestamp = `${name}_${Date.now()}${ext}`;
-            /* const filePath = `${directory}/${filenameTimestamp}`; */
             const filePath = path.join(directory, filenameTimestamp);
 
             newFilenames.push(filenameTimestamp);
@@ -526,11 +499,8 @@ export class DataHandlerController {
         this.logger.debug("dir: ", directory);
         const filenameTimestamp = `${name}_${Date.now()}${ext}`;
         const filePath = path.join(directory, filenameTimestamp);
-        /* const filePath = `${directory}/${filenameTimestamp}`; */
 
         newFilenames.push(filenameTimestamp);
-
-        this.logger.debug("filepath: ", filePath);
 
         await new Promise<void>((resolve, reject) => {
           file.mv(filePath, (err: any) => {
@@ -549,6 +519,7 @@ export class DataHandlerController {
         files_list: newFilenames,
         message: "Files uploaded!",
       });
+
     } catch (err: any) {
       console.error(err);
       return res
