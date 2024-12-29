@@ -114,6 +114,7 @@ function SecretariatPage() {
             setPage(page);
             setSelectedItem(page);
           }}
+          userId={userId}
         />
         <div id="content-wrapper" className="tw-flex tw-flex-col">
           <div id="content" className="tw-bg-light-pale-blue-white">
