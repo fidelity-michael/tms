@@ -73,50 +73,17 @@ export class UserController extends ResourceController<IUser> {
       // @ts-ignore: Suppressing type error for custom file structure
       const file = req.files.image;
 
-      this.logger.debug("file: ", file);
-
-      if (!file /* || !file.image */) {
+      if (!file) {
         return res
           .status(StatusCodes.BAD_REQUEST)
           .send({ message: "No image uploaded" });
       }
 
-      const directory = path.resolve(__dirname, "public/uploads/images"); // NOTE: Works
-
-      if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory, { recursive: true });
-      } else {
-        fs.chmodSync(directory, 0o755);
-      }
-
-      /* const base64Image = file.buffer.toString("base64"); */
-      /* const base64Image = imageBuffer.toString("base64"); */
       const data = file.data;
       await UserModel.updateOne(
         { _id: userId },
         { $set: { profileImage: data } },
       );
-
-      const ext = path.extname(file.name);
-      const name = path.basename(file.name, ext);
-      this.logger.debug("name: ", name);
-      this.logger.debug("dir: ", directory);
-      const filenameTimestamp = `${name}_${Date.now()}${ext}`;
-      const filePath = path.join(directory, filenameTimestamp);
-
-      /* newFilenames.push(filenameTimestamp); */
-
-      await new Promise<void>((resolve, reject) => {
-        file.mv(filePath, (err: any) => {
-          if (err) {
-            console.error("File move error:", err);
-            reject(err);
-          } else {
-            this.logger.debug("File uploaded:", filenameTimestamp);
-            resolve();
-          }
-        });
-      });
 
       res
         .status(StatusCodes.OK)
