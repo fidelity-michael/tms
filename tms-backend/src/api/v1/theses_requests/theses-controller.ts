@@ -127,6 +127,7 @@ export class ThesesReqController extends ResourceController<IThesesReq> {
       });
   };
 
+  // TODO: Fix this
   private checkResetDate() {
     // Check reset date
     setInterval(function () {

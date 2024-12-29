@@ -75,7 +75,6 @@ export class NotificationController extends ResourceController<INotification> {
    */
   postNotification = async (req: Request, res: Response) => {
     this.logger.debug("postNotification request");
-    // TODO: FIX THIS EMIT SOCKET SITUATION HERE
     try {
       const notification = new NotificationModel({
         title: req.body.title,
@@ -91,7 +90,6 @@ export class NotificationController extends ResourceController<INotification> {
       let receiverSocketIds: { [index: string]: any } = [];
       // let receiverSocketIds: string[] = [];
 
-      this.logger.debug("Do users exist?" + JSON.stringify(this.users));
       //we get all the current socketIds of the receiver and the sender
       Object.keys(this.users).forEach((key: string) => {
         //key is the socket.id of the receiver

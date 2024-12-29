@@ -141,7 +141,7 @@ function SecretariatPage() {
                   />
                 </div>
               ) : null}
-              {page === "Completed Theses" ? (
+              {page === "Graded Theses" ? (
                 <CompletedTheses userId={userId} />
               ) : null}
               {page === "Theses Archive" ? (

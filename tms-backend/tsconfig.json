@@ -11,8 +11,8 @@
     // "sourceMap": true,                           // Include source maps
     "rootDir": ".",                          // Specify the root directory of input files
     "resolveJsonModule": true,                   // Allow importing JSON files
-    // "emitDecoratorMetadata": true,               // Required for Inversify.js decorators
-    // "experimentalDecorators": true               // Enable decorators (e.g., for Inversify.js)
+    "emitDecoratorMetadata": true,               // Required for Inversify.js decorators
+    "experimentalDecorators": true               // Enable decorators (e.g., for Inversify.js)
   },
   // "include": ["src/**/*.ts"],                    // Include all TypeScript files in the src folder
   "exclude": ["node_modules", "dist"]            // Exclude these folders

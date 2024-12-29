@@ -17,7 +17,8 @@ import EmailIcon from "@mui/icons-material/Email";
 import AddIcon from "@mui/icons-material/Add";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 export const AdminSidebarLinks = [
   {
@@ -234,14 +235,30 @@ export function SidebarLink({ item, props }) {
 
 export function TopSidebar({ props }) {
   const [image, setImage] = useState(null);
+  const toBase64 = (uInt8Array) => btoa(String.fromCharCode(...uInt8Array));
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    const getProfileImage = async () => {
+      axios
+        .get(`/api/users/getProfileImage/${props.userId}`)
+        .then((res) => {
+          const user = res.data;
+          console.log("user: ", user);
+          /* setImage(user[0].profileImage); */
+          setImage(`data:image/jpeg;base64,${toBase64(user.profileImage.data)}`);
+        })
+        .catch(() => console.log("Server Internal error occured!"));
+    };
+
+    getProfileImage();
+  }, []);
+
   const handleIconClick = () => {
-    if(fileInputRef.current)
-      fileInputRef.current.click();
+    if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -251,6 +268,30 @@ export function TopSidebar({ props }) {
         }
       };
       reader.readAsDataURL(file);
+
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file, "profileImage.jpg");
+
+        const res = await axios.patch(
+          `/api/users/uploadProfileImage/${props.userId}`,
+          formData,
+        );
+
+        if (res.data)
+          console.log("Image uploaded successfully! Data: ", res.data);
+
+        /* try {
+          fetch(`/api/users/${props.userId}/uploadProfileImage`, {
+            method: "POST",
+            body: formData,
+          });
+          console.log("Image uploaded successfully!");
+        } catch (err) {
+          console.error(err);
+          console.log("Image upload failed!");
+        } */
+      }
     }
   };
 
@@ -260,7 +301,7 @@ export function TopSidebar({ props }) {
         {image ? (
           <img
             src={image}
-            alt="User"
+            alt="ProfileLogo"
             style={{
               height: "5rem",
               width: "5rem",
@@ -283,6 +324,7 @@ export function TopSidebar({ props }) {
           style={{ display: "none" }}
           accept="image/*"
           onChange={handleImageUpload}
+          name="image"
         />
       </div>
       <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
@@ -320,7 +362,7 @@ export function BottomSidebar({ button, onSelect }: BottomSidebarProps) {
         {button ? (
           <button
             onClick={onSelect}
-            className={`tw-mb-12 tw-mx-6 xl:tw-px-4 tw-py-2 xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-py-3 tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
+            className={`tw-mb-12 tw-mx-6 xl:tw-px-4 tw-py-3 xl:tw-text-xl tw-flex tw-flex-1 tw-gap-2 tw-justify-center tw-items-center hover:tw-opacity-85 tw-w-full tw-text-lg tw-rounded-lg tw-bg-dark-sky-blue tw-text-white tw-font-semibold focus:tw-outline-none`}
           >
             <AddIcon className="tw-text-lg xl:tw-text-2xl" />
             Create Thesis

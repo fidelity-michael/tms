@@ -1,23 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Fragment } from "react";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  MenuSeparator,
-} from "@headlessui/react";
-import MyNotifications from "../../content/MyNotifications";
 import axios from "axios";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ListIcon from "@mui/icons-material/List";
-import LogoutIcon from "@mui/icons-material/Logout";
-import clsx from "clsx";
 import AcademicYear from "./AcademicYear";
 import EmailBellComponent from "./TopBarComponents";
 
