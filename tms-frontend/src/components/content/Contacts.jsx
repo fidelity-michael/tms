@@ -9,7 +9,7 @@ export default function Contacts({
   function renderContacts() {
     // console.log("Rendering CONTACTS", conversations);
     // console.log(myContacts.length);
-    
+
     if (myContacts.length > 0) {
       var contactsIds = myContacts.map((contact) => {
         return contact._id;
@@ -97,11 +97,11 @@ export default function Contacts({
 
           //console.log(index)
 
+          /* tw-bg-light-pale-blue-white tw-max-h-52 tw-max-w-52 list-group-item  */
           return (
             <div key={contact.chatId} id={"contact" + contact.chatId}>
               <li
                 className="contact list-group-item"
-                type="button"
                 style={{ backgroundColor: "" }}
                 id={"contact" + contact._id}
                 onClick={() => {

@@ -67,7 +67,7 @@ export const config = {
  * Indicates whether process is in production mode
  *
  * @export
- * @returns {boolean}
+ * @returns {boolean} true if it's production environment
  */
 export function isProd(): boolean {
   return config.environment === "production";
@@ -77,7 +77,7 @@ export function isProd(): boolean {
  * Indicates whether process is in development mode
  *
  * @export
- * @returns {boolean}
+ * @returns {boolean} true if it's development environment
  */
 export function isDev(): boolean {
   return config.environment === "development";

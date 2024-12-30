@@ -19,6 +19,7 @@ import { UniversityController } from "./universities/university-controller";
 import { CalendarEventsController } from "./calendarEvents/calendarEvents-controller";
 import { ThesesRepController } from "./theses_reports/theses_rep-controller";
 import { DataHandlerController } from "./api/dataHandler-controller";
+import path from "path";
 
 const apiLimiter = rateLimit(config.apiLimiter);
 // const authLimiter = rateLimit(config.authLimiter);
@@ -30,6 +31,8 @@ const notificationV1Router = express.Router();
 const chatV1Router = express.Router();
 
 apiV1Router
+
+  .use("/images", express.static(path.join(__dirname, "users/public")))
   .use("/data", new DataHandlerController().applyRoutes())
   .use("/auth", apiLimiter, new AuthenticationController().applyRoutes()) // ldap
   .use("/resource", apiLimiter, new ResourcesController().applyRoutes())
@@ -39,10 +42,18 @@ apiV1Router
   .use("/favourites", apiLimiter, new FavouritesController().applyRoutes())
   .use("/departments", apiLimiter, new DepartmentController().applyRoutes())
   .use("/universities", apiLimiter, new UniversityController().applyRoutes())
-  .use("/calendarEvents", apiLimiter, new CalendarEventsController().applyRoutes())
+  .use(
+    "/calendarEvents",
+    apiLimiter,
+    new CalendarEventsController().applyRoutes(),
+  )
   .use("/theses_requests", apiLimiter, new ThesesReqController().applyRoutes())
   .use("/theses_reports", apiLimiter, new ThesesRepController().applyRoutes())
-  .use("/assigned_theses", apiLimiter, new AssignedThesisController().applyRoutes());
+  .use(
+    "/assigned_theses",
+    apiLimiter,
+    new AssignedThesisController().applyRoutes(),
+  );
 
 notificationV1Router.use(
   "/",

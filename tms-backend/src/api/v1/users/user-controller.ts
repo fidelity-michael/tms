@@ -70,7 +70,8 @@ export class UserController extends ResourceController<IUser> {
     this.logger.debug("uploadImage request");
     try {
       const userId = req.params.userId;
-      // @ts-ignore: Suppressing type error for custom file structure
+      // @ts-ignore: Suppressing type error for custom file structure.
+      // express-fileupload is used!
       const file = req.files.image;
 
       if (!file) {
@@ -78,16 +79,39 @@ export class UserController extends ResourceController<IUser> {
           .status(StatusCodes.BAD_REQUEST)
           .send({ message: "No image uploaded" });
       }
+      const directory = path.resolve(__dirname, "public/uploads/images"); // NOTE: Works
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+      } else {
+        fs.chmodSync(directory, 0o755);
+      }
 
-      const data = file.data;
+      const ext = path.extname(file.name);
+      const name = path.basename(file.name, ext);
+      this.logger.debug("name: ", name);
+      this.logger.debug("dir: ", directory);
+      const filenameTimestamp = `${name}_${Date.now()}${ext}`;
+      const filePath = path.join(directory, filenameTimestamp);
+      /* newFilenames.push(filenameTimestamp); */
+      await new Promise<void>((resolve, reject) => {
+        file.mv(filePath, (err: any) => {
+          if (err) {
+            console.error("File move error:", err);
+            reject(err);
+          } else {
+            this.logger.debug("File uploaded:", filenameTimestamp);
+            resolve();
+          }
+        });
+      });
+
+      // Save image path associated with user
       await UserModel.updateOne(
         { _id: userId },
-        { $set: { profileImage: data } },
+        { $set: { profileImage: filePath } },
       );
 
-      res
-        .status(StatusCodes.OK)
-        .send({ message: "Image uploaded successfully" });
+      res.status(StatusCodes.OK).send({ imagePath: filePath });
     } catch (err: any) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -98,7 +122,7 @@ export class UserController extends ResourceController<IUser> {
   getProfileImage = async (req: Request, res: Response) => {
     this.logger.debug("getProfileImage request");
     const user = await this.getOne(req.params.userId, req, res);
-    return res.status(StatusCodes.OK).json(user);
+    return res.status(StatusCodes.OK).json({ profileImage: user.profileImage });
   };
 
   /**

@@ -28,7 +28,7 @@ const userSchema = new Schema(
     status: { type: String, default: "active" },
     department: { type: String, default: "FirstName" },
     date: { type: Date, default: Date.now() },
-    profileImage: { type: Buffer },
+    profileImage: { type: String },
   },
   { ...DefaultSchemaOptions },
 );
@@ -47,5 +47,5 @@ export type User_t = {
   status?: string;
   department: string;
   date?: Date;
-  profileImage?: Buffer;
+  profileImage?: string;
 };

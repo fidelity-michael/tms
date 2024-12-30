@@ -235,20 +235,21 @@ export function SidebarLink({ item, props }) {
 
 export function TopSidebar({ props }) {
   const [image, setImage] = useState(null);
-  const toBase64 = (uInt8Array) => btoa(String.fromCharCode(...uInt8Array));
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     const getProfileImage = async () => {
-      axios
-        .get(`/api/users/getProfileImage/${props.userId}`)
-        .then((res) => {
-          const user = res.data;
-          console.log("user: ", user);
-          /* setImage(user[0].profileImage); */
-          setImage(`data:image/jpeg;base64,${toBase64(user.profileImage.data)}`);
-        })
-        .catch(() => console.log("Server Internal error occured!"));
+      try {
+        const res = await axios.get(
+          `/api/users/getProfileImage/${props.userId}`,
+        );
+        if (res.data.profileImage) {
+          const file = res.data.profileImage;
+          setImage("uploads/images/" + file.split("/").pop());
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile image:", err);
+      }
     };
 
     getProfileImage();
@@ -277,20 +278,11 @@ export function TopSidebar({ props }) {
           `/api/users/uploadProfileImage/${props.userId}`,
           formData,
         );
-
-        if (res.data)
-          console.log("Image uploaded successfully! Data: ", res.data);
-
-        /* try {
-          fetch(`/api/users/${props.userId}/uploadProfileImage`, {
-            method: "POST",
-            body: formData,
-          });
-          console.log("Image uploaded successfully!");
-        } catch (err) {
-          console.error(err);
-          console.log("Image upload failed!");
-        } */
+        if (res.data.imagePath) {
+          const final = res.data.imagePath;
+          setImage("uploads/images/" + final.split("/").pop());
+          console.log("Image uploaded successfully:", res.data.imagePath);
+        }
       }
     }
   };
@@ -300,7 +292,7 @@ export function TopSidebar({ props }) {
       <div className="tw-flex tw-items-center">
         {image ? (
           <img
-            src={image}
+            src={`${"/api/images/"}${image}`}
             alt="ProfileLogo"
             style={{
               height: "5rem",
@@ -333,21 +325,6 @@ export function TopSidebar({ props }) {
       </div>
     </div>
   );
-
-  /* return (
-    <div className="tw-flex tw-pb-6 tw-pl-10 tw-pr-5">
-      <div className="tw-flex tw-items-center">
-        <AccountCircleIcon
-          style={{ height: "5rem", width: "5rem" }}
-          className="tw-flex tw-flex-1 tw-text-dark-sky-blue hover:tw-opacity-50 hover:tw-cursor-pointer"
-        />
-      </div>
-      <div className="tw-flex tw-flex-col tw-items-start tw-justify-center tw-ml-2 tw-leading-5">
-        <div className="tw-text-dark-sky-blue tw-font-bold">{props.name}</div>
-        <div className="tw-text-gray-300 tw-font-bold">{props.role}</div>
-      </div>
-    </div>
-  ); */
 }
 
 type BottomSidebarProps = {
