@@ -92,7 +92,6 @@ export class UserController extends ResourceController<IUser> {
       this.logger.debug("dir: ", directory);
       const filenameTimestamp = `${name}_${Date.now()}${ext}`;
       const filePath = path.join(directory, filenameTimestamp);
-      /* newFilenames.push(filenameTimestamp); */
       await new Promise<void>((resolve, reject) => {
         file.mv(filePath, (err: any) => {
           if (err) {
@@ -105,7 +104,12 @@ export class UserController extends ResourceController<IUser> {
         });
       });
 
-      // Save image path associated with user
+      const user = await this.getOne(req.params.userId, req, res);
+      // Delete previous profileImage
+      fs.unlink(user.profileImage, (err) => {
+        if (err) this.logger.error("Image file wasn't deleted!");
+      });
+
       await UserModel.updateOne(
         { _id: userId },
         { $set: { profileImage: filePath } },
