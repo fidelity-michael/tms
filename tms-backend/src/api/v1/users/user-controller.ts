@@ -45,10 +45,20 @@ export class UserController extends ResourceController<IUser> {
       /* .delete("/all", this.deleteAllUsers) */
       .delete("/:userId", this.deleteUser)
       .get("/getProfileImage/:userId", this.getProfileImage)
-      .patch("/uploadProfileImage/:userId", this.uploadImage);
+      .patch("/uploadProfileImage/:userId", this.uploadImage)
+      .patch("/resetProfileImage/:userId", this.resetImage);
 
     return router;
   }
+
+  resetImage = async (req: Request, res: Response) => {
+    this.logger.debug("resetImage request");
+    const user = await UserModel.updateOne(
+      { _id: req.params.userId },
+      { $set: { profileImage: "" } },
+    );
+    return res.status(StatusCodes.OK).json(user);
+  };
 
   /**
    * Delete all users
