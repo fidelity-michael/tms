@@ -455,7 +455,10 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
             fontWeight: 400,
           },
         },
-        categories: [...areasWithTheses.keys()]
+        categories: [...areasWithTheses.keys()],
+        min: 0,
+        max: Math.max(...areasWithTheses.values()),
+        tickAmount: Math.max(...areasWithTheses.values()), // Ensure no repeated values
       },
       yaxis: {
         labels: {
@@ -466,9 +469,6 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
             fontWeight: 400,
           },
         },
-        min: 0,
-        max: Math.max(...areasWithTheses.values()),
-        tickAmount: Math.max(...areasWithTheses.values()), // Ensure no repeated values
       },
       grid: {
         show: true,
