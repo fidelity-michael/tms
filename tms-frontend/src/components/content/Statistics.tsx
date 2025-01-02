@@ -401,6 +401,7 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
   let areasWithTheses = new Map<string, number>();
 
   console.log(...areasWithTheses.keys());
+  console.log("theses: ", theses)
   theses.map((el) => {
     if (areasWithTheses.has(el.area)) {
       areasWithTheses.set(el.area, areasWithTheses.get(el.area)! + 1);
@@ -454,9 +455,7 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
             fontWeight: 400,
           },
         },
-        min: 0,
-        max: Math.max(...areasWithTheses.values()),
-        tickAmount: Math.max(...areasWithTheses.values()), // Ensure no repeated values
+        categories: [...areasWithTheses.keys()]
       },
       yaxis: {
         labels: {
@@ -467,6 +466,9 @@ function getChartConfigForAreaTheses({ theses }: barChartThesesProps) {
             fontWeight: 400,
           },
         },
+        min: 0,
+        max: Math.max(...areasWithTheses.values()),
+        tickAmount: Math.max(...areasWithTheses.values()), // Ensure no repeated values
       },
       grid: {
         show: true,
