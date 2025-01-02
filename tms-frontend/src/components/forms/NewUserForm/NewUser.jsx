@@ -181,7 +181,7 @@ export default function NewUser() {
   }
 
   return (
-    <div className="tw-flex tw-flex-1 tw-align-middle tw-justify-start">
+    <div className="tw-flex tw-flex-1 tw-align-middle tw-justify-center">
       {showAlert ? (
         <Alert
           className="upload-alert"
@@ -197,7 +197,7 @@ export default function NewUser() {
         onSubmit={(e) => {
           submitForm(e);
         }}
-        className="tw-w-full tw-max-w-4xl tw-bg-white tw-shadow-md tw-rounded tw-px-8 tw-pt-6 tw-pb-8 tw-mb-4"
+        className="tw-w-full tw-max-w-6xl tw-bg-white tw-shadow-md tw-rounded tw-px-8 tw-pt-6 tw-pb-8 tw-mb-4"
       >
         <div className="tw-mb-4">
           <label
