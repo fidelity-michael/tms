@@ -12,6 +12,9 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import { IUser, UserModel } from "../users/user-model";
 
+/* import { IdP, SP } from "./saml"; */
+import { Constants } from "samlify";
+
 declare module "express-session" {
   interface SessionData {
     user: {
@@ -31,7 +34,7 @@ interface CustomRequest extends Request {
     role: string;
     group: string;
   };
-  data?: Array<{ cn: string; mail: string }>;
+  data?: { cn: string; dn: string };
 }
 
 // Define a custom interface to ensure req has a results property
@@ -44,7 +47,8 @@ interface CustomResponse extends Response {
     message?: string;
   };
   data?: Array<{
-    cnDn: { cn: string; dn: string };
+    cn: string;
+    dn: string;
     mail: string;
     eduPersonAffiliation: string;
     businessCategory: string;
@@ -77,6 +81,8 @@ export class AuthenticationController extends ResourceController<IAuth> {
     const router = Router();
     router
       .get("/authorization", this.authorization)
+      /* .get("/saml/metadata", this.getSPmetadata)
+      .post("/saml/login", this.samlLogin) */
       .post(
         "/ldap_login",
         this.ldapSearch(),
@@ -86,9 +92,44 @@ export class AuthenticationController extends ResourceController<IAuth> {
       )
       .post("/login", this.loginWithoutLDAP)
       .post("/logout", this.logout);
+
     return router;
   }
 
+  /* getSPmetadata = async (req: CustomRequest, res: Response) => {
+    res.header("Content-Type", "application/xml");
+    res.send(SP.getMetadata());
+  }; */
+
+  /* samlLogin = async (req: CustomRequest, res: Response) => {
+    try {
+      const { context } = SP.createLoginRequest(
+        IdP,
+        Constants.BindingNamespace.Redirect,
+      );
+      return res.redirect(context); // Redirect user to IdP login page
+    } catch (err) {
+      console.error("SSO Login Error:", err);
+      res.status(500).send("Failed to initiate SSO");
+    }
+  }; */
+
+  /* samlACS = async (req: CustomRequest, res: Response) => {
+    try {
+      const { extract } = await SP.parseLoginResponse(
+        IdP,
+        Constants.BindingNamespace.Post,
+        req,
+      );
+      console.log("SAML Response:", extract);
+      res.send(`Hello ${extract.attributes.email}, you are authenticated!`);
+    } catch (err) {
+      console.error("ACS Error:", err);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send("Failed to process SAML response");
+    }
+  }; */
   /**
    * User authorization
    * @param req
@@ -164,8 +205,8 @@ export class AuthenticationController extends ResourceController<IAuth> {
           try {
             const insertUser = async () => {
               UserModel.create({
-                first_name: res.data![0].cnDn.cn.split(" ")[0],
-                last_name: res.data![0].cnDn.cn.split(" ")[1],
+                first_name: res.data![0].cn.split(" ")[0],
+                last_name: res.data![0].cn.split(" ")[1],
                 email: res.data![0].mail,
                 password: await this.encryptPass(req.body.password, 10),
                 role: res.results!.role,
@@ -318,7 +359,10 @@ export class AuthenticationController extends ResourceController<IAuth> {
 
   logout = async (req: Request, res: Response) => {
     req.session.destroy(function (err) {
-      if (err) res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server failed to delete session!");
+      if (err)
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .send("Server failed to delete session!");
       else {
         res.status(StatusCodes.OK).send("Server deleted session successfully!");
       }
@@ -384,6 +428,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
         if (Object.keys(res.data!).length === 0) {
           // "!" it's not undefined, neither null
           // console.log("LDAP user not found!");
+          this.logger.error("Failed to LDAP Authenticate");
           res.results = {
             auth: "fail",
             message: "LDAP user not found!",
@@ -392,11 +437,12 @@ export class AuthenticationController extends ResourceController<IAuth> {
         } else {
           // console.log("Authenticate Data (received): ", res.data);
           const password = req.body.password;
-          const dn = res.data![0].cnDn.dn;
-          // console.log("User dn: ", dn);
+          const dn = res.data![0].dn;
+          this.logger.debug("User dn: ", dn);
           try {
             await this.client.bind(dn, password);
             // console.log("LDAP Bind succeeded!");
+            this.logger.debug("BINDED CLIENT! [data]: ", JSON.stringify(res.data![0]))
             res.results = {
               auth: "success",
               message: "LDAP authentication succeeded!",
@@ -434,12 +480,13 @@ export class AuthenticationController extends ResourceController<IAuth> {
 
         // console.log("Modify Results: ", res.results);
         if (res.data![0]) {
-          this.logger.debug("User Entry: ", res.data![0]);
+          this.logger.debug("User Entry [data]: ", JSON.stringify(res.data![0]));
           const role = res.data![0].eduPersonAffiliation
             ? res.data![0].eduPersonAffiliation.toLowerCase()
             : "undefined";
 
           // console.log("User Role: ", role);
+          this.logger.debug("USER ROLE: ", JSON.stringify(role))
           if (role === "faculty") {
             res.results!.role = "professor";
             res.results!.group = "Professor";
@@ -459,6 +506,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
           } else {
             // console.log("Reading staff file..");
             // Read staff.json file
+            // TODO: Check for reading the correct public directory
             const data = fs.readFileSync("public/staff.json", {
               encoding: "utf8",
               flag: "r",
@@ -505,8 +553,9 @@ export class AuthenticationController extends ResourceController<IAuth> {
         next();
       } catch (err: any) {
         this.logger.error("Server internal error occurred: " + err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
-        next();
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message });
       }
     };
   }
