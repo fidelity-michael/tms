@@ -17,19 +17,24 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
   const [thesesTableData, setThesesTableData] = useState([]);
 
   async function initTableData() {
-    setThesesTableData([
-      {
-        first: thesisData.thesis.title,
-        second: thesisData.thesis.topic,
-        third: thesisData.thesis.area,
-        fourth: thesisData.thesis.professor,
-      },
-    ]);
+    console.log("thesisData [init]:", thesisData)
+    if (thesisData) {
+      setThesesTableData([
+        {
+          first: thesisData.thesis.title,
+          second: thesisData.thesis.topic,
+          third: thesisData.thesis.area,
+          fourth: thesisData.thesis.professor,
+        },
+      ]);
+    } else {
+      setThesesTableData([{}]);
+    }
   }
 
   useEffect(() => {
     initTableData();
-
+    
     return () => {
       componentIsMounted.current = true;
       // componentIsMounted.current = false
@@ -42,7 +47,6 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
       await axios
         .get("/api/calendarEvents/" + userId)
         .then((res) => {
-          console.log(res.data);
           sortByDate(res.data);
           setEvents(res.data);
           setLoadingEvents(false);
@@ -129,7 +133,7 @@ function StudentDashboard({ userId, thesisData, setPage, setSelectedItem }) {
             setSelectedItem("My Thesis");
           }}
         >
-          {thesisData ? (
+          {thesisData && thesisData.thesis.title !== ""? (
             <SmallTable
               caption={{
                 name: "My Thesis",

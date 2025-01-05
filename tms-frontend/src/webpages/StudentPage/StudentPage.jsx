@@ -96,7 +96,6 @@ function StudentPage() {
               auth_data.data.role.includes("student")) || //we come from my roles page
             (location.state === "login" && auth_data.data.role[0] === "student") //we come from login
           ) {
-            console.log(location.state);
             const user_data = await axios.get(
               "/api/users/" + auth_data.data.id,
             );
@@ -133,7 +132,6 @@ function StudentPage() {
   useEffect(() => {
     const fetchRequests = async () => {
       const requests_data = await axios.get("/api/data/theses_requests");
-      // console.log("All requests: ", requests_data.data.results);
       if (requests_data.data.results.length > 0) {
         const user_requests = requests_data.data.results.filter(
           (request) => request.student === user.userId,
@@ -147,12 +145,9 @@ function StudentPage() {
       }
 
       if (user.userId.length > 0) {
-        console.log("userId: ", user.userId);
         const thesis_data = await axios.get(
           "/api/data/my_thesis/" + user.userId,
         );
-
-        console.log("Thesis: ", thesis_data.data);
 
         if (thesis_data && thesis_data.data.thesis) {
           // NOTE: Check this piece of code
@@ -160,6 +155,26 @@ function StudentPage() {
           setThesisData(thesis_data.data);
           if (thesis_data.data.thesis.status === "completed")
             setThesisCompleted(true);
+        } else {
+          // NOTE: Temportary solution for ldap connected user, to display
+          setThesisData({
+            thesis: {
+              area: "",
+              createdAt: "",
+              date: "",
+              description: "",
+              group: "",
+              prerequisites: "",
+              professor: "",
+              required_files: [""],
+              status: "",
+              thesis_files: [""],
+              title: "",
+              topic: "",
+              updatedAt: "",
+              _id: "",
+            },
+          });
         }
       }
     };
