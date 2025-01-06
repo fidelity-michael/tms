@@ -212,6 +212,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
                 role: res.results!.role,
                 group: res.results!.group,
                 department: "5f89b089099c8d21dc2d9ef8",
+                profileImage: "",
               })
                 .then((user) => {
                   this.logger.debug("New User inserted: " + user);
@@ -310,6 +311,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
     }
 
     // Check if password is correct
+    this.logger.debug("PASSWORD: ", req.body.password);
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) {
       const server_res = {
@@ -442,7 +444,10 @@ export class AuthenticationController extends ResourceController<IAuth> {
           try {
             await this.client.bind(dn, password);
             // console.log("LDAP Bind succeeded!");
-            this.logger.debug("BINDED CLIENT! [data]: ", JSON.stringify(res.data![0]))
+            this.logger.debug(
+              "BINDED CLIENT! [data]: ",
+              JSON.stringify(res.data![0]),
+            );
             res.results = {
               auth: "success",
               message: "LDAP authentication succeeded!",
@@ -480,13 +485,26 @@ export class AuthenticationController extends ResourceController<IAuth> {
 
         // console.log("Modify Results: ", res.results);
         if (res.data![0]) {
-          this.logger.debug("User Entry [data]: ", JSON.stringify(res.data![0]));
+          this.logger.debug(
+            "User Entry [data]: ",
+            JSON.stringify(res.data![0]),
+          );
           const role = res.data![0].eduPersonAffiliation
             ? res.data![0].eduPersonAffiliation.toLowerCase()
             : "undefined";
 
+          this.logger.debug("Current working directory:", process.cwd());
+
+          // TODO: FIX THIS
+          /* const data = fs.readFileSync("public/staff.json", {
+            encoding: "utf8",
+            flag: "r",
+          }); */
+
+          /* this.logger.debug(data); */
+
           // console.log("User Role: ", role);
-          this.logger.debug("USER ROLE: ", JSON.stringify(role))
+          this.logger.debug("USER ROLE: ", JSON.stringify(role));
           if (role === "faculty") {
             res.results!.role = "professor";
             res.results!.group = "Professor";
@@ -507,7 +525,7 @@ export class AuthenticationController extends ResourceController<IAuth> {
             // console.log("Reading staff file..");
             // Read staff.json file
             // TODO: Check for reading the correct public directory
-            const data = fs.readFileSync("public/staff.json", {
+            const data = fs.readFileSync("/public/staff.json", {
               encoding: "utf8",
               flag: "r",
             });
