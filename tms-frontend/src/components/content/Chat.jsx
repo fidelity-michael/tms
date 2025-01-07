@@ -35,7 +35,7 @@ export default function Chat({ userId, role }) {
 
   //for sockets
   const socketRef = useRef(null);
-  const ENDPOINT = "http://localhost:8080/chat"; // /chat for namespace
+  const ENDPOINT = `http://${import.meta.env.HOST}:8080/chat`; // /chat for namespace
 
   useEffect(() => {
     const handleClickOutside = (event) => {
