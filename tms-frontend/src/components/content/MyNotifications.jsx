@@ -30,7 +30,7 @@ export default function MyNotifications({
     if (userId) {
       if (socketRef.current == null) {
         //current will persist for the full lifetime of the component
-        socketRef.current = io(`http://${import.meta.env.HOST}:8080/notification`); // notification namespace
+        socketRef.current = io(`http://${import.meta.env.VITE_HOST}:8080/notification`); // notification namespace
       }
 
       socketRef.current.on("connect", () => {

@@ -15,7 +15,7 @@ function ProfessorSidebar(props) {
 
   //for sockets
   const socketRef = useRef(null);
-  const ENDPOINT = `http://${import.meta.env.HOST}:8080/chat`;
+  const ENDPOINT = `http://${import.meta.env.VITE_HOST}:8080/chat`;
 
   // NOTE: First
   useEffect(() => {

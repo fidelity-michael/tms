@@ -13,7 +13,7 @@ export default function StudentSidebar(props) {
   const [notifyIcon, setNotifyIcon] = useState(false);
 
   const socketRef = useRef(null);
-  const ENDPOINT = `http://${import.meta.env.HOST}:8080/chat`;
+  const ENDPOINT = `http://${import.meta.env.VITE_HOST}:8080/chat`;
 
   // Initialize socket connection
   useEffect(() => {
