@@ -8,7 +8,7 @@ dns.setDefaultResultOrder("verbatim");
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ["chunk-UCMNR7HQ"], // Replace this with the actual dependency if identified
+    exclude: ["chunk-UCMNR7HQ", "chunk-H7PK7LP3"], // Replace this with the actual dependency if identified
   },
   server: {
     host: true,
