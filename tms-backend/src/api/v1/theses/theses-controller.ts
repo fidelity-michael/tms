@@ -8,7 +8,7 @@ export class ThesisController extends ResourceController<IThesis> {
   private logger: Logger = Logger.getInstance();
   constructor() {
     super(ThesisModel);
-    // this.checkAndInitialize();
+    this.checkAndInitialize();
   }
   /**
    * Apply all routes for theses
