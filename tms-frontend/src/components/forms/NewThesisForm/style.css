@@ -22,6 +22,17 @@ Label {
     border-radius: 0.25rem !important;
 }
 
+.new-file {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.new-file label{
+    margin-bottom: 0;
+}
+
 .new-file i {
     cursor: pointer;
     color: #ec2020;
