@@ -184,7 +184,6 @@ function StudentPage() {
         const favourites_data = await axios.get(
           "/api/data/favourites/" + user.userId,
         );
-        // console.log("Favourites: ", favourites_data.data);
         if (favourites_data.data.length > 0) {
           setFavourites(favourites_data.data);
         }
