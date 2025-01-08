@@ -34,7 +34,7 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
 
           let final_data = await Promise.all(
             res.data.map(async (el) => {
-              if (el.status === "completed") {
+              if (el.status === "graded") {
                 completed++;
 
                 let thesis = await axios.get("/api/theses/" + el.thesis);
@@ -157,15 +157,15 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
       <div className="tw-flex tw-flex-col tw-flex-1 tw-gap-8">
         <div
           onClick={() => {
-            setPage("Completed Theses");
-            setSelectedItem("Completed Theses");
+            setPage("Graded Theses");
+            setSelectedItem("Graded Theses");
           }}
           className="tw-cursor-pointer"
         >
           {thesesTableData.length ? (
             <SmallTable
               caption={{
-                name: "Completed Theses",
+                name: "Graded Theses",
                 amount: completedThesesCount,
               }}
               headerTitles={complThesesHeaders}
@@ -175,7 +175,7 @@ function StudentDashboard({ userId, setPage, setSelectedItem }) {
           ) : (
             <SmallTableEmpty
               caption={{
-                name: "Completed Theses",
+                name: "Graded Theses",
                 amount: completedThesesCount,
               }}
               headerTitles={complThesesHeaders}
