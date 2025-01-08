@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Form } from "react-bootstrap";
 import axios from "axios";
 import "./content.css";
-import { PaginationTab } from "./TableComponents";
+import ActionButtons, { PaginationTab } from "./TableComponents";
 
 export default function ReportsArchive({ userId, email, user }) {
   const [reports, setReports] = useState([]);
@@ -205,7 +205,6 @@ export default function ReportsArchive({ userId, email, user }) {
 
             <div
               className="detailsToggle"
-              type="button"
               data-toggle="collapse"
               data-target={"#collapse" + index}
               aria-expanded="false"
@@ -446,9 +445,11 @@ export default function ReportsArchive({ userId, email, user }) {
   }
 
   return (
-    <div className="thesis-reports tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl" style={{ marginTop: "2rem" }}>
-      <h5 style={{ color: "#4e73df" }}>Thesis Reports</h5>
-      <hr />
+    <div
+      className="thesis-reports tw-bg-white tw-px-4 tw-py-6 tw-rounded-2xl"
+      style={{ marginTop: "2rem" }}
+    >
+      <h5 style={{ color: "#4e73df" }}></h5>
       <div className="reports-wrapper">
         {loadingReports
           ? loadingData()
