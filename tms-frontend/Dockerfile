@@ -8,11 +8,6 @@ WORKDIR /tms-frontend
 # add `/frontend/node_modules/.bin` to $PATH
 ENV PATH /tms-frontend/node_modules/.bin:$PATH
 
-# install and cache app dependencies
-# RUN npm create vite@latest . -- --template react-ts
-# RUN npm install -D tailwindcss postcss autoprefixer
-# RUN npx tailwindcss init -p
-
 # Install all dependencies
 COPY package.json .
 RUN npm install
@@ -21,4 +16,4 @@ COPY . /tms-frontend
 
 # -------------- STAGE 2: Run --------------
 
-CMD [ "sh", "-c", "npm run dev" ]
+CMD [ "sh", "-c", "npm run start" ]
