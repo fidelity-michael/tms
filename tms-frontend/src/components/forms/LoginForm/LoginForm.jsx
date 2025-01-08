@@ -31,7 +31,7 @@ export default function LoginForm() {
 
   function handleCheckboxChange(target) {
     // console.log(ldapAuth);
-    setLdapAuth(!ldapAuth);
+    setLdapAuth((prev) => !prev);
   }
 
   function login(e) {
@@ -43,7 +43,6 @@ export default function LoginForm() {
 
     if (ldapAuth) {
       setLoading(true);
-      // axios.post("/api/auth/login", user_data, {proxy: {protocol: "http", host: "http://localhost", port: 8080}})
       axios({
         // url: "http://localhost:8080/api/auth/login", // before use of proxy server
         url: "/api/auth/ldap_login",
@@ -54,7 +53,6 @@ export default function LoginForm() {
           setLoading(false);
           setError("");
           console.log("Authentication succeeded!");
-          // console.log("User role: ", res.data.role);
           const redirection_page = "/" + res.data.role;
           navigate(redirection_page, { state: "login" });
         })
