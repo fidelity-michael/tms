@@ -92,12 +92,12 @@ export default function NewThesisForm({ userId, email }) {
       const { id, filename } = file;
       return (
         <div className="new-file" key={id}>
-          <i
+          <a
             className="fa fa-trash-alt"
             type="button"
             id={id}
             onClick={(e) => removeRequiredFile(e)}
-          ></i>
+          ></a>
           <Form.Label className="filename">{filename}</Form.Label>
         </div>
       );
@@ -110,11 +110,11 @@ export default function NewThesisForm({ userId, email }) {
         //multiple
         return (
           <div className="newThesisFile" key={fileList[i].name + index}>
-            <i
+            <a
               className="fa fa-trash-alt"
               type="button"
               onClick={() => removeThesisFile(fileList[i].name)}
-            ></i>
+            ></a>
             <Form.Label className="filename">{fileList[i].name}</Form.Label>
           </div>
         );
@@ -146,7 +146,7 @@ export default function NewThesisForm({ userId, email }) {
         filename: requiredFilename,
       };
 
-      setRequiredFiles([...requiredFiles, newFile]);
+      setRequiredFiles((prev) => [...prev, newFile]);
       setRequiredFilename("");
     } else {
       console.log("File name is empty!");
@@ -266,23 +266,67 @@ export default function NewThesisForm({ userId, email }) {
   function uploadFiles() {
     if (thesisFiles.length > 0) {
       console.log("File Upload: ", thesisFiles);
-
       let formData = new FormData();
-      for (let i = 0; i < thesisFiles.length; i++) {
+      /* Array.from(thesisFiles).forEach((file) => {
+        formData.append("files", file);
+      }); */
+
+      thesisFiles.forEach((fileList) => {
+        // Check if fileList is an object and has a 'length' property
+        if (fileList && typeof fileList === "object" && "length" in fileList) {
+          Array.from(fileList).forEach((file, index) => {
+            console.log(`Adding file from FileList ${index}:`, file.name);
+            formData.append("files", file);
+          });
+        } else {
+          console.warn("Invalid FileList:", fileList);
+        }
+      });
+      /* for (let i = 0; i < thesisFiles.length; i++) {
         for (let j = 0; j < thesisFiles[i].length; j++) {
           formData.append("files", thesisFiles[i][j]);
         }
+      } */
+      console.log("Uploading files:");
+      thesisFiles.forEach((fileList, index) => {
+        console.log(`FileList ${index}:`, fileList);
+        Array.from(fileList).forEach((file) => {
+          console.log("File:", file.name, file.size, file.type);
+        });
+      });
+
+      /* console.log("formData: ", formData); */
+
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
       }
 
+      /* const uploadData = async () => {
+        fetch("/api/data/uploads/theses", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => {
+            // console.log("Response: ", res.data);
+            thesis.thesis_files = res.files_list;
+            uploadThesis();
+          })
+          .catch(() => {
+            setVariant("danger");
+            setMessage("Thesis failed to submit!");
+            setShowAlert(true);
+            resetThesis();
+          });
+      }; */
       const uploadData = async () => {
         await axios
-          .post("/api/data/uploads/theses", formData) // NOTE: Check this route
+          .post("/api/data/uploads/theses", formData)
           .then((res) => {
             // console.log("Response: ", res.data);
             thesis.thesis_files = res.data.files_list;
             uploadThesis();
           })
-          .catch((err) => {
+          .catch(() => {
             setVariant("danger");
             setMessage("Thesis failed to submit!");
             setShowAlert(true);
@@ -421,6 +465,7 @@ export default function NewThesisForm({ userId, email }) {
 
             <div className="tw-flex tw-mt-2 tw-justify-end tw-items-center">
               <button
+                type="button"
                 onClick={(e) => addRequiredFile(e)}
                 className="tw-bg-transparent hover:tw-bg-mid-pale-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
               >
@@ -449,7 +494,10 @@ export default function NewThesisForm({ userId, email }) {
         </Form.Group>
 
         <div className="tw-flex tw-justify-end tw-items-center">
-          <button className="tw-bg-transparent hover:tw-bg-mid-pale-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded">
+          <button
+            className="tw-bg-transparent hover:tw-bg-mid-pale-blue tw-text-dark-sky-blue tw-font-semibold hover:tw-text-white tw-py-2 tw-px-4 tw-border tw-border-dark-sky-blue hover:tw-border-transparent tw-rounded"
+            type="submit"
+          >
             Add Thesis
           </button>
         </div>
