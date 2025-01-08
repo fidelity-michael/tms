@@ -286,7 +286,7 @@ export default function NewUser() {
             onChange={(e) => handleChange(e.target)}
             required={true}
           />
-            <small id="emailValidity"></small>
+          <small id="emailValidity"></small>
         </div>
 
         <div className="tw-mb-6">
@@ -321,7 +321,7 @@ export default function NewUser() {
             onChange={(e) => handleChange(e.target)}
             required={true}
           ></input>
-            <small id="passwordValidity"></small>
+          <small id="passwordValidity"></small>
         </div>
         <div className="tw-flex tw-items-center tw-justify-end">
           <button
