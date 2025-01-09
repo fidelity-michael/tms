@@ -8,7 +8,7 @@ export class ThesisController extends ResourceController<IThesis> {
   private logger: Logger = Logger.getInstance();
   constructor() {
     super(ThesisModel);
-    this.checkAndInitialize();
+    /* this.checkAndInitialize(); */
   }
   /**
    * Apply all routes for theses
@@ -22,8 +22,8 @@ export class ThesisController extends ResourceController<IThesis> {
       .get("/:thesisId", this.getThesisById)
       .post("/", this.postThesis)
       .patch("/:thesisId", this.patchThesis)
-      .delete("/all", this.deleteAll)
-      .delete("/:thesisId", this.deleteThesis);
+      .delete("/:thesisId", this.deleteThesis)
+      .delete("/all", this.deleteAll);
     return router;
   }
 
@@ -34,13 +34,10 @@ export class ThesisController extends ResourceController<IThesis> {
    */
   deleteAll = async (req: Request, res: Response) => {
     this.logger.debug("deleteAll request");
-    const allTheses = await this.getAll(req, res);
-    if (allTheses) {
-      for (const item of allTheses) {
-        await this.delete(item._id.toString(), req, res);
-      }
-      this.logger.success("All theses items deleted");
-    }
+    /* const allTheses = await this.getAll(req, res); */
+    const allTheses = await this.modelSchema.deleteMany({});
+    this.logger.success("All theses items deleted");
+    return res.status(StatusCodes.OK).json(allTheses);
   };
 
   /**
