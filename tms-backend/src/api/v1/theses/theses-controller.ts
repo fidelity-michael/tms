@@ -8,7 +8,7 @@ export class ThesisController extends ResourceController<IThesis> {
   private logger: Logger = Logger.getInstance();
   constructor() {
     super(ThesisModel);
-    /* this.checkAndInitialize(); */
+    this.checkAndInitialize();
   }
   /**
    * Apply all routes for theses
@@ -129,46 +129,98 @@ export class ThesisController extends ResourceController<IThesis> {
 
     const thesesToInsert: Thesis_t[] = [
       {
-        title: "Machine Learning in Healthcare",
-        topic: "Artificial Intelligence",
-        area: "Healthcare",
+        title: "Low-Power Microprocessor Design for Edge Computing",
+        topic: "Optimizing edge devices for energy efficiency and performance",
+        area: "Computer architecture and microelectronics",
         description:
-          "An exploration of machine learning applications in healthcare.",
-        prerequisites: "Basic knowledge of AI and healthcare systems",
-        group: "Group A",
-        professor: "Dr. John Smith",
-        required_files: ["proposal.pdf", "data.csv"],
+          "Research on low-power microprocessor architectures tailored for edge computing applications.",
+        prerequisites:
+          "Basic understanding of computer architecture and low-power design",
+        group: "MSc",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "simulation_results.zip"],
         thesis_files: ["final_report.pdf"],
         status: "active",
         date: new Date("2024-09-01"),
       },
       {
-        title: "Blockchain in Finance",
-        topic: "Finance Technology",
-        area: "Finance",
+        title: "Accelerating Big Data Processing with GPU Clusters",
+        topic: "Leveraging GPU clusters for high-performance data analysis",
+        area: "Computer systems, parallel and high performance computing",
         description:
-          "Study of blockchain applications in the financial sector.",
-        prerequisites: "Understanding of blockchain technology",
-        group: "Group B",
-        professor: "Dr. Alice Johnson",
-        required_files: ["project_outline.pdf"],
-        thesis_files: ["research_paper.pdf"],
-        status: "archived",
-        date: new Date("2024-06-15"),
+          "Exploration of GPU-based parallel computing to accelerate big data analytics workflows.",
+        prerequisites:
+          "Knowledge of GPU programming and big data processing frameworks",
+        group: "PhD",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "codebase.zip"],
+        thesis_files: ["final_report.pdf"],
+        status: "active",
+        date: new Date("2024-09-01"),
       },
       {
-        title: "Cybersecurity and Cloud Computing",
-        topic: "Cybersecurity",
-        area: "Cloud Computing",
+        title: "Blockchain-Based Solutions for Secure IoT Systems",
+        topic:
+          "Developing secure frameworks for IoT using blockchain technology",
+        area: "Computer security and distributed systems",
         description:
-          "Evaluating cybersecurity challenges in cloud environments.",
-        prerequisites: "Background in cybersecurity and cloud computing",
-        group: "Group C",
-        professor: "Dr. Emily Davis",
-        required_files: ["security_protocols.pdf"],
-        thesis_files: ["final_presentation.pdf"],
+          "Research on enhancing IoT security through the integration of blockchain-based distributed systems.",
+        prerequisites:
+          "Familiarity with blockchain concepts and IoT security challenges",
+        group: "MSc",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "architecture_diagram.pdf"],
+        thesis_files: ["final_report.pdf"],
         status: "active",
-        date: new Date("2024-12-20"),
+        date: new Date("2024-09-01"),
+      },
+      {
+        title: "Traffic Load Balancing in 5G Networks",
+        topic:
+          "Optimizing resource allocation for next-generation mobile networks",
+        area: "Computer networks, mobile computing, and telecommunications",
+        description:
+          "A study on traffic load balancing techniques for efficient resource allocation in 5G networks.",
+        prerequisites:
+          "Basic knowledge of 5G technologies and traffic engineering",
+        group: "BSc",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "traffic_analysis.csv"],
+        thesis_files: ["final_report.pdf"],
+        status: "active",
+        date: new Date("2024-09-01"),
+      },
+      {
+        title: "AI-Enhanced Signal Processing for Smart Grids",
+        topic:
+          "Applying artificial intelligence to improve signal processing in energy grids",
+        area: "Signal processing and analysis",
+        description:
+          "Developing AI-powered signal processing techniques to optimize the performance of smart grids.",
+        prerequisites:
+          "Understanding of AI techniques and signal processing fundamentals",
+        group: "MSc",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "signal_analysis_results.zip"],
+        thesis_files: ["final_report.pdf"],
+        status: "active",
+        date: new Date("2024-09-01"),
+      },
+      {
+        title: "Designing Immersive AR Interfaces for Remote Learning",
+        topic:
+          "Creating augmented reality tools to improve remote education experiences",
+        area: "Computer graphics and human-computer interaction",
+        description:
+          "Exploration of augmented reality interfaces for engaging remote learning environments.",
+        prerequisites:
+          "Basic understanding of AR development and HCI principles",
+        group: "BSc",
+        professor: "677da031265a76563c377c57",
+        required_files: ["proposal.pdf", "ar_demo_app.zip"],
+        thesis_files: ["final_report.pdf"],
+        status: "active",
+        date: new Date("2024-09-01"),
       },
     ];
 
