@@ -453,10 +453,18 @@
 Αρχικά ο χρήστης πρέπει να μπει στον καθένα από τους *tms-frontend*, *tms-backend* φακέλους και να 
 τρέξει ```sh npm install``` για τον καθένα. Αφού εγκατασταθούν τα κατάλληλα libraries ο χρήστης 
 μπορεί πλέον να μπει στον *tms-integration* φάκελο και να τρέξει την εντολή:
-#align(center)[#raw("sudo docker compose up --build", lang: "sh", block: true) ]
-
+#figure(
+  align(center)[#raw("sudo docker compose up --build", lang: "sh", block: true) ],
+  caption: [Run Command],
+  supplement: "Code",
+  kind: "Code"
+) <docker_command>
 Η εντολή αυτή κατασκεύαζει, (ξανά)δημιουργεί και συνδέει τα containers για τα services του tms.
-Εκτός αν τρέχουν ήδη, αυτή η εντολή ξεκινάει άλλα linked services.
+Εκτός αν τρέχουν ήδη, αυτή η εντολή ξεκινάει και τα άλλα linked services (αν υπάρχουν).
+
+Επίσης *δεν* χρειάζεται να χτιστούν χειροκίνητα τα images για το tms σύστημα, καθώς η εντολή 
+(#text(blue)[@docker_command]) με το ```sh --build``` flag κατασκευάζει τα images πριν αρχίσουν τα
+containers.
 
 == Χρήσιμες εντολές
 
