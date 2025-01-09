@@ -22,8 +22,8 @@ export class ThesisController extends ResourceController<IThesis> {
       .get("/:thesisId", this.getThesisById)
       .post("/", this.postThesis)
       .patch("/:thesisId", this.patchThesis)
-      .delete("/:thesisId", this.deleteThesis)
-      .delete("/all", this.deleteAll);
+      .delete("/all", this.deleteAll)
+      .delete("/:thesisId", this.deleteThesis);
     return router;
   }
 
