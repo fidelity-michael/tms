@@ -117,7 +117,7 @@
 απομακρύνεται από το επαγγελματικό στυλ.
 
 #figure(
-  image("thesis-images/shared/color-palette.png", width: 95%),
+  image("thesis-images/shared/color-palette.png", width: 100%),
   caption: [Χρωματική Παλέτα],
 )
 
@@ -134,7 +134,7 @@
 πιο χρήσιμο: το τωρινό ακαδημαϊκό έτος και το εξάμηνο που διανυεί.
 
 #figure(
-  image("thesis-images/shared/top_bar.png", width: 95%),
+  image("thesis-images/shared/top_bar.png", width: 100%),
   caption: [Πάνω μπάρα],
 )
 
@@ -168,22 +168,22 @@
 Οι αρχικές οθόνες των τεσσάρων ειδών user αρχικά ήταν:
 
 #figure(
-  image("thesis-images/tms-initial-design/Desktop Dashboard Admin.png", width: 95%),
+  image("thesis-images/tms-initial-design/Desktop Dashboard Admin.png", width: 100%),
   caption: [Διαχειριστής],
 )
 
 #figure(
-  image("thesis-images/tms-initial-design/Desktop Secretariant Dashboard.png", width: 95%),
+  image("thesis-images/tms-initial-design/Desktop Secretariant Dashboard.png", width: 100%),
   caption: [Γραμματείας],
 )
 
 #figure(
-  image("thesis-images/tms-initial-design/Desktop Professor Dashboard.png", width: 95%),
+  image("thesis-images/tms-initial-design/Desktop Professor Dashboard.png", width: 100%),
   caption: [Καθηγητής],
 )
 
 #figure(
-  image("thesis-images/tms-initial-design/Desktop Student Dashboard.png", width: 95%),
+  image("thesis-images/tms-initial-design/Desktop Student Dashboard.png", width: 100%),
   caption: [Μαθητής],
 )
 
@@ -205,7 +205,7 @@
 
 
 #figure(
-  image("thesis-images/admin/admin_dashboard.png", width: 95%),
+  image("thesis-images/admin/admin_dashboard.png", width: 100%),
   caption: [Διαχειριστής],
 )
 
@@ -215,25 +215,25 @@
 
 
 #figure(
-  image("thesis-images/secretariat/secre_dashboard.png", width: 95%),
+  image("thesis-images/secretariat/secre_dashboard.png", width: 100%),
   caption: [Γραμματείας],
 )
 
 
 #figure(
-  image("thesis-images/professor/prof_dashboard.png", width: 95%),
+  image("thesis-images/professor/prof_dashboard.png", width: 100%),
   caption: [Καθηγητής],
 )
 
 #figure(
-  image("thesis-images/student/stu_dashboard.png", width: 95%),
+  image("thesis-images/student/stu_dashboard.png", width: 100%),
   caption: [Μαθητής],
 )
 
 == Σελίδα Διαχειριστή
 
 #figure(
-  image("thesis-images/admin/admin_dashboard.png", width: 95%),
+  image("thesis-images/admin/admin_dashboard.png", width: 100%),
   caption: [Dashboard],
 )
 
@@ -241,7 +241,7 @@
 εφαρμογή και φτιάχθηκα custom search bar για
 
 #figure(
-  image("thesis-images/admin/admin_users.png", width: 95%),
+  image("thesis-images/admin/admin_users.png", width: 100%),
   caption: [Χρήστες],
 )
 
@@ -250,37 +250,37 @@
 τη βάση δεδομένων και τα τρέχοντα αποθηκευμένα στοιχεία της.
 
 #figure(
-  image("thesis-images/admin/admin_stats1.png", width: 95%),
+  image("thesis-images/admin/admin_stats1.png", width: 100%),
   caption: [Στατιστικά],
 )
 
 #figure(
-  image("thesis-images/admin/admin_stats2.png", width: 95%),
+  image("thesis-images/admin/admin_stats2.png", width: 100%),
   caption: [Στατιστικά],
 )
 
 #figure(
-  image("thesis-images/admin/admin_universities.png", width: 95%),
+  image("thesis-images/admin/admin_universities.png", width: 100%),
   caption: [Πανεπιστήμια],
 )
 
 #figure(
-  image("thesis-images/admin/admin_departments.png", width: 95%),
+  image("thesis-images/admin/admin_departments.png", width: 100%),
   caption: [Τμήματα],
 )
 
 #figure(
-  image("thesis-images/admin/admin_categories.png", width: 95%),
+  image("thesis-images/admin/admin_categories.png", width: 100%),
   caption: [Κατηγορίες],
 )
 
 #figure(
-  image("thesis-images/admin/admin_assigned_theses.png", width: 95%),
+  image("thesis-images/admin/admin_assigned_theses.png", width: 100%),
   caption: [Πτυχιακές που έχουν ανατεθεί],
 )
 
 #figure(
-  image("thesis-images/admin/admin_theses_archive.png", width: 95%),
+  image("thesis-images/admin/admin_theses_archive.png", width: 100%),
   caption: [Πτυχιακές],
 )
 
@@ -292,34 +292,34 @@
 διαχωρίσει και να καταλάβει πως είναι μια σημαντική λειτουργία.
 
 #figure(
-  image("thesis-images/professor/prof_dashboard.png", width: 95%),
+  image("thesis-images/professor/prof_dashboard.png", width: 100%),
   caption: [Dashboard],
 )
 
 #figure(
-  image("thesis-images/professor/prof_assigned_theses.png", width: 95%),
+  image("thesis-images/professor/prof_assigned_theses.png", width: 100%),
   caption: [Πτυχιακές που έχουν ανατεθεί],
 )
 
 #figure(
-  image("thesis-images/professor/prof_supervised_theses.png", width: 95%),
+  image("thesis-images/professor/prof_supervised_theses.png", width: 100%),
   caption: [Πτυχιακές που επιβλέπονται],
 )
 
 
 #figure(
-  image("thesis-images/professor/prof_theses_requests.png", width: 95%),
+  image("thesis-images/professor/prof_theses_requests.png", width: 100%),
   caption: [Αναφορές πτυχιακών],
 )
 
 #figure(
-  image("thesis-images/professor/prof_theses_archive.png", width: 95%),
+  image("thesis-images/professor/prof_theses_archive.png", width: 100%),
   caption: [Ιστορικό πτυχιακών],
 )
 
 
 #figure(
-  image("thesis-images/professor/prof_chat.png", width: 95%),
+  image("thesis-images/professor/prof_chat.png", width: 100%),
   caption: [Συνομιλία],
 )
 
@@ -328,64 +328,64 @@
 
 
 #figure(
-  image("thesis-images/student/stu_dashboard.png", width: 95%),
+  image("thesis-images/student/stu_dashboard.png", width: 100%),
   caption: [Dashboard],
 )
 
 #figure(
-  image("thesis-images/student/stu_favourite_areas_1.png", width: 95%),
+  image("thesis-images/student/stu_favourite_areas_1.png", width: 100%),
   caption: [Αγαπημένες κατηγορίες],
 )
 
 #figure(
-  image("thesis-images/student/stu_favourite_areas_2.png", width: 95%),
+  image("thesis-images/student/stu_favourite_areas_2.png", width: 100%),
   caption: [Αγαπημένες κατηγορίες],
 )
 
 #figure(
-  image("thesis-images/student/stu_available_theses.png", width: 95%),
+  image("thesis-images/student/stu_available_theses.png", width: 100%),
   caption: [Διαθέσιμες πτυχιακές],
 )
 
 #figure(
-  image("thesis-images/student/stu_requests_approved.png", width: 95%),
+  image("thesis-images/student/stu_requests_approved.png", width: 100%),
   caption: [Αιτήματα που έγιναν αποδέκτα],
 )
 
 #figure(
-  image("thesis-images/student/stu_my_thesis.png", width: 95%),
+  image("thesis-images/student/stu_my_thesis.png", width: 100%),
   caption: [Η πτυχιακή του φοιτητή],
 )
 
 #figure(
-  image("thesis-images/student/stu_my_reports.png", width: 95%),
+  image("thesis-images/student/stu_my_reports.png", width: 100%),
   caption: [Οι αναφορές του φοιτητή],
 )
 
 #figure(
-  image("thesis-images/student/stu_chat.png", width: 95%),
+  image("thesis-images/student/stu_chat.png", width: 100%),
   caption: [Συνομιλία],
 )
 
 == Σελίδα Γραμματείας
 
 #figure(
-  image("thesis-images/secretariat/secre_dashboard.png", width: 95%),
+  image("thesis-images/secretariat/secre_dashboard.png", width: 100%),
   caption: [Γραμματείας],
 )
 
 #figure(
-  image("thesis-images/secretariat/secre_active_theses.png", width: 95%),
+  image("thesis-images/secretariat/secre_active_theses.png", width: 100%),
   caption: [Εν ενεργεία πτυχιακές],
 )
 
 #figure(
-  image("thesis-images/secretariat/secre_graded_theses.png", width: 95%),
+  image("thesis-images/secretariat/secre_graded_theses.png", width: 100%),
   caption: [Βαθμολογημένες πτυχιακές],
 )
 
 #figure(
-  image("thesis-images/secretariat/secre_theses_archive.png", width: 95%),
+  image("thesis-images/secretariat/secre_theses_archive.png", width: 100%),
   caption: [Ιστορικό Πτυχιακών],
 )
 
@@ -400,7 +400,7 @@
 
 
 #figure(
-  image("thesis-images/shared/profileImage.png", width: 95%),
+  image("thesis-images/shared/profileImage.png", width: 100%),
   caption: [Εικόνα προφίλ (πάνω αριστερά)],
 )
 
@@ -414,12 +414,22 @@
 
 
 #figure(
-  image("thesis-images/shared/prof_chat_files_container.png", width: 95%),
+  image("thesis-images/shared/prof_chat_files_container.png", width: 100%),
   caption: [Παράθυρο επισυναπτώμενων αρχείων],
 )
 
 #figure(
-  image("thesis-images/shared/prof_files_attach_badge.png", width: 95%),
+  image("thesis-images/shared/prof_files_attach_badge.png", width: 100%),
+  caption: [Αριθμός επισυναπτώμενων αρχείων],
+)
+
+== Αλλαγή στο Ημερολόγιο
+
+Το καινούργιο ημερολόγιο έχει ανανεωθεί καθώς πλέον δεν περιέχει το κουμπί για ώστε να προστεθεί
+κάποιο event. Ο χρήστης πλέον αρκεί να κάνει κλικ την ημέρα που θέλει και να προσθέσει το event.
+
+#figure(
+  image("thesis-images/shared/prof_calendar_new_look.png", width: 100%),
   caption: [Αριθμός επισυναπτώμενων αρχείων],
 )
 
@@ -463,7 +473,7 @@
 Εκτός αν τρέχουν ήδη, αυτή η εντολή ξεκινάει και τα άλλα linked services (αν υπάρχουν).
 
 Επίσης *δεν* χρειάζεται να χτιστούν χειροκίνητα τα images για το tms σύστημα, καθώς η εντολή 
-(#text(blue)[@docker_command]) με το ```sh --build``` flag κατασκευάζει τα images πριν αρχίσουν τα
+(#text(blue)[@docker_command] docker compose up) με το ```sh --build``` flag κατασκευάζει τα images πριν αρχίσουν τα
 containers.
 
 == Χρήσιμες εντολές
@@ -483,7 +493,7 @@ docker compose up
 docker compose up -d
 ```
 
-> Stop application:
+> Stop application (running in the background):
 ```sh
 docker compose down
 ```
@@ -493,7 +503,11 @@ docker compose down
 docker compose logs -f backend
 ```
 
+> View running containers in the background
 
+```sh
+docker ps
+```
 
 = Επίλογος
 
