@@ -31,26 +31,26 @@ Inside *`integration`* folder you can use the following commands:
 
 > Run application (and build):
 ```sh
-docker-compose up --build
+docker compose up --build
 ```
 
 > Run application (with full logging available):
 ```sh
-docker-compose up
+docker compose up
 ```
 
 > Run application (detached mode/with no logging available):
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 
 > Stop application:
 ```sh
-docker-compose down
+docker compose down
 ```
 
 > View logs for specific project/container of the application (e.g., backend):
 ```sh
-docker-compose logs -f backend
+docker compose logs -f backend
 ```
 
