@@ -75,9 +75,9 @@ export class App {
       .set("env", config.environment)
       .use(cors())
       .use(helmet()) // security
-      .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 }})) // 50MB file limit
-      .use(bodyParser.json({ limit: "10MB" }))
-      .use(bodyParser.urlencoded({limit: "10MB", extended: true }));
+      .use(bodyParser.json({ limit: "20MB" }))
+      .use(bodyParser.urlencoded({limit: "20MB", extended: true }))
+      .use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 }, debug: true})); // 50MB file limit
 
     // setup primary app routes.
     application.use(await Api.applyRoutes(application));

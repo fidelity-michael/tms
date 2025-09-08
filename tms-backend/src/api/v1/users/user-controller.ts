@@ -42,7 +42,7 @@ export class UserController extends ResourceController<IUser> {
       .post("/", this.postUser)
       .put("/:userId", this.updateUser)
       .patch("/:userId", this.patchUser)
-      /* .delete("/all", this.deleteAllUsers) */
+      .delete("/all", this.deleteAllUsers)
       .delete("/:userId", this.deleteUser)
       .get("/getProfileImage/:userId", this.getProfileImage)
       .patch("/uploadProfileImage/:userId", this.uploadImage)
@@ -83,7 +83,7 @@ export class UserController extends ResourceController<IUser> {
       // @ts-ignore: Suppressing type error for custom file structure.
       // express-fileupload is used!
       const file = req.files.image;
-
+          
       if (!file) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -98,8 +98,6 @@ export class UserController extends ResourceController<IUser> {
 
       const ext = path.extname(file.name);
       const name = path.basename(file.name, ext);
-      this.logger.debug("name: ", name);
-      this.logger.debug("dir: ", directory);
       const filenameTimestamp = `${name}_${Date.now()}${ext}`;
       const filePath = path.join(directory, filenameTimestamp);
       await new Promise<void>((resolve, reject) => {
@@ -116,16 +114,18 @@ export class UserController extends ResourceController<IUser> {
 
       const user = await this.getOne(req.params.userId, req, res);
       // Delete previous profileImage
-      fs.unlink(user.profileImage, (err) => {
-        if (err) this.logger.error("Image file wasn't deleted!");
-      });
+      if (user && user.profileImage){
+        fs.unlink(user.profileImage, (err) => {
+          if (err) this.logger.error("Image file wasn't deleted!");
+        });
+      }
 
       await UserModel.updateOne(
         { _id: userId },
         { $set: { profileImage: filePath } },
       );
 
-      res.status(StatusCodes.OK).send({ imagePath: filePath });
+      return res.status(StatusCodes.OK).send({ imagePath: filePath });
     } catch (err: any) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -275,6 +275,7 @@ export class UserController extends ResourceController<IUser> {
         role: ["student"],
         group: "BSc",
         department: "5f89b089099c8d21dc2d9ef8",
+        profileImage: "",
       },
       {
         email: "professor@csd.uoc.gr",
@@ -282,6 +283,7 @@ export class UserController extends ResourceController<IUser> {
         role: ["professor"],
         group: "Professor",
         department: "5f89b089099c8d21dc2d9ef8",
+        profileImage: "",
       },
       {
         email: "secretariat@csd.uoc.gr",
@@ -289,6 +291,7 @@ export class UserController extends ResourceController<IUser> {
         role: ["secretariat"],
         group: "Secretariat",
         department: "5f89b089099c8d21dc2d9ef8",
+        profileImage: "",
       },
       {
         email: "admin@csd.uoc.gr",
@@ -296,6 +299,7 @@ export class UserController extends ResourceController<IUser> {
         role: ["administrator"],
         group: "Administrator",
         department: "5f89b089099c8d21dc2d9ef8",
+        profileImage: "",
       },
     ];
 

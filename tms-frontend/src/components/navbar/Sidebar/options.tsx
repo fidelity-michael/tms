@@ -262,27 +262,22 @@ export function TopSidebar({ props }) {
   const handleImageUpload = async (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setImage(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
 
-      if (file) {
-        const formData = new FormData();
-        formData.append("image", file, "profileImage.jpg");
+      const formData = new FormData();
+      formData.append("image", file, "profileImage.jpg");
 
+      try {
         const res = await axios.patch(
           `/api/users/uploadProfileImage/${props.userId}`,
           formData,
         );
+
         if (res.data.imagePath) {
-          const final = res.data.imagePath;
-          setImage("uploads/images/" + final.split("/").pop());
+          setImage("uploads/images/" + res.data.imagePath.split("/").pop());
           console.log("Image uploaded successfully:", res.data.imagePath);
         }
+      } catch (error) {
+        console.error("Image upload failed:", error);
       }
     }
   };
