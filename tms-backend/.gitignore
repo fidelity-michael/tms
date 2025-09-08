@@ -46,3 +46,5 @@ dist/
 
 # ignore package-lock.json
 package-lock.json
+.env
+src/api/v1/authentication/cert/sp-private-key.pem
