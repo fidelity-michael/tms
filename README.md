@@ -25,6 +25,16 @@ What you will need:
 Tested on:
 * Docker version 25.0.3, build 4debf41
 
+### Before running
+Create a `.env` file and set the variables as shown in the `.env.example` file
+```
+ACCESS_TOKEN_SECRET=string_example
+REFRESH_TOKEN_SECRET=string_example
+ENCRYPTION_KEY=string_example
+SESSION_SECRET=string_example
+SESSION_MAX_AGE=2678400000 # 31 days
+AES_KEY=string_example
+```
 
 ### Useful commands
 Inside *`integration`* folder you can use the following commands:
@@ -54,3 +64,8 @@ docker compose down
 docker compose logs -f backend
 ```
 
+> View running containers in the background
+
+```sh
+docker ps
+```
