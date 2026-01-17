@@ -92,3 +92,32 @@ docker compose logs -f backend
 ```sh
 docker ps
 ```
+
+### Functionality and Admin Capabilities
+
+The Administrative Dashboard serves as the central command center for the institution, allowing for complete oversight of the academic lifecycle and system users.
+
+#### User & Role Management
+
+- Centralized Directory: View and manage all system participants, including Students, Professors, and Secretariat staff.
+
+- Account Oversight: Monitor real-time "Active" status and manage user permissions to ensure secure access to department resources.
+
+#### Academic Infrastructure
+- Hierarchical Organization: Configure and maintain the foundational structures of the application, including Universities, Departments, and specific research Categories.
+
+- Theses Lifecycle: Track the progress of research from inception to completion through the Assigned Theses tracker and the historical Theses Archive.
+
+![Admin Dashboard Overview - Thesis Management System](thesis-images/admin/admin_dashboard.png)
+
+#### Operations & Scheduling
+- Integrated Calendar: Manage academic deadlines and meetings (e.g., "Συνάντηση") directly from the dashboard to keep the department on schedule.
+
+- System Statistics: Access data-driven insights regarding thesis distribution and departmental performance.
+
+
+![Admin Statistics Overview - Thesis Management System](thesis-images/admin/admin_stats1.png)
+
+=== 
+
+![Admin Statistics Overview - Thesis Management System](thesis-images/admin/admin_stats2.png)
