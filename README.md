@@ -118,6 +118,5 @@ The Administrative Dashboard serves as the central command center for the instit
 
 ![Admin Statistics Overview - Thesis Management System](thesis-images/admin/admin_stats1.png)
 
-=== 
 
 ![Admin Statistics Overview - Thesis Management System](thesis-images/admin/admin_stats2.png)
